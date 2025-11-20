@@ -62,4 +62,12 @@ public class GameController implements InputEventListener {
         board.newGame();
         viewGuiController.refreshGameBackground(board.getBoardMatrix());
     }
+    public Board getBoard() {
+        return board;
+    }
+
+    public GuiController getGuiController() {
+        return viewGuiController;
+    }
+
 }
