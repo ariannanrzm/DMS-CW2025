@@ -97,7 +97,7 @@ public class SimpleBoard implements Board {
             return false;
         }
 
-        brickRotator.setCurrentShape(nextShape.getPosition());
+        brickRotator.applyRotation(nextShape.getPosition());
         return true;
     }
 
