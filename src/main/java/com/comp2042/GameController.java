@@ -10,7 +10,11 @@ package com.comp2042;
 
 public class GameController implements InputEventListener {
 
-    private Board board = new SimpleBoard(25, 10);
+    private static final int BOARD_ROWS = 25;
+    private static final int BOARD_COLUMNS = 10;
+    private static final int SOFT_DROP_SCORE = 1;
+
+    private Board board = new SimpleBoard(BOARD_ROWS, BOARD_COLUMNS);
     private final GuiController viewGuiController;
 
     public GameController(GuiController c) {
@@ -104,7 +108,7 @@ public class GameController implements InputEventListener {
 
     private void incrementSoftDropScore(MoveEvent event) {
         if (event.getEventSource() == EventSource.USER) {
-            board.getScore().add(1);
+            board.getScore().add(SOFT_DROP_SCORE);
         }
     }
 
