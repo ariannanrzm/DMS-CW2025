@@ -1,15 +1,12 @@
 package com.comp2042;
 
-
 /**
- * The GameController class handles all interactions between the GUI controller
- * and the underlying game logic (Board). It processes movement events,
- * coordinates updates to the board state, and manages transitions such as
- * landing, line clears, scoring, and spawning new bricks.
+ * The GameController class handles interactions between the GUI and the game logic (Board).
+ * It processes movement events, manages brick updates, spawning, and game-over behaviour.
+ * Scoring is now handled fully inside SimpleBoard.
  */
-
 public class GameController implements InputEventListener {
-    /** Replaced magic numbers with named constants */
+
     private static final int BOARD_ROWS = 25;
     private static final int BOARD_COLUMNS = 10;
     private static final int SOFT_DROP_SCORE = 1;
@@ -25,22 +22,12 @@ public class GameController implements InputEventListener {
         viewGuiController.bindScore(board.getScore().scoreProperty());
     }
 
-    /**
-     * Handles a downward movement event. This method delegates movement,
-     * landing, scoring, row clearing, and brick spawning to smaller helper
-     * methods for improved clarity.
-     *
-     * @param event the movement event triggered by the user or internal thread
-     * @return DownData object containing row-clear information and updated view data
-     */
-
     @Override
     public DownData onDownEvent(MoveEvent event) {
-        boolean canMove = handleBrickMovement();
+        boolean canMove = board.moveBrickDown();
 
         if (!canMove) {
             ClearRow clearRow = handleLanding();
-            handleRowClear(clearRow);
 
             boolean gameOver = trySpawnNewBrick();
             if (gameOver) {
@@ -55,57 +42,18 @@ public class GameController implements InputEventListener {
         }
     }
 
-    /**
-     * Attempts to move the active brick downward.
-     *
-     * @return true if the brick can move, false if it has landed
-     */
-
-    private boolean handleBrickMovement() {
-        return board.moveBrickDown();
-    }
-
-    /**
-     * Handles logic upon brick landing: merging the brick into the background
-     * and clearing completed rows.
-     *
-     * @return a ClearRow object describing any rows cleared
-     */
-
+    /** Attempt to move brick down; if landed, merge + clear rows. */
     private ClearRow handleLanding() {
         board.mergeBrickToBackground();
-        return board.clearRows();
+        return board.clearRows(); // scoring now handled inside SimpleBoard.clearRows()
     }
 
-    /**
-     * Updates the score if row clearing has occurred.
-     *
-     * @param clearRow the result of the row-clear operation
-     */
-
-    private void handleRowClear(ClearRow clearRow) {
-        if (clearRow != null && clearRow.getLinesRemoved() > 0) {
-            board.getScore().add(clearRow.getScoreBonus());
-        }
-    }
-
-    /**
-     * Attempts to create a new brick. If the new brick overlaps with existing tiles,
-     * the game is considered over.
-     *
-     * @return true if the game should end, false otherwise
-     */
-
+    /** Spawns next brick; returns true if game-over condition occurs. */
     private boolean trySpawnNewBrick() {
         return board.createNewBrick();
     }
 
-    /**
-     * Increments the score only for user-initiated soft drops.
-     *
-     * @param event the downward movement event
-     */
-
+    /** Award soft-drop points only for user input (not thread gravity). */
     private void incrementSoftDropScore(MoveEvent event) {
         if (event.getEventSource() == EventSource.USER) {
             board.getScore().add(SOFT_DROP_SCORE);

@@ -186,7 +186,10 @@ public class GuiController implements Initializable {
             DownData downData = eventListener.onDownEvent(event);
 
             if (downData.getClearRow() != null && downData.getClearRow().getLinesRemoved() > 0) {
-                NotificationPanel notif = new NotificationPanel("+" + downData.getClearRow().getScoreBonus());
+                int lines = downData.getClearRow().getLinesRemoved();
+                int bonus = 50 * lines * lines; // match SimpleBoard scoring
+
+                NotificationPanel notif = new NotificationPanel("+" + bonus);
                 groupNotification.getChildren().add(notif);
                 notif.showScore(groupNotification.getChildren());
             }
@@ -195,6 +198,7 @@ public class GuiController implements Initializable {
         }
         gamePanel.requestFocus();
     }
+
 
     public void setEventListener(InputEventListener listener) {
         this.eventListener = listener;

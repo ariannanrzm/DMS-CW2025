@@ -144,9 +144,21 @@ public class SimpleBoard implements Board {
     @Override
     public ClearRow clearRows() {
         ClearRow clearRow = MatrixOperations.removeCompletedRows(currentGameMatrix);
+
+        if (clearRow.getLinesRemoved() > 0) {
+            int bonus = calculateScoreBonus(clearRow.getLinesRemoved());
+            score.add(bonus);
+        }
+
         currentGameMatrix = clearRow.getNewMatrix();
         return clearRow;
     }
+
+    private int calculateScoreBonus(int lines) {
+        return 50 * lines * lines;
+    }
+
+
 
     @Override
     public Score getScore() {

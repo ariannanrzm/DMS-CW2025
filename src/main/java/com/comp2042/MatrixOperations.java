@@ -1,44 +1,44 @@
 package com.comp2042;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Deque;
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Utility class containing static helper methods for manipulating 2D matrices
- * used by the Tetris board. Provides collision checks, merging operations,
- * row-clearing, copying, and deep-copy utilities.
+ * Utility class for performing matrix-related operations used by the Tetris board.
+ * Responsibilities include:
+ *  - collision detection
+ *  - out-of-bounds checks
+ *  - merging bricks into the board
+ *  - clearing completed rows (without score logic)
+ *  - matrix copying utilities
  */
 public final class MatrixOperations {
-
-    /** Score multiplier applied when computing row-clear bonuses. */
-    private static final int SCORE_MULTIPLIER = 50;
 
     // Prevent instantiation
     private MatrixOperations() {}
 
     /**
-     * Checks whether placing a brick at (x, y) would collide with an existing block
-     * or fall outside the board boundaries.
+     * Checks whether placing a brick at (x, y) would collide with existing blocks
+     * or exceed board boundaries.
      *
-     * @param matrix the game board matrix
-     * @param brick  the brick shape matrix
-     * @param x      horizontal offset
-     * @param y      vertical offset
-     * @return true if a collision or boundary error occurs
+     * @param matrix board matrix
+     * @param brick  brick shape matrix
+     * @param x      column offset
+     * @param y      row offset
      */
     public static boolean intersect(final int[][] matrix, final int[][] brick, int x, int y) {
-        for (int i = 0; i < brick.length; i++) {
-            for (int j = 0; j < brick[i].length; j++) {
+        for (int row = 0; row < brick.length; row++) {
+            for (int col = 0; col < brick[row].length; col++) {
 
-                int targetX = x + i;
-                int targetY = y + j;
+                if (brick[row][col] == 0)
+                    continue; // skip empty cells
 
-                boolean brickFilled = brick[i][j] != 0;
-                if (brickFilled && (isOutOfBounds(matrix, targetX, targetY)
-                        || matrix[targetY][targetX] != 0)) {
+                int targetX = x + col; // column
+                int targetY = y + row; // row
+
+                if (isOutOfBounds(matrix, targetX, targetY)
+                        || matrix[targetY][targetX] != 0) {
                     return true;
                 }
             }
@@ -46,13 +46,7 @@ public final class MatrixOperations {
         return false;
     }
 
-    /**
-     * Returns true if the given coordinates lie outside the matrix.
-     *
-     * @param matrix the board matrix
-     * @param targetX column index
-     * @param targetY row index
-     */
+    /** Returns true if (targetX, targetY) is outside board bounds. */
     private static boolean isOutOfBounds(int[][] matrix, int targetX, int targetY) {
         return targetX < 0
                 || targetY < 0
@@ -60,12 +54,7 @@ public final class MatrixOperations {
                 || targetX >= matrix[0].length;
     }
 
-    /**
-     * Produces a deep copy of a 2D matrix.
-     *
-     * @param original the matrix to copy
-     * @return a deep copy of the matrix
-     */
+    /** Deep-copies a 2D array. */
     public static int[][] copy(int[][] original) {
         int[][] copy = new int[original.length][];
         for (int i = 0; i < original.length; i++) {
@@ -76,20 +65,20 @@ public final class MatrixOperations {
     }
 
     /**
-     * Merges a brick's filled cells into the board matrix at the given offset.
+     * Merges a brick into the board.
      *
-     * @param board the board matrix
-     * @param brick the brick shape
-     * @param x     x-offset
-     * @param y     y-offset
-     * @return a new matrix containing the merged result
+     * @param board existing board
+     * @param brick brick matrix
+     * @param x     column offset
+     * @param y     row offset
      */
     public static int[][] merge(int[][] board, int[][] brick, int x, int y) {
         int[][] updated = copy(board);
-        for (int i = 0; i < brick.length; i++) {
-            for (int j = 0; j < brick[i].length; j++) {
-                if (brick[i][j] != 0) {
-                    updated[y + j][x + i] = brick[i][j];
+
+        for (int row = 0; row < brick.length; row++) {
+            for (int col = 0; col < brick[row].length; col++) {
+                if (brick[row][col] != 0) {
+                    updated[y + row][x + col] = brick[row][col];
                 }
             }
         }
@@ -97,21 +86,19 @@ public final class MatrixOperations {
     }
 
     /**
-     * Removes all completely filled rows from the board and returns the updated matrix
-     * along with the number of cleared rows and score bonus.
-     *
-     * @param matrix the original board matrix
-     * @return a ClearRow object containing updated board data
+     * Removes all completed rows and returns a ClearRow object with:
+     *  - number of cleared rows
+     *  - updated board matrix
      */
     public static ClearRow removeCompletedRows(final int[][] matrix) {
 
-        int width = matrix[0].length;
         int height = matrix.length;
+        int width = matrix[0].length;
 
         List<int[]> remaining = new ArrayList<>();
         int cleared = 0;
 
-        // Collect all non-full rows
+        // Collect rows that are NOT full
         for (int[] row : matrix) {
             if (isRowFilled(row)) {
                 cleared++;
@@ -120,27 +107,25 @@ public final class MatrixOperations {
             }
         }
 
+        // Build new matrix: empty rows on top, remaining rows below
         int[][] newMatrix = new int[height][width];
 
-        int emptyRows = cleared;
-        int index = 0;
+        int insertIndex = 0;
 
-        // Empty top rows
-        for (int i = 0; i < emptyRows; i++) {
-            newMatrix[index++] = new int[width]; // all zeros
+        // Insert empty rows first
+        for (int i = 0; i < cleared; i++) {
+            newMatrix[insertIndex++] = new int[width]; // all zeros
         }
 
-        // Add the remaining (non-cleared) rows below
+        // Then insert remaining rows
         for (int[] row : remaining) {
-            newMatrix[index++] = row;
+            newMatrix[insertIndex++] = row;
         }
 
-        int scoreBonus = SCORE_MULTIPLIER * cleared * cleared;
-
-        return new ClearRow(cleared, newMatrix, scoreBonus);
+        return new ClearRow(cleared, newMatrix);
     }
 
-    /** Returns true if a row is entirely filled (contains no zeros). */
+    /** Returns true if a row is fully filled (no zeros). */
     private static boolean isRowFilled(int[] row) {
         for (int cell : row) {
             if (cell == 0) return false;
@@ -148,22 +133,10 @@ public final class MatrixOperations {
         return true;
     }
 
-    /** Computes the score bonus for the number of cleared rows. */
-    private static int computeScoreBonus(int rowsCleared) {
-        return SCORE_MULTIPLIER * rowsCleared * rowsCleared;
-    }
-
-    /** Writes rows into a matrix starting from the bottom. */
-    private static void fillFromBottom(int[][] matrix, Deque<int[]> rows) {
-        for (int i = matrix.length - 1; i >= 0; i--) {
-            int[] row = rows.pollLast();
-            if (row != null) {
-                matrix[i] = row;
-            } else break;
-        }
-    }
-
+    /** Deep copy of a list of 2D matrices. */
     public static List<int[][]> deepCopyList(List<int[][]> list) {
-        return list.stream().map(MatrixOperations::copy).collect(Collectors.toList());
+        return list.stream()
+                .map(MatrixOperations::copy)
+                .collect(Collectors.toList());
     }
 }
