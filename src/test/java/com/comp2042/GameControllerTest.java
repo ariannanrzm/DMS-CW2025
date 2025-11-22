@@ -27,7 +27,8 @@ public class GameControllerTest {
 
         for (int i = 0; i < 30; i++) {
             controller.onDownEvent(
-                    new MoveEvent(EventType.DOWN, EventSource.AUTO)
+                    new MoveEvent(EventType.DOWN, EventSource.THREAD
+                    )
             );
         }
 
@@ -39,15 +40,20 @@ public class GameControllerTest {
         MockGuiController mockGui = new MockGuiController();
         GameController controller = new GameController(mockGui);
 
+        // Fill the spawn region so the new brick immediately collides
         int[][] m = controller.getBoard().getBoardMatrix();
-        for (int col = 0; col < 10; col++) {
-            m[0][col] = 1;
+        int spawnY = 10;
+        int spawnX = 4;
+
+        for (int row = spawnY; row < spawnY + 4; row++) {
+            for (int col = spawnX; col < spawnX + 4; col++) {
+                m[row][col] = 1;
+            }
         }
 
-        controller.onDownEvent(
-                new MoveEvent(EventType.DOWN, EventSource.AUTO)
-        );
+        controller.onDownEvent(new MoveEvent(EventType.DOWN, EventSource.THREAD));
 
-        assertTrue(mockGui.wasGameOverCalled());
+        assertTrue(mockGui.wasGameOverCalled(), "Game over should have been triggered");
     }
+
 }
