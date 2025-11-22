@@ -19,6 +19,7 @@ public final class Score {
         score.setValue(0);
     }
 
+    /** Convenience getter  */
     public int getScore() {
         return score.get();
     }

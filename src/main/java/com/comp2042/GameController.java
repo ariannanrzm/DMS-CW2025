@@ -9,7 +9,7 @@ package com.comp2042;
  */
 
 public class GameController implements InputEventListener {
-
+    /** Replaced magic numbers with named constants */
     private static final int BOARD_ROWS = 25;
     private static final int BOARD_COLUMNS = 10;
     private static final int SOFT_DROP_SCORE = 1;
