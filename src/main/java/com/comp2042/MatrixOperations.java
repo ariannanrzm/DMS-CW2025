@@ -104,25 +104,40 @@ public final class MatrixOperations {
      * @return a ClearRow object containing updated board data
      */
     public static ClearRow removeCompletedRows(final int[][] matrix) {
-        int[][] updatedMatrix = new int[matrix.length][matrix[0].length];
-        Deque<int[]> remainingRows = new ArrayDeque<>();
-        List<Integer> cleared = new ArrayList<>();
 
+        int width = matrix[0].length;
+        int height = matrix.length;
+
+        List<int[]> remaining = new ArrayList<>();
+        int cleared = 0;
+
+        // Collect all non-full rows
         for (int[] row : matrix) {
-            int[] rowCopy = new int[row.length];
-            System.arraycopy(row, 0, rowCopy, 0, row.length);
-
             if (isRowFilled(row)) {
-                cleared.add(1);
+                cleared++;
             } else {
-                remainingRows.add(rowCopy);
+                remaining.add(row.clone());
             }
         }
 
-        fillFromBottom(updatedMatrix, remainingRows);
+        int[][] newMatrix = new int[height][width];
 
-        int scoreBonus = computeScoreBonus(cleared.size());
-        return new ClearRow(cleared.size(), updatedMatrix, scoreBonus);
+        int emptyRows = cleared;
+        int index = 0;
+
+        // Empty top rows
+        for (int i = 0; i < emptyRows; i++) {
+            newMatrix[index++] = new int[width]; // all zeros
+        }
+
+        // Add the remaining (non-cleared) rows below
+        for (int[] row : remaining) {
+            newMatrix[index++] = row;
+        }
+
+        int scoreBonus = SCORE_MULTIPLIER * cleared * cleared;
+
+        return new ClearRow(cleared, newMatrix, scoreBonus);
     }
 
     /** Returns true if a row is entirely filled (contains no zeros). */
