@@ -10,13 +10,13 @@ public class GameControllerTest {
         MockGuiController mockGui = new MockGuiController();
         GameController controller = new GameController(mockGui);
 
-        int initialScore = controller.getBoard().getScore().get();
+        int initialScore = controller.getBoard().getScore().getScore();
 
         controller.onDownEvent(
                 new MoveEvent(EventType.DOWN, EventSource.USER)
         );
 
-        int updatedScore = controller.getBoard().getScore().get();
+        int updatedScore = controller.getBoard().getScore().getScore();
         assertEquals(initialScore + 1, updatedScore);
     }
 

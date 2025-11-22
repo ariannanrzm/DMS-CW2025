@@ -11,11 +11,15 @@ public final class Score {
         return score;
     }
 
-    public void add(int i){
+    public void add(int i) {
         score.setValue(score.getValue() + i);
     }
 
     public void reset() {
         score.setValue(0);
+    }
+
+    public int getScore() {
+        return score.get();
     }
 }
