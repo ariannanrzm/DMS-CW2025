@@ -185,19 +185,32 @@ public class GuiController implements Initializable {
         if (!isPause.get()) {
             DownData downData = eventListener.onDownEvent(event);
 
-            if (downData.getClearRow() != null && downData.getClearRow().getLinesRemoved() > 0) {
-                int lines = downData.getClearRow().getLinesRemoved();
-                int bonus = 50 * lines * lines; // match SimpleBoard scoring
+            // 1) If rows were cleared, show notification
+            if (downData.getClearRow() != null &&
+                    downData.getClearRow().getLinesRemoved() > 0) {
 
-                NotificationPanel notif = new NotificationPanel("+" + bonus);
+                // You no longer have scoreBonus in ClearRow, so keep it simple:
+                NotificationPanel notif =
+                        new NotificationPanel("Lines cleared: " + downData.getClearRow().getLinesRemoved());
+
                 groupNotification.getChildren().add(notif);
                 notif.showScore(groupNotification.getChildren());
             }
 
+            // 2) Always refresh the background from the board matrix
+            refreshGameBackground(downData.getBoardMatrix());
+
+            // 3) Refresh the falling brick
             refreshBrick(downData.getViewData());
+
+            // 4) If the controller says game over, show it
+            if (downData.isGameOver()) {
+                gameOver();
+            }
         }
         gamePanel.requestFocus();
     }
+
 
 
     public void setEventListener(InputEventListener listener) {

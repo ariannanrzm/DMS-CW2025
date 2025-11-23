@@ -24,23 +24,32 @@ public class GameController implements InputEventListener {
 
     @Override
     public DownData onDownEvent(MoveEvent event) {
-        boolean canMove = board.moveBrickDown();
+        boolean canMove = handleBrickMovement();
 
         if (!canMove) {
+            // Brick landed
             ClearRow clearRow = handleLanding();
+            handleRowClear(clearRow); // this updates score
 
-            boolean gameOver = trySpawnNewBrick();
-            if (gameOver) {
-                viewGuiController.gameOver();
-            }
+            boolean gameOver = trySpawnNewBrick(); // true if new brick overlaps
 
-            viewGuiController.refreshGameBackground(board.getBoardMatrix());
-            return new DownData(clearRow, board.getViewData());
+            // Build the data for the view to render
+            int[][] boardMatrix = board.getBoardMatrix();
+            ViewData viewData   = board.getViewData();
+
+
+            return new DownData(clearRow, viewData, boardMatrix, gameOver);
         } else {
+            // Brick moved down successfully
             incrementSoftDropScore(event);
-            return new DownData(null, board.getViewData());
+
+            int[][] boardMatrix = board.getBoardMatrix();
+            ViewData viewData   = board.getViewData();
+
+            return new DownData(null, viewData, boardMatrix, false);
         }
     }
+
 
     /** Attempt to move brick down; if landed, merge + clear rows. */
     private ClearRow handleLanding() {
@@ -59,6 +68,21 @@ public class GameController implements InputEventListener {
             board.getScore().add(SOFT_DROP_SCORE);
         }
     }
+
+    /** Attempts to move the brick down. */
+    private boolean handleBrickMovement() {
+        return board.moveBrickDown();
+    }
+
+    /** Applies score update after clearing rows (score logic is in SimpleBoard). */
+    private void handleRowClear(ClearRow clearRow) {
+        // Nothing to do here anymore except check if clearRow exists.
+        // Scoring now lives inside SimpleBoard.
+        if (clearRow != null && clearRow.getLinesRemoved() > 0) {
+            // No scoring here — SimpleBoard already updated score.
+        }
+    }
+
 
     @Override
     public ViewData onLeftEvent(MoveEvent event) {
@@ -81,8 +105,8 @@ public class GameController implements InputEventListener {
     @Override
     public void createNewGame() {
         board.newGame();
-        viewGuiController.refreshGameBackground(board.getBoardMatrix());
     }
+
 
     public Board getBoard() {
         return board;
