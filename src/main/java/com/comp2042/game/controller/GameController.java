@@ -7,9 +7,8 @@ import com.comp2042.game.events.InputEventListener;
 import com.comp2042.game.events.MoveEvent;
 
 /**
- * The GameController class handles interactions between the GUI and the game logic (Board).
- * It processes movement events, manages brick updates, spawning, and game-over behaviour.
- * Scoring is now handled fully inside SimpleBoard.
+ * GameController handles only game logic and communication with the Board.
+ * It no longer performs GUI updates or input handling (pure MVC separation).
  */
 public class GameController implements InputEventListener {
 
@@ -17,43 +16,42 @@ public class GameController implements InputEventListener {
     private static final int BOARD_COLUMNS = 10;
     private static final int SOFT_DROP_SCORE = 1;
 
-    private Board board = new SimpleBoard(BOARD_ROWS, BOARD_COLUMNS);
+    /** Game logic board */
+    private final Board board = new SimpleBoard(BOARD_ROWS, BOARD_COLUMNS);
 
-    /** The UI controller this game controller communicates with. */
+    /** GUI controller (only to register event listeners; no UI calls here) */
     private final GuiController viewGuiController;
 
     public GameController(GuiController viewGuiController) {
         this.viewGuiController = viewGuiController;
-        board.createNewBrick();
+
+        // Let GUI send events to this controller
         viewGuiController.setEventListener(this);
+
+        // GameController no longer calls GUI methods such as initGameView() or bindScore()
+        board.createNewBrick();
     }
 
     @Override
     public DownData onDownEvent(MoveEvent event) {
-        boolean canMove = handleBrickMovement();
+        boolean canMove = board.moveBrickDown();
 
         if (!canMove) {
             ClearRow clearRow = handleLanding();
-            handleRowClear(clearRow);
+            boolean gameOver = board.createNewBrick();
 
-            boolean gameOver = trySpawnNewBrick();
-
-            return new DownData(
-                    clearRow,
+            return new DownData(clearRow,
                     board.getViewData(),
                     board.getBoardMatrix(),
-                    gameOver
-            );
-        } else {
-            incrementSoftDropScore(event);
-
-            return new DownData(
-                    null,
-                    board.getViewData(),
-                    board.getBoardMatrix(),
-                    false
-            );
+                    gameOver);
         }
+
+        incrementSoftDropScore(event);
+
+        return new DownData(null,
+                board.getViewData(),
+                board.getBoardMatrix(),
+                false);
     }
 
     private ClearRow handleLanding() {
@@ -61,23 +59,9 @@ public class GameController implements InputEventListener {
         return board.clearRows();
     }
 
-    private boolean trySpawnNewBrick() {
-        return board.createNewBrick();
-    }
-
     private void incrementSoftDropScore(MoveEvent event) {
         if (event.getEventSource() == EventSource.USER) {
             board.getScore().add(SOFT_DROP_SCORE);
-        }
-    }
-
-    private boolean handleBrickMovement() {
-        return board.moveBrickDown();
-    }
-
-    private void handleRowClear(ClearRow clearRow) {
-        if (clearRow != null && clearRow.getLinesRemoved() > 0) {
-            // Score handled fully inside SimpleBoard
         }
     }
 
@@ -104,11 +88,10 @@ public class GameController implements InputEventListener {
         board.newGame();
     }
 
+    /** Board getter kept for testing */
     public Board getBoard() {
         return board;
     }
 
-    public GuiController getGuiController() {
-        return viewGuiController;
-    }
+    // Removed getGuiController() according to MVC separation (Commit 8)
 }
