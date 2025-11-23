@@ -1,3 +1,13 @@
+/**
+ * Unit tests for GameController verifying:
+ *  - soft-drop scoring,
+ *  - brick spawning behaviour,
+ *  - game-over detection when the spawn region is obstructed.
+ *
+ * Tests were updated after refactoring GameController and SimpleBoard,
+ * including moving score logic out of MatrixOperations and adjusting SPAWN_Y.
+ */
+
 package com.comp2042;
 
 import com.comp2042.game.controller.GameController;
@@ -31,8 +41,7 @@ public class GameControllerTest {
 
         for (int i = 0; i < 30; i++) {
             controller.onDownEvent(
-                    new MoveEvent(EventType.DOWN, EventSource.THREAD
-                    )
+                    new MoveEvent(EventType.DOWN, EventSource.THREAD)
             );
         }
 
@@ -44,20 +53,22 @@ public class GameControllerTest {
         MockGuiController mockGui = new MockGuiController();
         GameController controller = new GameController(mockGui);
 
-        // Fill the spawn region so the new brick immediately collides
-        int[][] m = controller.getBoard().getBoardMatrix();
-        int spawnY = 10;
-        int spawnX = 4;
+        int[][] matrix = controller.getBoard().getBoardMatrix();
 
+        int spawnX = 4;   // default
+        int spawnY = 0;   // your updated SimpleBoard spawn row
+
+        // Fill the 4×4 spawn region
         for (int row = spawnY; row < spawnY + 4; row++) {
             for (int col = spawnX; col < spawnX + 4; col++) {
-                m[row][col] = 1;
+                if (row < matrix.length && col < matrix[row].length) {
+                    matrix[row][col] = 1;
+                }
             }
         }
 
-        controller.onDownEvent(new MoveEvent(EventType.DOWN, EventSource.THREAD));
+        var result = controller.onDownEvent(new MoveEvent(EventType.DOWN, EventSource.THREAD));
 
-        assertTrue(mockGui.wasGameOverCalled(), "Game over should have been triggered");
+        assertTrue(result.isGameOver(), "Game over should be triggered when the spawn area is blocked.");
     }
-
 }
