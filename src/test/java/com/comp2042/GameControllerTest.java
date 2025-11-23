@@ -71,4 +71,56 @@ public class GameControllerTest {
 
         assertTrue(result.isGameOver(), "Game over should be triggered when the spawn area is blocked.");
     }
+
+    @Test
+    public void testMoveLeftDecreasesX() {
+        MockGuiController mockGui = new MockGuiController();
+        GameController controller = new GameController(mockGui);
+
+        int initialX = controller.getBoard().getViewData().getxPosition();
+        int initialY = controller.getBoard().getViewData().getyPosition();
+
+        // simulate LEFT key from user
+        controller.onLeftEvent(new MoveEvent(EventType.LEFT, EventSource.USER));
+
+        int newX = controller.getBoard().getViewData().getxPosition();
+        int newY = controller.getBoard().getViewData().getyPosition();
+
+        assertEquals(initialX - 1, newX, "Brick should move one step left");
+        assertEquals(initialY, newY, "Y position should not change when moving left");
+    }
+
+    @Test
+    public void testMoveRightIncreasesX() {
+        MockGuiController mockGui = new MockGuiController();
+        GameController controller = new GameController(mockGui);
+
+        int initialX = controller.getBoard().getViewData().getxPosition();
+        int initialY = controller.getBoard().getViewData().getyPosition();
+
+        // simulate RIGHT key from user
+        controller.onRightEvent(new MoveEvent(EventType.RIGHT, EventSource.USER));
+
+        int newX = controller.getBoard().getViewData().getxPosition();
+        int newY = controller.getBoard().getViewData().getyPosition();
+
+        assertEquals(initialX + 1, newX, "Brick should move one step right");
+        assertEquals(initialY, newY, "Y position should not change when moving right");
+    }
+
+    @Test
+    public void testDownEventMovesBrickDown() {
+        MockGuiController mockGui = new MockGuiController();
+        GameController controller = new GameController(mockGui);
+
+        int initialY = controller.getBoard().getViewData().getyPosition();
+
+        // simulate DOWN key from user
+        controller.onDownEvent(new MoveEvent(EventType.DOWN, EventSource.USER));
+
+        int newY = controller.getBoard().getViewData().getyPosition();
+
+        assertEquals(initialY + 1, newY, "Brick should move one step down");
+    }
+
 }
