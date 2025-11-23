@@ -18,10 +18,12 @@ public class GameController implements InputEventListener {
     private static final int SOFT_DROP_SCORE = 1;
 
     private Board board = new SimpleBoard(BOARD_ROWS, BOARD_COLUMNS);
+
+    /** The UI controller this game controller communicates with. */
     private final GuiController viewGuiController;
 
-    public GameController(GuiController c) {
-        viewGuiController = c;
+    public GameController(GuiController viewGuiController) {
+        this.viewGuiController = viewGuiController;
         board.createNewBrick();
         viewGuiController.setEventListener(this);
     }
@@ -31,62 +33,53 @@ public class GameController implements InputEventListener {
         boolean canMove = handleBrickMovement();
 
         if (!canMove) {
-            // Brick landed
             ClearRow clearRow = handleLanding();
-            handleRowClear(clearRow); // this updates score
+            handleRowClear(clearRow);
 
-            boolean gameOver = trySpawnNewBrick(); // true if new brick overlaps
+            boolean gameOver = trySpawnNewBrick();
 
-            // Build the data for the view to render
-            int[][] boardMatrix = board.getBoardMatrix();
-            ViewData viewData   = board.getViewData();
-
-
-            return new DownData(clearRow, viewData, boardMatrix, gameOver);
+            return new DownData(
+                    clearRow,
+                    board.getViewData(),
+                    board.getBoardMatrix(),
+                    gameOver
+            );
         } else {
-            // Brick moved down successfully
             incrementSoftDropScore(event);
 
-            int[][] boardMatrix = board.getBoardMatrix();
-            ViewData viewData   = board.getViewData();
-
-            return new DownData(null, viewData, boardMatrix, false);
+            return new DownData(
+                    null,
+                    board.getViewData(),
+                    board.getBoardMatrix(),
+                    false
+            );
         }
     }
 
-
-    /** Attempt to move brick down; if landed, merge + clear rows. */
     private ClearRow handleLanding() {
         board.mergeBrickToBackground();
-        return board.clearRows(); // scoring now handled inside SimpleBoard.clearRows()
+        return board.clearRows();
     }
 
-    /** Spawns next brick; returns true if game-over condition occurs. */
     private boolean trySpawnNewBrick() {
         return board.createNewBrick();
     }
 
-    /** Award soft-drop points only for user input (not thread gravity). */
     private void incrementSoftDropScore(MoveEvent event) {
         if (event.getEventSource() == EventSource.USER) {
             board.getScore().add(SOFT_DROP_SCORE);
         }
     }
 
-    /** Attempts to move the brick down. */
     private boolean handleBrickMovement() {
         return board.moveBrickDown();
     }
 
-    /** Applies score update after clearing rows (score logic is in SimpleBoard). */
     private void handleRowClear(ClearRow clearRow) {
-        // Nothing to do here anymore except check if clearRow exists.
-        // Scoring now lives inside SimpleBoard.
         if (clearRow != null && clearRow.getLinesRemoved() > 0) {
-            // No scoring here — SimpleBoard already updated score.
+            // Score handled fully inside SimpleBoard
         }
     }
-
 
     @Override
     public ViewData onLeftEvent(MoveEvent event) {
@@ -110,7 +103,6 @@ public class GameController implements InputEventListener {
     public void createNewGame() {
         board.newGame();
     }
-
 
     public Board getBoard() {
         return board;
