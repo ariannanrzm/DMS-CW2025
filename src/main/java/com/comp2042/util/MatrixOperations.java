@@ -1,4 +1,6 @@
-package com.comp2042;
+package com.comp2042.util;
+
+import com.comp2042.game.board.ClearRow;
 
 import java.util.ArrayList;
 import java.util.List;

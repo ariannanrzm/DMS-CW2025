@@ -1,5 +1,11 @@
-package com.comp2042;
+package com.comp2042.ui;
 
+import com.comp2042.game.board.DownData;
+import com.comp2042.game.board.ViewData;
+import com.comp2042.game.events.EventSource;
+import com.comp2042.game.events.EventType;
+import com.comp2042.game.events.InputEventListener;
+import com.comp2042.game.events.MoveEvent;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.property.BooleanProperty;
@@ -10,7 +16,6 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
-import javafx.scene.effect.Reflection;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;

@@ -1,4 +1,10 @@
-package com.comp2042;
+package com.comp2042.game.controller;
+
+import com.comp2042.ui.GuiController;
+import com.comp2042.game.board.*;
+import com.comp2042.game.events.EventSource;
+import com.comp2042.game.events.InputEventListener;
+import com.comp2042.game.events.MoveEvent;
 
 /**
  * The GameController class handles interactions between the GUI and the game logic (Board).

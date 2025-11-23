@@ -1,6 +1,4 @@
-package com.comp2042;
-
-import com.comp2042.logic.bricks.Brick;
+package com.comp2042.game.bricks;
 
 /**
  * The BrickRotator class manages the rotation state of the active Tetris brick.

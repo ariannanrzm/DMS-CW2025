@@ -1,5 +1,9 @@
 package com.comp2042;
 
+import com.comp2042.game.controller.GameController;
+import com.comp2042.game.events.EventSource;
+import com.comp2042.game.events.EventType;
+import com.comp2042.game.events.MoveEvent;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 

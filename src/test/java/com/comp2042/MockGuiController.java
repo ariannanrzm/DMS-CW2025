@@ -1,5 +1,8 @@
 package com.comp2042;
 
+import com.comp2042.game.board.ViewData;
+import com.comp2042.game.events.InputEventListener;
+import com.comp2042.ui.GuiController;
 import javafx.beans.property.IntegerProperty;
 import javafx.event.ActionEvent;
 

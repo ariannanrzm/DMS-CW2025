@@ -1,4 +1,7 @@
-package com.comp2042;
+package com.comp2042.game.events;
+
+import com.comp2042.game.board.DownData;
+import com.comp2042.game.board.ViewData;
 
 public interface InputEventListener {
 
