@@ -8,7 +8,6 @@ import com.comp2042.game.events.MoveEvent;
 
 /**
  * GameController handles only game logic and communication with the Board.
- * It no longer performs GUI updates or input handling (pure MVC separation).
  */
 public class GameController implements InputEventListener {
 
@@ -25,11 +24,12 @@ public class GameController implements InputEventListener {
     public GameController(GuiController viewGuiController) {
         this.viewGuiController = viewGuiController;
 
-        // Let GUI send events to this controller
-        viewGuiController.setEventListener(this);
+        this.viewGuiController.setGameController(this);
+        this.viewGuiController.setEventListener(this);
 
-        // GameController no longer calls GUI methods such as initGameView() or bindScore()
         board.createNewBrick();
+        this.viewGuiController.initGameView(board.getBoardMatrix(), board.getViewData());
+        this.viewGuiController.bindScore(board.getScore().scoreProperty());
     }
 
     @Override
@@ -38,6 +38,7 @@ public class GameController implements InputEventListener {
 
         if (!canMove) {
             ClearRow clearRow = handleLanding();
+
             boolean gameOver = board.createNewBrick();
 
             return new DownData(clearRow,
@@ -59,17 +60,20 @@ public class GameController implements InputEventListener {
         return board.clearRows();
     }
 
+
     private void incrementSoftDropScore(MoveEvent event) {
         if (event.getEventSource() == EventSource.USER) {
             board.getScore().add(SOFT_DROP_SCORE);
         }
     }
 
+
     @Override
     public ViewData onLeftEvent(MoveEvent event) {
         board.moveBrickLeft();
         return board.getViewData();
     }
+
 
     @Override
     public ViewData onRightEvent(MoveEvent event) {
@@ -93,5 +97,5 @@ public class GameController implements InputEventListener {
         return board;
     }
 
-    // Removed getGuiController() according to MVC separation (Commit 8)
+
 }
