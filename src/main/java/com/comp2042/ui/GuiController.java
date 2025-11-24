@@ -142,7 +142,7 @@ public class GuiController implements Initializable {
         r.setArcWidth(ARC_RADIUS);
     }
 
-    private void refreshBrick(ViewData brick) {
+    public void refreshBrick(ViewData brick) {
         if (isPause.get()) return;
         updateBrickPanelPosition(brick);
 

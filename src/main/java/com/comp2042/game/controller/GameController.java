@@ -37,17 +37,23 @@ public class GameController implements InputEventListener {
         boolean canMove = board.moveBrickDown();
 
         if (!canMove) {
-            ClearRow clearRow = handleLanding();
 
+            ClearRow clearRow = handleLanding();
             boolean gameOver = board.createNewBrick();
 
-            return new DownData(clearRow,
+            // refresh full board on landing
+            DownData data = new DownData(clearRow,
                     board.getViewData(),
                     board.getBoardMatrix(),
                     gameOver);
+
+            return data;
         }
 
         incrementSoftDropScore(event);
+
+        // refresh brick on move
+        viewGuiController.refreshBrick(board.getViewData());
 
         return new DownData(null,
                 board.getViewData(),
@@ -71,20 +77,23 @@ public class GameController implements InputEventListener {
     @Override
     public ViewData onLeftEvent(MoveEvent event) {
         board.moveBrickLeft();
-        return board.getViewData();
+        viewGuiController.refreshBrick(board.getViewData());
+        return null;
     }
 
 
     @Override
     public ViewData onRightEvent(MoveEvent event) {
         board.moveBrickRight();
-        return board.getViewData();
+        viewGuiController.refreshBrick(board.getViewData());
+        return null;
     }
 
     @Override
     public ViewData onRotateEvent(MoveEvent event) {
         board.rotateLeftBrick();
-        return board.getViewData();
+        viewGuiController.refreshBrick(board.getViewData());
+        return null;
     }
 
     @Override
