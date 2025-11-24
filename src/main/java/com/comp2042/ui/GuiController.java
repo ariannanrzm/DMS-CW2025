@@ -197,6 +197,12 @@ public class GuiController implements Initializable {
         isGameOver.set(true);
     }
 
+    public void resetTimeline() {
+        if (timeLine != null) {
+            timeLine.stop();
+            timeLine.play(); // Restarts the 400ms countdown from 0
+        }
+    }
     public void newGame(ActionEvent e) {
         timeLine.stop();
         gameOverPanel.setVisible(false);
