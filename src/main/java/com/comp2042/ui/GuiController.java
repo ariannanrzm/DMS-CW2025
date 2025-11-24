@@ -183,7 +183,6 @@ public class GuiController implements Initializable {
                 gameOver();
             }
         }
-        gamePanel.requestFocus();
     }
 
     public void setEventListener(InputEventListener listener) {
