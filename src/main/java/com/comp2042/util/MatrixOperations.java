@@ -4,7 +4,6 @@ import com.comp2042.game.board.ClearRow;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Utility class for performing matrix-related operations used by the Tetris board.
@@ -13,12 +12,12 @@ import java.util.stream.Collectors;
  *  - out-of-bounds checks
  *  - merging bricks into the board
  *  - clearing completed rows (without score logic)
- *  - matrix copying utilities
  */
 public final class MatrixOperations {
 
     // Prevent instantiation
-    private MatrixOperations() {}
+    private MatrixOperations() {
+    }
 
     /**
      * Checks whether placing a brick at (x, y) would collide with existing blocks
@@ -48,7 +47,9 @@ public final class MatrixOperations {
         return false;
     }
 
-    /** Returns true if (targetX, targetY) is outside board bounds. */
+    /**
+     * Returns true if (targetX, targetY) is outside board bounds.
+     */
     private static boolean isOutOfBounds(int[][] matrix, int targetX, int targetY) {
         return targetX < 0
                 || targetY < 0
@@ -56,26 +57,13 @@ public final class MatrixOperations {
                 || targetX >= matrix[0].length;
     }
 
-    /** Deep-copies a 2D array. */
-    public static int[][] copy(int[][] original) {
-        int[][] copy = new int[original.length][];
-        for (int i = 0; i < original.length; i++) {
-            copy[i] = new int[original[i].length];
-            System.arraycopy(original[i], 0, copy[i], 0, original[i].length);
-        }
-        return copy;
-    }
 
     /**
      * Merges a brick into the board.
-     *
-     * @param board existing board
-     * @param brick brick matrix
-     * @param x     column offset
-     * @param y     row offset
+     * Uses ArrayOperations to create a safe copy before modifying.
      */
     public static int[][] merge(int[][] board, int[][] brick, int x, int y) {
-        int[][] updated = copy(board);
+        int[][] updated = ArrayOperations.copy(board);
 
         for (int row = 0; row < brick.length; row++) {
             for (int col = 0; col < brick[row].length; col++) {
@@ -89,8 +77,8 @@ public final class MatrixOperations {
 
     /**
      * Removes all completed rows and returns a ClearRow object with:
-     *  - number of cleared rows
-     *  - updated board matrix
+     * - number of cleared rows
+     * - updated board matrix
      */
     public static ClearRow removeCompletedRows(final int[][] matrix) {
 
@@ -111,7 +99,6 @@ public final class MatrixOperations {
 
         // Build new matrix: empty rows on top, remaining rows below
         int[][] newMatrix = new int[height][width];
-
         int insertIndex = 0;
 
         // Insert empty rows first
@@ -127,18 +114,14 @@ public final class MatrixOperations {
         return new ClearRow(cleared, newMatrix);
     }
 
-    /** Returns true if a row is fully filled (no zeros). */
+    /**
+     * Returns true if a row is fully filled (no zeros).
+     */
     private static boolean isRowFilled(int[] row) {
         for (int cell : row) {
             if (cell == 0) return false;
         }
         return true;
     }
-
-    /** Deep copy of a list of 2D matrices. */
-    public static List<int[][]> deepCopyList(List<int[][]> list) {
-        return list.stream()
-                .map(MatrixOperations::copy)
-                .collect(Collectors.toList());
-    }
 }
+
