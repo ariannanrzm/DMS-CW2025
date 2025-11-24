@@ -38,6 +38,7 @@ public class GameController implements InputEventListener {
 
         if (!canMove) {
 
+            board.mergeBrickToBackground();
             ClearRow clearRow = handleLanding();
             boolean gameOver = board.createNewBrick();
 
@@ -47,10 +48,17 @@ public class GameController implements InputEventListener {
                     board.getBoardMatrix(),
                     gameOver);
 
+            viewGuiController.refreshGameBackground(data.getBoardMatrix());
+            viewGuiController.refreshBrick(board.getViewData());
             return data;
         }
 
         incrementSoftDropScore(event);
+
+        if (event.getEventSource() == EventSource.USER) {
+            board.getScore().add(SOFT_DROP_SCORE);
+            viewGuiController.resetTimeline(); // <--- Add this line
+        }
 
         // refresh brick on move
         viewGuiController.refreshBrick(board.getViewData());
