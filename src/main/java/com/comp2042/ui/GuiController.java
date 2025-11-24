@@ -2,6 +2,7 @@ package com.comp2042.ui;
 
 import com.comp2042.game.board.DownData;
 import com.comp2042.game.board.ViewData;
+import com.comp2042.game.controller.GameController;
 import com.comp2042.game.events.EventSource;
 import com.comp2042.game.events.EventType;
 import com.comp2042.game.events.InputEventListener;
@@ -12,12 +13,9 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -62,45 +60,24 @@ public class GuiController implements Initializable {
     private final BooleanProperty isPause = new SimpleBooleanProperty();
     private final BooleanProperty isGameOver = new SimpleBooleanProperty();
 
+    private InputHandler inputHandler;
+    private GameController gameController;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Font.loadFont(getClass().getClassLoader().getResource("digital.ttf").toExternalForm(), 38);
 
         gamePanel.setFocusTraversable(true);
         gamePanel.requestFocus();
-
-        gamePanel.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent keyEvent) {
-
-                if (!isPause.get() && !isGameOver.get()) {
-
-                    if (keyEvent.getCode() == KeyCode.LEFT || keyEvent.getCode() == KeyCode.A) {
-                        refreshBrick(eventListener.onLeftEvent(new MoveEvent(EventType.LEFT, EventSource.USER)));
-                    }
-
-                    if (keyEvent.getCode() == KeyCode.RIGHT || keyEvent.getCode() == KeyCode.D) {
-                        refreshBrick(eventListener.onRightEvent(new MoveEvent(EventType.RIGHT, EventSource.USER)));
-                    }
-
-                    if (keyEvent.getCode() == KeyCode.UP || keyEvent.getCode() == KeyCode.W) {
-                        refreshBrick(eventListener.onRotateEvent(new MoveEvent(EventType.ROTATE, EventSource.USER)));
-                    }
-
-                    if (keyEvent.getCode() == KeyCode.DOWN || keyEvent.getCode() == KeyCode.S) {
-                        moveDown(new MoveEvent(EventType.DOWN, EventSource.USER));
-                    }
-                }
-
-                if (keyEvent.getCode() == KeyCode.N) {
-                    newGame(null);
-                }
-
-                keyEvent.consume();
-            }
-        });
-
         gameOverPanel.setVisible(false);
+    }
+
+
+    public void setGameController(GameController controller) {
+        this.gameController = controller;
+
+        this.inputHandler = new InputHandler(controller);
+        inputHandler.attachTo(gamePanel);
     }
 
     public void initGameView(int[][] boardMatrix, ViewData brick) {
@@ -139,11 +116,9 @@ public class GuiController implements Initializable {
 
     private void updateBrickPanelPosition(ViewData brick) {
         brickPanel.setLayoutX(gamePanel.getLayoutX()
-                + brick.getxPosition() * brickPanel.getVgap()
                 + brick.getxPosition() * BRICK_SIZE);
 
         brickPanel.setLayoutY(TOP_OFFSET + gamePanel.getLayoutY()
-                + brick.getyPosition() * brickPanel.getHgap()
                 + brick.getyPosition() * BRICK_SIZE);
     }
 
@@ -190,11 +165,10 @@ public class GuiController implements Initializable {
         if (!isPause.get()) {
             DownData downData = eventListener.onDownEvent(event);
 
-            // 1) If rows were cleared, show notification
+            //  If rows were cleared, show notification
             if (downData.getClearRow() != null &&
                     downData.getClearRow().getLinesRemoved() > 0) {
 
-                // You no longer have scoreBonus in ClearRow, so keep it simple:
                 NotificationPanel notif =
                         new NotificationPanel("Lines cleared: " + downData.getClearRow().getLinesRemoved());
 
@@ -202,21 +176,15 @@ public class GuiController implements Initializable {
                 notif.showScore(groupNotification.getChildren());
             }
 
-            // 2) Always refresh the background from the board matrix
             refreshGameBackground(downData.getBoardMatrix());
-
-            // 3) Refresh the falling brick
             refreshBrick(downData.getViewData());
 
-            // 4) If the controller says game over, show it
             if (downData.isGameOver()) {
                 gameOver();
             }
         }
         gamePanel.requestFocus();
     }
-
-
 
     public void setEventListener(InputEventListener listener) {
         this.eventListener = listener;
