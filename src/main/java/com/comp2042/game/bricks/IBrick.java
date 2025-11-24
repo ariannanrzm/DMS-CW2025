@@ -1,6 +1,6 @@
 package com.comp2042.game.bricks;
+import com.comp2042.util.ArrayOperations;
 
-import com.comp2042.util.MatrixOperations;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +26,7 @@ final class IBrick implements Brick {
 
     @Override
     public List<int[][]> getShapeMatrix() {
-        return MatrixOperations.deepCopyList(brickMatrix);
+        return ArrayOperations.deepCopyList(brickMatrix);
     }
 
 }

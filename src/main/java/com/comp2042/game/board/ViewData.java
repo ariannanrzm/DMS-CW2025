@@ -1,6 +1,6 @@
 package com.comp2042.game.board;
 
-import com.comp2042.util.MatrixOperations;
+import com.comp2042.util.ArrayOperations;
 
 /**
  * ViewData is an immutable data transfer object used to pass
@@ -34,7 +34,7 @@ public final class ViewData {
      * @return a defensive copy of the active brick's shape matrix
      */
     public int[][] getBrickData() {
-        return MatrixOperations.copy(brickData);
+        return ArrayOperations.copy(brickData);
     }
 
     /**
@@ -55,6 +55,6 @@ public final class ViewData {
      * @return a defensive copy of the next brick's shape matrix
      */
     public int[][] getNextBrickData() {
-        return MatrixOperations.copy(nextBrickData);
+        return ArrayOperations.copy(nextBrickData);
     }
 }

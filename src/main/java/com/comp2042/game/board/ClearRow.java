@@ -1,6 +1,6 @@
 package com.comp2042.game.board;
 
-import com.comp2042.util.MatrixOperations;
+import com.comp2042.util.ArrayOperations;
 
 public final class ClearRow {
 
@@ -9,7 +9,7 @@ public final class ClearRow {
 
     public ClearRow(int linesRemoved, int[][] newMatrix) {
         this.linesRemoved = linesRemoved;
-        this.newMatrix = MatrixOperations.copy(newMatrix);
+        this.newMatrix = ArrayOperations.copy(newMatrix);
     }
 
     public int getLinesRemoved() {
@@ -17,7 +17,7 @@ public final class ClearRow {
     }
 
     public int[][] getNewMatrix() {
-        return MatrixOperations.copy(newMatrix);
+        return ArrayOperations.copy(newMatrix);
     }
 
 }

@@ -2,6 +2,7 @@ package com.comp2042.game.board;
 
 import com.comp2042.game.bricks.*;
 import com.comp2042.game.scoring.Score;
+import com.comp2042.util.ArrayOperations;
 import com.comp2042.util.MatrixOperations;
 
 import java.awt.*;
@@ -47,7 +48,7 @@ public class SimpleBoard implements Board {
      */
 
     private boolean tryMove(int dx, int dy) {
-        int[][] currentMatrix = MatrixOperations.copy(currentGameMatrix);
+        int[][] currentMatrix = ArrayOperations.copy(currentGameMatrix);
 
         Point newOffset = new Point(currentOffset);
         newOffset.translate(dx, dy);
@@ -84,7 +85,7 @@ public class SimpleBoard implements Board {
 
     @Override
     public boolean rotateLeftBrick() {
-        int[][] currentMatrix = MatrixOperations.copy(currentGameMatrix);
+        int[][] currentMatrix = ArrayOperations.copy(currentGameMatrix);
         NextShapeInfo nextShape = brickRotator.getNextShape();
         boolean conflict = MatrixOperations.intersect(
                 currentMatrix,

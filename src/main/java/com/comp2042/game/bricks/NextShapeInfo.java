@@ -1,6 +1,7 @@
 package com.comp2042.game.bricks;
 
-import com.comp2042.util.MatrixOperations;
+
+import com.comp2042.util.ArrayOperations;
 
 public final class NextShapeInfo {
 
@@ -13,7 +14,7 @@ public final class NextShapeInfo {
     }
 
     public int[][] getShape() {
-        return MatrixOperations.copy(shape);
+        return ArrayOperations.copy(shape);
     }
 
     public int getPosition() {
