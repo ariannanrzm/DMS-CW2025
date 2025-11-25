@@ -1,5 +1,10 @@
 .root {
-    -fx-background-image: url("background_image.png");
+    -fx-background-color: rgba(0, 1, 70, 1);
+}
+
+.game-grid {
+    -fx-background-color: rgba(25, 19, 29, 1);
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
 }
 
 .nextBrick {
@@ -8,11 +13,6 @@
     -fx-border-radius: 17px;
 }
 
-.gameBoard {
-    -fx-border-color: linear-gradient(#2A5058, #61a2b1);
-    -fx-border-width: 12px;
-    -fx-border-radius: 12px;
-}
 
 .nextBrickLabel {
     -fx-font-family: "Let's go Digital";

@@ -62,7 +62,8 @@ public class GuiController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Font.loadFont(getClass().getClassLoader().getResource("digital.ttf").toExternalForm(), 38);
-
+        gamePanel.getStyleClass().add("game-grid");
+        brickPanel.toFront();
         gamePanel.setFocusTraversable(true);
         gamePanel.requestFocus();
         gameOverPanel.setVisible(false);
