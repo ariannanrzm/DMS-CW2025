@@ -4,6 +4,7 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
 public final class Score {
+    private static final int SOFT_DROP_SCORE = 1;
 
     private final IntegerProperty score = new SimpleIntegerProperty(0);
 
@@ -11,8 +12,21 @@ public final class Score {
         return score;
     }
 
-    public void add(int i) {
-        score.setValue(score.getValue() + i);
+    /**
+     * Calculates and adds points for cleared lines.
+     */
+
+    public int addLinesCleared(int lines) {
+        if (lines > 0) {
+            int bonus = 50 * lines * lines;
+            score.setValue(score.getValue() + bonus);
+            return bonus;
+        }
+        return 0;
+    }
+
+    public void addSoftDrop() {
+        score.setValue(score.getValue() + SOFT_DROP_SCORE);
     }
 
     public void reset() {

@@ -12,8 +12,6 @@ import com.comp2042.game.config.GameConfig;
  */
 public class GameController implements InputEventListener {
 
-    private static final int SOFT_DROP_SCORE = 1;
-
     /** Game logic board */
     private final Board board = new SimpleBoard(
             GameConfig.get().getBoardHeight(),
@@ -58,8 +56,8 @@ public class GameController implements InputEventListener {
         incrementSoftDropScore(event);
 
         if (event.getEventSource() == EventSource.USER) {
-            board.getScore().add(SOFT_DROP_SCORE);
-            viewGuiController.resetTimeline(); // <--- Add this line
+            board.getScore().addSoftDrop();
+            viewGuiController.resetTimeline();
         }
 
         // refresh brick on move
@@ -79,7 +77,7 @@ public class GameController implements InputEventListener {
 
     private void incrementSoftDropScore(MoveEvent event) {
         if (event.getEventSource() == EventSource.USER) {
-            board.getScore().add(SOFT_DROP_SCORE);
+            board.getScore().addSoftDrop();
         }
     }
 
