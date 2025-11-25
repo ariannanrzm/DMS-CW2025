@@ -5,18 +5,20 @@ import com.comp2042.game.board.*;
 import com.comp2042.game.events.EventSource;
 import com.comp2042.game.events.InputEventListener;
 import com.comp2042.game.events.MoveEvent;
+import com.comp2042.game.config.GameConfig;
 
 /**
  * GameController handles only game logic and communication with the Board.
  */
 public class GameController implements InputEventListener {
 
-    private static final int BOARD_ROWS = 25;
-    private static final int BOARD_COLUMNS = 10;
     private static final int SOFT_DROP_SCORE = 1;
 
     /** Game logic board */
-    private final Board board = new SimpleBoard(BOARD_ROWS, BOARD_COLUMNS);
+    private final Board board = new SimpleBoard(
+            GameConfig.get().getBoardRows(),
+            GameConfig.get().getBoardColumns()
+    );
 
     /** GUI controller (only to register event listeners; no UI calls here) */
     private final GuiController viewGuiController;

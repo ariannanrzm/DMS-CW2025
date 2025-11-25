@@ -7,6 +7,7 @@ import com.comp2042.game.events.EventSource;
 import com.comp2042.game.events.EventType;
 import com.comp2042.game.events.InputEventListener;
 import com.comp2042.game.events.MoveEvent;
+import com.comp2042.game.config.GameConfig;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.property.BooleanProperty;
@@ -33,11 +34,6 @@ import java.util.ResourceBundle;
  */
 public class GuiController implements Initializable {
 
-    private static final int BRICK_SIZE = 20;
-    private static final int TOP_OFFSET = -42;
-    private static final int ARC_RADIUS = 9;
-    private static final int DROP_INTERVAL_MS = 400;
-    private static final int HIDDEN_ROWS = 2;
 
     @FXML
     private GridPane gamePanel;
@@ -84,6 +80,10 @@ public class GuiController implements Initializable {
 
         displayMatrix = new Rectangle[boardMatrix.length][boardMatrix[0].length];
 
+        // singleton used here
+        int HIDDEN_ROWS = GameConfig.get().getHiddenRows();
+        int BRICK_SIZE = GameConfig.get().getBrickSize();
+
         for (int i = HIDDEN_ROWS; i < boardMatrix.length; i++) {
             for (int j = 0; j < boardMatrix[i].length; j++) {
                 Rectangle r = new Rectangle(BRICK_SIZE, BRICK_SIZE);
@@ -107,7 +107,7 @@ public class GuiController implements Initializable {
         updateBrickPanelPosition(brick);
 
         timeLine = new Timeline(new KeyFrame(
-                Duration.millis(DROP_INTERVAL_MS),
+                Duration.millis(GameConfig.get().getDropInterval()),
                 ae -> moveDown(new MoveEvent(EventType.DOWN, EventSource.THREAD))
         ));
         timeLine.setCycleCount(Timeline.INDEFINITE);
@@ -115,6 +115,9 @@ public class GuiController implements Initializable {
     }
 
     private void updateBrickPanelPosition(ViewData brick) {
+        int BRICK_SIZE = GameConfig.get().getBrickSize();
+        int TOP_OFFSET = GameConfig.get().getTopOffset();
+
         brickPanel.setLayoutX(gamePanel.getLayoutX()
                 + brick.getxPosition() * BRICK_SIZE);
 
@@ -138,8 +141,9 @@ public class GuiController implements Initializable {
 
     private void setRectangleData(int color, Rectangle r) {
         r.setFill(getFillColor(color));
-        r.setArcHeight(ARC_RADIUS);
-        r.setArcWidth(ARC_RADIUS);
+
+        r.setArcHeight(GameConfig.get().getArcRadius());
+        r.setArcWidth(GameConfig.get().getArcRadius());
     }
 
     public void refreshBrick(ViewData brick) {
@@ -154,6 +158,8 @@ public class GuiController implements Initializable {
     }
 
     public void refreshGameBackground(int[][] board) {
+        int HIDDEN_ROWS = GameConfig.get().getHiddenRows();
+
         for (int i = HIDDEN_ROWS; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
                 setRectangleData(board[i][j], displayMatrix[i][j]);
