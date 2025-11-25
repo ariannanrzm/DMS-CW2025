@@ -50,7 +50,6 @@ public class SimpleBoard implements Board {
         int[][] currentMatrix = ArrayOperations.copy(currentGameMatrix);
 
         GamePoint newOffset = currentOffset.translate(dx, dy);
-        newOffset.translate(dx, dy);
 
         boolean conflict = MatrixOperations.intersect(
                 currentMatrix,
