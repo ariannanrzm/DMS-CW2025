@@ -38,6 +38,15 @@ public class SimpleBoard implements Board {
         score = new Score();
     }
 
+    private boolean isMoveValid(int x, int y, int[][] brickMatrix) {
+        return !MatrixOperations.intersect(
+                currentGameMatrix,
+                brickMatrix,
+                x,
+                y
+        );
+    }
+
     /**
      * Attempts to move the active brick by a given offset.
      *
@@ -47,18 +56,10 @@ public class SimpleBoard implements Board {
      */
 
     private boolean tryMove(int dx, int dy) {
-        int[][] currentMatrix = ArrayOperations.copy(currentGameMatrix);
 
         GamePoint newOffset = currentOffset.translate(dx, dy);
 
-        boolean conflict = MatrixOperations.intersect(
-                currentMatrix,
-                brickRotator.getCurrentShape(),
-                newOffset.x(),
-                newOffset.y()
-        );
-
-        if (conflict) {
+        if (!isMoveValid((newOffset.x()), newOffset.y(), brickRotator.getCurrentShape())){
             return false;
         }
 
@@ -83,16 +84,9 @@ public class SimpleBoard implements Board {
 
     @Override
     public boolean rotateLeftBrick() {
-        int[][] currentMatrix = ArrayOperations.copy(currentGameMatrix);
         NextShapeInfo nextShape = brickRotator.getNextShape();
-        boolean conflict = MatrixOperations.intersect(
-                currentMatrix,
-                nextShape.getShape(),
-                currentOffset.x(),
-                currentOffset.y()
-        );
 
-        if (conflict) {
+        if (!isMoveValid((currentOffset.x()), currentOffset.y(), nextShape.getShape())) {
             return false;
         }
 
@@ -107,11 +101,10 @@ public class SimpleBoard implements Board {
 
         currentOffset = new GamePoint(SPAWN_X, SPAWN_Y);
 
-        return MatrixOperations.intersect(
-                currentGameMatrix,
-                brickRotator.getCurrentShape(),
+        return !isMoveValid(
                 currentOffset.x(),
-                currentOffset.y()
+                currentOffset.y(),
+                brickRotator.getCurrentShape()
         );
     }
 

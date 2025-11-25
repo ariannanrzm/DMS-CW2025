@@ -18,7 +18,7 @@ public class GameController implements InputEventListener {
             GameConfig.get().getBoardWidth()
     );
 
-    /** GUI controller (only to register event listeners; no UI calls here) */
+    /** GUI controller (only for view updates, not game logic) */
     private final GuiController viewGuiController;
 
     public GameController(GuiController viewGuiController) {
