@@ -5,7 +5,6 @@ import com.comp2042.game.scoring.Score;
 import com.comp2042.util.ArrayOperations;
 import com.comp2042.util.MatrixOperations;
 
-import java.awt.*;
 
 /**
  * The SimpleBoard class manages brick movement, rotation, spawning,
@@ -27,7 +26,7 @@ public class SimpleBoard implements Board {
     private final BrickGenerator brickGenerator;
     private final BrickRotator brickRotator;
     private int[][] currentGameMatrix;
-    private Point currentOffset;
+    private GamePoint currentOffset;
     private final Score score;
 
     public SimpleBoard(int width, int height) {
@@ -50,14 +49,14 @@ public class SimpleBoard implements Board {
     private boolean tryMove(int dx, int dy) {
         int[][] currentMatrix = ArrayOperations.copy(currentGameMatrix);
 
-        Point newOffset = new Point(currentOffset);
+        GamePoint newOffset = currentOffset.translate(dx, dy);
         newOffset.translate(dx, dy);
 
         boolean conflict = MatrixOperations.intersect(
                 currentMatrix,
                 brickRotator.getCurrentShape(),
-                (int) newOffset.getX(),
-                (int) newOffset.getY()
+                newOffset.x(),
+                newOffset.y()
         );
 
         if (conflict) {
@@ -90,8 +89,8 @@ public class SimpleBoard implements Board {
         boolean conflict = MatrixOperations.intersect(
                 currentMatrix,
                 nextShape.getShape(),
-                (int) currentOffset.getX(),
-                (int) currentOffset.getY()
+                currentOffset.x(),
+                currentOffset.y()
         );
 
         if (conflict) {
@@ -107,13 +106,13 @@ public class SimpleBoard implements Board {
         Brick currentBrick = brickGenerator.getBrick();
         brickRotator.setBrick(currentBrick);
 
-        currentOffset = new Point(SPAWN_X, SPAWN_Y);
+        currentOffset = new GamePoint(SPAWN_X, SPAWN_Y);
 
         return MatrixOperations.intersect(
                 currentGameMatrix,
                 brickRotator.getCurrentShape(),
-                (int) currentOffset.getX(),
-                (int) currentOffset.getY()
+                currentOffset.x(),
+                currentOffset.y()
         );
     }
 
@@ -126,8 +125,8 @@ public class SimpleBoard implements Board {
     public ViewData getViewData() {
         return new ViewData(
                 brickRotator.getCurrentShape(),
-                (int) currentOffset.getX(),
-                (int) currentOffset.getY(),
+                currentOffset.x(),
+                currentOffset.y(),
                 brickGenerator.getNextBrick().getShapeMatrix().get(0)
         );
     }
@@ -137,8 +136,8 @@ public class SimpleBoard implements Board {
         currentGameMatrix = MatrixOperations.merge(
                 currentGameMatrix,
                 brickRotator.getCurrentShape(),
-                (int) currentOffset.getX(),
-                (int) currentOffset.getY()
+                currentOffset.x(),
+                currentOffset.y()
         );
     }
 
