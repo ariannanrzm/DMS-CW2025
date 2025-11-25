@@ -16,8 +16,8 @@ public class GameController implements InputEventListener {
 
     /** Game logic board */
     private final Board board = new SimpleBoard(
-            GameConfig.get().getBoardRows(),
-            GameConfig.get().getBoardColumns()
+            GameConfig.get().getBoardHeight(),
+            GameConfig.get().getBoardWidth()
     );
 
     /** GUI controller (only to register event listeners; no UI calls here) */

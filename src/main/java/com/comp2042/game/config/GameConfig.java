@@ -12,8 +12,8 @@ public class GameConfig {
     private static final int ARC_RADIUS = 9;
     private static final int DROP_INTERVAL_MS = 400;
     private static final int HIDDEN_ROWS = 2;
-    private static final int BOARD_ROWS = 25;
-    private static final int BOARD_COLUMNS = 10;
+    private static final int BOARD_HEIGHT = 25;
+    private static final int BOARD_WIDTH = 10;
 
     private GameConfig() {}
 
@@ -23,8 +23,8 @@ public class GameConfig {
     }
 
     // Getters
-    public int getBoardColumns() { return BOARD_COLUMNS; }
-    public int getBoardRows() { return BOARD_ROWS; }
+    public int getBoardWidth() { return BOARD_WIDTH; }
+    public int getBoardHeight() { return BOARD_HEIGHT; }
     public int getBrickSize() { return BRICK_SIZE; }
     public int getHiddenRows() { return HIDDEN_ROWS; }
     public double getArcRadius() { return ARC_RADIUS; }
