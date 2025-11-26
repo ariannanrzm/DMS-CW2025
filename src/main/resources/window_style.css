@@ -1,10 +1,11 @@
 .root {
-    -fx-background-color: rgba(0, 1, 70, 1);
+    -fx-background-color: rgba(25, 19, 29, 1);
 }
 
 .game-grid {
     -fx-background-color: rgba(25, 19, 29, 1);
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
+    -fx-border-color: whitesmoke;
+    -fx-effect: dropshadow(three-pass-box, rgbargba(17, 12, 17, 1), 20, 0, 0, 0);
 }
 
 .nextBrick {
