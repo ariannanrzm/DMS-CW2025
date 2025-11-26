@@ -121,7 +121,7 @@ public class GuiController implements Initializable {
     private void showClearRowNotication(ClearRow clearRow){
         if (clearRow != null && clearRow.getLinesRemoved() > 0) {
             NotificationPanel notif = new NotificationPanel("Lines Cleared: " + clearRow.getLinesRemoved());
-
+=
             groupNotification.getChildren().add(notif);
             notif.showScore(groupNotification.getChildren());
         }
