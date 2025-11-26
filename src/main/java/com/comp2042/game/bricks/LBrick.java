@@ -1,14 +1,6 @@
 package com.comp2042.game.bricks;
 
-import com.comp2042.util.ArrayOperations;
-
-import java.util.ArrayList;
-import java.util.List;
-
-final class LBrick implements Brick {
-
-    private final List<int[][]> brickMatrix = new ArrayList<>();
-
+final class LBrick extends AbstractBrick {
     public LBrick() {
         brickMatrix.add(new int[][]{
                 {0, 0, 0, 0},
@@ -35,9 +27,5 @@ final class LBrick implements Brick {
                 {0, 0, 0, 0}
         });
     }
-
-    @Override
-    public List<int[][]> getShapeMatrix() {
-        return ArrayOperations.deepCopyList(brickMatrix);
-    }
 }
+
