@@ -35,6 +35,7 @@ import java.util.ResourceBundle;
  */
 public class GuiController implements Initializable {
 
+    private static final int BOARD_BORDER_OFFSET = 2;
 
     @FXML
     private GridPane gamePanel;
@@ -136,9 +137,12 @@ public class GuiController implements Initializable {
 
         // Correct the visual offset when brick falls.
         final int CELL_STEP = BRICK_SIZE + 1;
-
+        final int RIGHT_EDGE_VISUAL_TWEAK = 1;
         brickPanel.setLayoutX(gamePanel.getLayoutX()
-                + brick.getxPosition() * CELL_STEP);
+                + BOARD_BORDER_OFFSET
+                + brick.getxPosition() * CELL_STEP
+                - RIGHT_EDGE_VISUAL_TWEAK
+        );
 
         brickPanel.setLayoutY(TOP_OFFSET + gamePanel.getLayoutY()
                 + brick.getyPosition() * CELL_STEP);
