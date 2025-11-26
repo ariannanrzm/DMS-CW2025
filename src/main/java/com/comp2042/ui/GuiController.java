@@ -1,5 +1,6 @@
 package com.comp2042.ui;
 
+import com.comp2042.game.board.ClearRow;
 import com.comp2042.game.board.DownData;
 import com.comp2042.game.board.ViewData;
 import com.comp2042.game.controller.GameController;
@@ -113,6 +114,20 @@ public class GuiController implements Initializable {
         ));
         timeLine.setCycleCount(Timeline.INDEFINITE);
         timeLine.play();
+    }
+
+
+    private void showClearRowNotication(ClearRow clearRow){
+        if (clearRow != null && clearRow.getLinesRemoved() > 0) {
+            NotificationPanel notif = new NotificationPanel("Lines Cleared: " + clearRow.getLinesRemoved());
+
+            groupNotification.getChildren().add(notif);
+            notif.showScore(groupNotification.getChildren());
+        }
+    }
+
+    public void showNotificationIfRowsCleared(ClearRow clearRow) {
+        showClearRowNotication(clearRow);
     }
 
     private void updateBrickPanelPosition(ViewData brick) {

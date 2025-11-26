@@ -152,6 +152,32 @@ public class SimpleBoard implements Board {
     }
 
     @Override
+    public DownData hardDropBrick() {
+        int rowsDropped = 0;
+
+        // Move the brick down until collision
+        while (tryMove(0, MOVE_DOWN)) {
+            rowsDropped++;
+        }
+
+        score.addHardDrop(rowsDropped);
+
+        mergeBrickToBackground();
+
+        ClearRow clearRow = clearRows();
+
+        // Create a new brick and check for game over
+        boolean gameOver = createNewBrick();
+
+        return new DownData(
+                clearRow,
+                getViewData(),
+                getBoardMatrix(),
+                gameOver
+        );
+    }
+
+    @Override
     public void newGame() {
         currentGameMatrix = new int[width][height];
         score.reset();

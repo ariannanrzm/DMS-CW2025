@@ -9,6 +9,8 @@ import javafx.scene.input.KeyCode;
 
 import javafx.scene.input.KeyEvent;
 
+import java.security.Key;
+
 /**
  * Handles all keyboard input and forwards actions to the GameController.
  */
@@ -39,6 +41,8 @@ public class InputHandler {
             controller.onRotateEvent(new MoveEvent(EventType.ROTATE, EventSource.USER));
         } else if (code == KeyCode.DOWN || code == KeyCode.S) {
             controller.onDownEvent(new MoveEvent(EventType.DOWN, EventSource.USER));
+        } else if (code == KeyCode.SPACE) {
+            controller.onHardDropEvent(new MoveEvent(EventType.HARD_DROP, EventSource.USER));
         } else if (code == KeyCode.N) {
             controller.createNewGame();
         }

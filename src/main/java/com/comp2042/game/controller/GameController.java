@@ -72,6 +72,22 @@ public class GameController implements InputEventListener {
         return board.clearRows();
     }
 
+    @Override
+    public DownData onHardDropEvent(MoveEvent event) {
+        DownData data = board.hardDropBrick();
+
+        // Full refresh and game over check.
+        viewGuiController.refreshGameBackground(data.getBoardMatrix());
+        viewGuiController.refreshBrick(data.getViewData());
+
+        viewGuiController.showNotificationIfRowsCleared(data.getClearRow());
+
+        if (data.isGameOver()) {
+            viewGuiController.gameOver();
+        }
+
+        return data;
+    }
 
     private void incrementSoftDropScore(MoveEvent event) {
         if (event.getEventSource() == EventSource.USER) {
