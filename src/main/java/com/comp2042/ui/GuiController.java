@@ -119,11 +119,14 @@ public class GuiController implements Initializable {
         int BRICK_SIZE = GameConfig.get().getBrickSize();
         int TOP_OFFSET = GameConfig.get().getTopOffset();
 
+        // Correct the visual offset when brick falls.
+        final int CELL_STEP = BRICK_SIZE + 1;
+
         brickPanel.setLayoutX(gamePanel.getLayoutX()
-                + brick.getxPosition() * BRICK_SIZE);
+                + brick.getxPosition() * CELL_STEP);
 
         brickPanel.setLayoutY(TOP_OFFSET + gamePanel.getLayoutY()
-                + brick.getyPosition() * BRICK_SIZE);
+                + brick.getyPosition() * CELL_STEP);
     }
 
     private Paint getFillColor(int i) {
