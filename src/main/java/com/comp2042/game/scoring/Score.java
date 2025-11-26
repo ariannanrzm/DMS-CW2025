@@ -5,6 +5,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 
 public final class Score {
     private static final int SOFT_DROP_SCORE = 1;
+    private static final int HARD_DROP_SCORE = 2;
 
     private final IntegerProperty score = new SimpleIntegerProperty(0);
 
@@ -27,6 +28,13 @@ public final class Score {
 
     public void addSoftDrop() {
         score.setValue(score.getValue() + SOFT_DROP_SCORE);
+    }
+
+    /**
+     * Adds score for hard drop based on the number of rows dropped.
+     */
+    public void addHardDrop(int rows) {
+        score.setValue(score.getValue() + (rows * HARD_DROP_SCORE));
     }
 
     public void reset() {
