@@ -56,7 +56,6 @@ public class GameController implements InputEventListener {
         incrementSoftDropScore(event);
 
         if (event.getEventSource() == EventSource.USER) {
-            board.getScore().addSoftDrop();
             viewGuiController.resetTimeline();
         }
 
@@ -70,7 +69,6 @@ public class GameController implements InputEventListener {
     }
 
     private ClearRow handleLanding() {
-        board.mergeBrickToBackground();
         return board.clearRows();
     }
 
