@@ -241,4 +241,9 @@ public class GuiController implements Initializable {
     public void pauseGame(ActionEvent e) {
         gamePanel.requestFocus();
     }
+
+    public boolean isGameOver() {
+        return isGameOver.get();
+    }
+
 }

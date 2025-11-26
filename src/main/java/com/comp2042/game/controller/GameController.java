@@ -34,6 +34,7 @@ public class GameController implements InputEventListener {
 
     @Override
     public DownData onDownEvent(MoveEvent event) {
+        if(viewGuiController.isGameOver()) return null;
         boolean canMove = board.moveBrickDown();
 
         if (!canMove) {
@@ -74,6 +75,8 @@ public class GameController implements InputEventListener {
 
     @Override
     public DownData onHardDropEvent(MoveEvent event) {
+        if (viewGuiController.isGameOver()) return null;
+
         DownData data = board.hardDropBrick();
 
         // Full refresh and game over check.
@@ -98,6 +101,7 @@ public class GameController implements InputEventListener {
 
     @Override
     public ViewData onLeftEvent(MoveEvent event) {
+        if (viewGuiController.isGameOver()) return null;
         board.moveBrickLeft();
         viewGuiController.refreshBrick(board.getViewData());
         return null;
@@ -106,6 +110,7 @@ public class GameController implements InputEventListener {
 
     @Override
     public ViewData onRightEvent(MoveEvent event) {
+        if (viewGuiController.isGameOver()) return null;
         board.moveBrickRight();
         viewGuiController.refreshBrick(board.getViewData());
         return null;
@@ -113,6 +118,7 @@ public class GameController implements InputEventListener {
 
     @Override
     public ViewData onRotateEvent(MoveEvent event) {
+        if (viewGuiController.isGameOver()) return null;
         board.rotateLeftBrick();
         viewGuiController.refreshBrick(board.getViewData());
         return null;
