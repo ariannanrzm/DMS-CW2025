@@ -1,5 +1,6 @@
 package com.comp2042.game.controller;
 
+import com.comp2042.game.bricks.RandomBrickGenerator;
 import com.comp2042.ui.GuiController;
 import com.comp2042.game.board.*;
 import com.comp2042.game.events.EventSource;
@@ -13,16 +14,19 @@ import com.comp2042.game.config.GameConfig;
 public class GameController implements InputEventListener {
 
     /** Game logic board */
-    private final Board board = new SimpleBoard(
-            GameConfig.get().getBoardHeight(),
-            GameConfig.get().getBoardWidth()
-    );
+    private final Board board;
 
     /** GUI controller (only for view updates, not game logic) */
     private final GuiController viewGuiController;
 
     public GameController(GuiController viewGuiController) {
         this.viewGuiController = viewGuiController;
+
+        this.board = new SimpleBoard(
+                GameConfig.get().getBoardHeight(),
+                GameConfig.get().getBoardWidth(),
+                new RandomBrickGenerator()
+        );
 
         this.viewGuiController.setGameController(this);
         this.viewGuiController.setEventListener(this);

@@ -9,7 +9,6 @@ import com.comp2042.util.MatrixOperations;
 /**
  * The SimpleBoard class manages brick movement, rotation, spawning,
  * background merging, and row clearing.
- * Refactoring to reduce duplication and eliminate magic numbers.
  */
 
 public class SimpleBoard implements Board {
@@ -29,13 +28,13 @@ public class SimpleBoard implements Board {
     private GamePoint currentOffset;
     private final Score score;
 
-    public SimpleBoard(int width, int height) {
+    public SimpleBoard(int width, int height,  BrickGenerator brickGenerator) {
         this.width = width;
         this.height = height;
-        currentGameMatrix = new int[width][height];
-        brickGenerator = new RandomBrickGenerator();
-        brickRotator = new BrickRotator();
-        score = new Score();
+        this.brickGenerator = brickGenerator;
+        this.currentGameMatrix = new int[width][height];
+        this.brickRotator = new BrickRotator();
+        this.score = new Score();
     }
 
     private boolean isMoveValid(int x, int y, int[][] brickMatrix) {
