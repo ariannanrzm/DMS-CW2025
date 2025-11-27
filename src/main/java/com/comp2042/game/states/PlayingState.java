@@ -34,10 +34,16 @@ public class PlayingState implements GameState {
             context.getGuiController().refreshGameBackground(data.getBoardMatrix());
             context.getGuiController().refreshBrick(context.getBoard().getViewData());
 
-            if (gameOver) {
-                context.setState(context.getGameOverState());
-                context.getGuiController().gameOver();
+
+            // Only refresh the brick if the game is not over
+            if (!gameOver) {
+                context.getGuiController().refreshBrick(context.getBoard().getViewData());
             }
+
+            if (gameOver) {
+                    context.setState(context.getGameOverState());
+                    context.getGuiController().gameOver();
+                }
 
             return data;
         }
@@ -83,6 +89,11 @@ public class PlayingState implements GameState {
         context.getGuiController().refreshGameBackground(data.getBoardMatrix());
         context.getGuiController().refreshBrick(data.getViewData());
         context.getGuiController().showNotificationIfRowsCleared(data.getClearRow());
+
+        // Only refresh the brick if the game is not over
+        if (!data.isGameOver()) {
+            context.getGuiController().refreshBrick(data.getViewData());
+        }
 
         if (data.isGameOver()) {
             context.setState(context.getGameOverState());

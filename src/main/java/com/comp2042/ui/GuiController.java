@@ -179,7 +179,11 @@ public class GuiController implements Initializable {
                 showNotificationIfRowsCleared(downData.getClearRow());
             }
             refreshGameBackground(downData.getBoardMatrix());
-            refreshBrick(downData.getViewData());
+
+            // Only refresh the brick if game is not over
+            if(!downData.isGameOver()) {
+                refreshBrick(downData.getViewData());
+            }
         }
     }
 
@@ -192,6 +196,7 @@ public class GuiController implements Initializable {
     public void gameOver() {
         timeLine.stop();
         gameOverPanel.setVisible(true);
+        brickPanel.setVisible(false);
     }
 
     public void resetTimeline() {
@@ -206,6 +211,7 @@ public class GuiController implements Initializable {
      */
     public void resetGameView() {
         gameOverPanel.setVisible(false);
+        brickPanel.setVisible(true);
         gamePanel.requestFocus();
         timeLine.play();
     }
