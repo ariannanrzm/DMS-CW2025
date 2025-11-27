@@ -29,35 +29,21 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
- * GuiController manages visual updates, keyboard input, and animations for
- * the Tetris game. This refactored version replaces magic numbers and extracts
- * repeated UI update logic for improved readability.
+ * GuiController manages visual updates and animations.
  */
 public class GuiController implements Initializable {
 
     private static final int BOARD_BORDER_OFFSET = 2;
 
-    @FXML
-    private GridPane gamePanel;
-
-    @FXML
-    private Group groupNotification;
-
-    @FXML
-    private GridPane brickPanel;
-
-    @FXML
-    private GameOverPanel gameOverPanel;
+    @FXML private GridPane gamePanel;
+    @FXML private Group groupNotification;
+    @FXML private GridPane brickPanel;
+    @FXML private GameOverPanel gameOverPanel;
 
     private Rectangle[][] displayMatrix;
     private Rectangle[][] rectangles;
-
     private InputEventListener eventListener;
     private Timeline timeLine;
-
-    private final BooleanProperty isPause = new SimpleBooleanProperty();
-    private final BooleanProperty isGameOver = new SimpleBooleanProperty();
-
     private InputHandler inputHandler;
     private GameController gameController;
 
@@ -74,7 +60,6 @@ public class GuiController implements Initializable {
 
     public void setGameController(GameController controller) {
         this.gameController = controller;
-
         this.inputHandler = new InputHandler(controller);
         inputHandler.attachTo(gamePanel);
     }
@@ -82,7 +67,6 @@ public class GuiController implements Initializable {
     public void initGameView(int[][] boardMatrix, ViewData brick) {
 
         displayMatrix = new Rectangle[boardMatrix.length][boardMatrix[0].length];
-
         // singleton used here
         int HIDDEN_ROWS = GameConfig.get().getHiddenRows();
         int BRICK_SIZE = GameConfig.get().getBrickSize();
@@ -121,7 +105,6 @@ public class GuiController implements Initializable {
     private void showClearRowNotication(ClearRow clearRow){
         if (clearRow != null && clearRow.getLinesRemoved() > 0) {
             NotificationPanel notif = new NotificationPanel("Lines Cleared: " + clearRow.getLinesRemoved());
-=
             groupNotification.getChildren().add(notif);
             notif.showScore(groupNotification.getChildren());
         }
@@ -170,9 +153,7 @@ public class GuiController implements Initializable {
     }
 
     public void refreshBrick(ViewData brick) {
-        if (isPause.get()) return;
         updateBrickPanelPosition(brick);
-
         for (int i = 0; i < brick.getBrickData().length; i++) {
             for (int j = 0; j < brick.getBrickData()[i].length; j++) {
                 setRectangleData(brick.getBrickData()[i][j], rectangles[i][j]);
@@ -191,26 +172,14 @@ public class GuiController implements Initializable {
     }
 
     private void moveDown(MoveEvent event) {
-        if (!isPause.get()) {
-            DownData downData = eventListener.onDownEvent(event);
+        DownData downData = eventListener.onDownEvent(event);
 
-            //  If rows were cleared, show notification
-            if (downData.getClearRow() != null &&
-                    downData.getClearRow().getLinesRemoved() > 0) {
-
-                NotificationPanel notif =
-                        new NotificationPanel("Lines cleared: " + downData.getClearRow().getLinesRemoved());
-
-                groupNotification.getChildren().add(notif);
-                notif.showScore(groupNotification.getChildren());
+        if (downData != null) {
+            if (downData.getClearRow() != null && downData.getClearRow().getLinesRemoved() > 0) {
+                showNotificationIfRowsCleared(downData.getClearRow());
             }
-
             refreshGameBackground(downData.getBoardMatrix());
             refreshBrick(downData.getViewData());
-
-            if (downData.isGameOver()) {
-                gameOver();
-            }
         }
     }
 
@@ -223,7 +192,6 @@ public class GuiController implements Initializable {
     public void gameOver() {
         timeLine.stop();
         gameOverPanel.setVisible(true);
-        isGameOver.set(true);
     }
 
     public void resetTimeline() {
@@ -232,22 +200,33 @@ public class GuiController implements Initializable {
             timeLine.play(); // Restarts the 400ms countdown from 0
         }
     }
-    public void newGame(ActionEvent e) {
-        timeLine.stop();
+
+    /**
+     * Resets the view for a new game.
+     */
+    public void resetGameView() {
         gameOverPanel.setVisible(false);
-        eventListener.createNewGame();
         gamePanel.requestFocus();
         timeLine.play();
-        isPause.set(false);
-        isGameOver.set(false);
+    }
+
+    public void newGame(ActionEvent e) {
+        eventListener.createNewGame();
     }
 
     public void pauseGame(ActionEvent e) {
         gamePanel.requestFocus();
     }
 
-    public boolean isGameOver() {
-        return isGameOver.get();
+    public void showPauseMessage(boolean isPaused) {
+        if (isPaused) {
+            NotificationPanel notif = new NotificationPanel("PAUSED");
+            groupNotification.getChildren().add(notif);
+            notif.showScore(groupNotification.getChildren());
+            timeLine.pause();
+        } else {
+            timeLine.play();
+        }
     }
 
 }
