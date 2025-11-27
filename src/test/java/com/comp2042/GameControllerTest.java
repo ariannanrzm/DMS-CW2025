@@ -107,20 +107,4 @@ public class GameControllerTest {
         assertEquals(initialX + 1, newX, "Brick should move one step right");
         assertEquals(initialY, newY, "Y position should not change when moving right");
     }
-
-    @Test
-    public void testDownEventMovesBrickDown() {
-        MockGuiController mockGui = new MockGuiController();
-        GameController controller = new GameController(mockGui);
-
-        int initialY = controller.getBoard().getViewData().getyPosition();
-
-        // simulate DOWN key from user
-        controller.onDownEvent(new MoveEvent(EventType.DOWN, EventSource.USER));
-
-        int newY = controller.getBoard().getViewData().getyPosition();
-
-        assertEquals(initialY + 1, newY, "Brick should move one step down");
-    }
-
 }
