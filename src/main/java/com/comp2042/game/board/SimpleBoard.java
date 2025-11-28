@@ -65,6 +65,25 @@ public class SimpleBoard implements Board {
         return true;
     }
 
+    // Helper method to calculate where the ghost lands
+    private int calculateGhostY() {
+        int ghostY = currentOffset.y();
+        int[][] currentShape = brickRotator.getCurrentShape();
+
+        while (true) {
+            // Check if we can move one step further down
+            boolean canMoveFurther = isMoveValid(currentOffset.x(), ghostY + 1, currentShape);
+
+            if (canMoveFurther) {
+                ghostY++;
+            } else {
+                break;
+            }
+        }
+
+        return ghostY;
+    }
+
     @Override
     public boolean moveBrickDown() {
         return tryMove(0, MOVE_DOWN);
@@ -110,12 +129,15 @@ public class SimpleBoard implements Board {
         return currentGameMatrix;
     }
 
+
+
     @Override
     public ViewData getViewData() {
         return new ViewData(
                 brickRotator.getCurrentShape(),
                 currentOffset.x(),
                 currentOffset.y(),
+                calculateGhostY(),
                 brickGenerator.getNextBrick().getShapeMatrix().get(0)
         );
     }
@@ -158,9 +180,7 @@ public class SimpleBoard implements Board {
         }
 
         score.addHardDrop(rowsDropped);
-
         mergeBrickToBackground();
-
         ClearRow clearRow = clearRows();
 
         // Create a new brick and check for game over

@@ -11,14 +11,13 @@ import com.comp2042.game.events.MoveEvent;
 import com.comp2042.game.config.GameConfig;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
@@ -46,6 +45,8 @@ public class GuiController implements Initializable {
     private Timeline timeLine;
     private InputHandler inputHandler;
     private GameController gameController;
+    private GridPane ghostPanel;
+    private Rectangle[][] ghostRectangles;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -77,6 +78,27 @@ public class GuiController implements Initializable {
                 r.setFill(Color.TRANSPARENT);
                 displayMatrix[i][j] = r;
                 gamePanel.add(r, j, i - HIDDEN_ROWS);
+            }
+        }
+
+        ghostPanel = new GridPane();
+        ghostPanel.setVgap(1);
+        ghostPanel.setHgap(1);
+
+        Pane parent = (Pane) brickPanel.getParent();
+        parent.getChildren().add(parent.getChildren().indexOf(brickPanel), ghostPanel);
+        ghostRectangles = new Rectangle[4][4]; // Max brick size is 4x4
+
+        // Initialize ghost rectangles
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                Rectangle r = new Rectangle(BRICK_SIZE, BRICK_SIZE);
+                r.setFill(Color.web("#ffffff", 0.2)); // Semi-transparent white
+                r.setArcHeight(GameConfig.get().getArcRadius());
+                r.setArcWidth(GameConfig.get().getArcRadius());
+                r.setVisible(false);
+                ghostRectangles[i][j] = r;
+                ghostPanel.add(r, j, i);
             }
         }
 
@@ -120,15 +142,19 @@ public class GuiController implements Initializable {
 
         // Correct the visual offset when brick falls.
         final int CELL_STEP = BRICK_SIZE + 1;
-        final int RIGHT_EDGE_VISUAL_TWEAK = 1;
+
         brickPanel.setLayoutX(gamePanel.getLayoutX()
                 + BOARD_BORDER_OFFSET
                 + brick.getxPosition() * CELL_STEP
-                - RIGHT_EDGE_VISUAL_TWEAK
         );
 
         brickPanel.setLayoutY(TOP_OFFSET + gamePanel.getLayoutY()
                 + brick.getyPosition() * CELL_STEP);
+
+        if (ghostPanel != null) {
+            ghostPanel.setLayoutX(gamePanel.getLayoutX() + BOARD_BORDER_OFFSET + brick.getxPosition() * CELL_STEP);
+            ghostPanel.setLayoutY(TOP_OFFSET + gamePanel.getLayoutY() + brick.getGhostYPosition() * CELL_STEP);
+        }
     }
 
     private Paint getFillColor(int i) {
@@ -154,9 +180,20 @@ public class GuiController implements Initializable {
 
     public void refreshBrick(ViewData brick) {
         updateBrickPanelPosition(brick);
+
         for (int i = 0; i < brick.getBrickData().length; i++) {
             for (int j = 0; j < brick.getBrickData()[i].length; j++) {
                 setRectangleData(brick.getBrickData()[i][j], rectangles[i][j]);
+            }
+        }
+
+        if (ghostRectangles != null) {
+            for (int i = 0; i < brick.getBrickData().length; i++) {
+                for (int j = 0; j < brick.getBrickData()[i].length; j++) {
+                    int type = brick.getBrickData()[i][j];
+                    // Only show the ghost block if there is a real block there
+                    ghostRectangles[i][j].setVisible(type != 0);
+                }
             }
         }
     }

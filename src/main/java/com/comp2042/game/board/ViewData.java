@@ -13,6 +13,7 @@ public final class ViewData {
     private final int[][] brickData;
     private final int xPosition;
     private final int yPosition;
+    private final int ghostYPosition;
     private final int[][] nextBrickData;
 
     /**
@@ -23,10 +24,11 @@ public final class ViewData {
      * @param yPosition       y-position of the active brick
      * @param nextBrickData   matrix of the upcoming brick
      */
-    public ViewData(int[][] brickData, int xPosition, int yPosition, int[][] nextBrickData) {
+    public ViewData(int[][] brickData, int xPosition, int yPosition, int ghostYPosition, int[][] nextBrickData) {
         this.brickData = brickData;
         this.xPosition = xPosition;
         this.yPosition = yPosition;
+        this.ghostYPosition = ghostYPosition;
         this.nextBrickData = nextBrickData;
     }
 
@@ -51,6 +53,10 @@ public final class ViewData {
         return yPosition;
     }
 
+
+    public int getGhostYPosition() {
+        return ghostYPosition;
+    }
     /**
      * @return a defensive copy of the next brick's shape matrix
      */

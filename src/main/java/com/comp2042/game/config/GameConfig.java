@@ -8,7 +8,7 @@ public class GameConfig {
 
     private static final GameConfig INSTANCE = new GameConfig();
     private static final int BRICK_SIZE = 20;
-    private static final int TOP_OFFSET = -45;
+    private static final int TOP_OFFSET = -43;
     private static final int ARC_RADIUS = 9;
     private static final int DROP_INTERVAL_MS = 400;
     private static final int HIDDEN_ROWS = 2;
