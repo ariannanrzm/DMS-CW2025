@@ -23,7 +23,7 @@ public class Main extends Application {
         GuiController c = fxmlLoader.getController();
 
         primaryStage.setTitle("TetrisJFX");
-        Scene scene = new Scene(root, 300, 510);
+        Scene scene = new Scene(root, 500, 520);
         scene.getStylesheets().add(getClass().getResource("/window_style.css").toExternalForm());
         primaryStage.setScene(scene);
         primaryStage.show();

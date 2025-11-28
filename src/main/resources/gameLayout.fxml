@@ -6,8 +6,15 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
 <?import java.net.URL?>
+
 <Pane fx:controller="com.comp2042.ui.GuiController"
       xmlns:fx="http://javafx.com/fxml">
+
+    <VBox layoutX="230" layoutY="370" styleClass="scoreBox" spacing="5" alignment="CENTER" minWidth="130">
+        <Label text="SCORE" styleClass="scoreTitle"/>
+        <Label fx:id="scoreLabel" text="0" styleClass="scoreValue"/>
+    </VBox>
+
     <GridPane fx:id="brickPanel" vgap="1" hgap="1"/>
     <BorderPane styleClass="gameBoard" fx:id="gameBoard">
         <center>
