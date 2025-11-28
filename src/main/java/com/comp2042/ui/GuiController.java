@@ -240,6 +240,9 @@ public class GuiController implements Initializable {
         timeLine.stop();
         gameOverPanel.setVisible(true);
         brickPanel.setVisible(false);
+        if (ghostPanel != null) {
+            ghostPanel.setVisible(false);
+        }
     }
 
     public void resetTimeline() {
@@ -255,6 +258,9 @@ public class GuiController implements Initializable {
     public void resetGameView() {
         gameOverPanel.setVisible(false);
         brickPanel.setVisible(true);
+        if (ghostPanel != null) {
+            ghostPanel.setVisible(true);
+        }
         gamePanel.requestFocus();
         timeLine.play();
     }
