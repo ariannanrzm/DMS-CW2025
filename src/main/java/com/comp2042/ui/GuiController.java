@@ -183,20 +183,26 @@ public class GuiController implements Initializable {
 
         for (int i = 0; i < brick.getBrickData().length; i++) {
             for (int j = 0; j < brick.getBrickData()[i].length; j++) {
+                int type = brick.getBrickData()[i][j];
+
+                if (type != 0) {
+
+                    Paint originalPaint = getFillColor(type);
+
+                    if (originalPaint instanceof Color) {
+                        Color c = (Color) originalPaint;
+                        Color ghostColor = new Color(c.getRed(), c.getGreen(), c.getBlue(), 0.3);
+                        ghostRectangles[i][j].setFill(ghostColor);
+                    }
+                    ghostRectangles[i][j].setVisible(true);
+                } else {
+                    ghostRectangles[i][j].setVisible(false);
+                }
                 setRectangleData(brick.getBrickData()[i][j], rectangles[i][j]);
             }
         }
-
-        if (ghostRectangles != null) {
-            for (int i = 0; i < brick.getBrickData().length; i++) {
-                for (int j = 0; j < brick.getBrickData()[i].length; j++) {
-                    int type = brick.getBrickData()[i][j];
-                    // Only show the ghost block if there is a real block there
-                    ghostRectangles[i][j].setVisible(type != 0);
-                }
-            }
-        }
     }
+
 
     public void refreshGameBackground(int[][] board) {
         int HIDDEN_ROWS = GameConfig.get().getHiddenRows();
