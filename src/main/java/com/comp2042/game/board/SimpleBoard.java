@@ -2,7 +2,6 @@ package com.comp2042.game.board;
 
 import com.comp2042.game.bricks.*;
 import com.comp2042.game.scoring.Score;
-import com.comp2042.util.ArrayOperations;
 import com.comp2042.util.MatrixOperations;
 
 
@@ -83,14 +82,13 @@ public class SimpleBoard implements Board {
 
     @Override
     public boolean rotateLeftBrick() {
-        NextShapeInfo nextShape = brickRotator.getNextShape();
+        GamePoint newPosition = brickRotator.tryRotate(currentGameMatrix, currentOffset);
 
-        if (!isMoveValid((currentOffset.x()), currentOffset.y(), nextShape.getShape())) {
-            return false;
+        if (newPosition != null ) {
+            currentOffset = newPosition;
+            return true;
         }
-
-        brickRotator.applyRotation(nextShape.getPosition());
-        return true;
+        return false;
     }
 
     @Override

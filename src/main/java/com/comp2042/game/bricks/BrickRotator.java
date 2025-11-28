@@ -1,5 +1,8 @@
 package com.comp2042.game.bricks;
 
+import com.comp2042.game.board.GamePoint;
+import com.comp2042.util.MatrixOperations;
+
 /**
  * The BrickRotator class manages the rotation state of the active Tetris brick.
  * Each brick contains multiple rotation matrices. This class controls which
@@ -10,15 +13,42 @@ package com.comp2042.game.bricks;
  */
 public class BrickRotator {
 
-    /** The currently active brick whose rotations are being managed. */
     private Brick brick;
 
-    /** Index representing the current rotation state of the brick. */
     private int currentShape = 0;
 
+
     /**
-     * Computes (but does not apply) the next rotation state of the current brick.
-     * Rotation cycles through the available rotation matrices using modular arithmetic.
+     * Attempts to rotate the current brick.
+     * Tries the standard rotation first, then applies wall kicks (shifts) if needed.
+     *
+     * @param boardMatrix The current state of the board grid (for collision checks)
+     * @param currentOffset The current x, y coordinates of the brick
+     * @return The new valid GamePoint if rotation succeeded, or null if impossible.
+     */
+    public GamePoint tryRotate(int[][] boardMatrix, GamePoint currentOffset) {
+        NextShapeInfo nextShapeInfo = getNextShape();
+        int[][] nextMatrix = nextShapeInfo.getShape();
+
+        int currentX = currentOffset.x();
+        int currentY = currentOffset.y();
+
+        int[] kickOffsets = {0, 1, -1, 2, -2};
+
+        for (int kick : kickOffsets) {
+            int targetX = currentX + kick;
+
+            if (!MatrixOperations.intersect(boardMatrix, nextMatrix, targetX, currentY)) {
+                applyRotation(nextShapeInfo.getPosition());
+                return currentOffset.translate(kick, 0);
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Computes the next rotation state of the current brick.
      *
      * @return NextShapeInfo containing the next rotation matrix and its index
      */
