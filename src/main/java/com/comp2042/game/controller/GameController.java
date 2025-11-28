@@ -98,15 +98,19 @@ public class GameController implements InputEventListener {
     public void createNewGame() {
         board.newGame();
         setState(playingState);
+        viewGuiController.resetGameView();
     }
 
     public void togglePause() {
         // Prevent pausing if the game is already over
         if (currentState == gameOverState) return;
+
         if (currentState == playingState) {
             setState(pausedState);
         } else if (currentState == pausedState) {
             setState(playingState);
+            viewGuiController.showPauseMessage(false);
         }
     }
+
 }
