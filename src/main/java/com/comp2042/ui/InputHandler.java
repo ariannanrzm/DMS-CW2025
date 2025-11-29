@@ -32,7 +32,7 @@ public class InputHandler {
             case DOWN, S  -> controller.onDownEvent(new MoveEvent(EventType.DOWN, EventSource.USER));
             case SPACE    -> controller.onHardDropEvent(new MoveEvent(EventType.HARD_DROP, EventSource.USER));
             case C        -> controller.onHoldEvent(new MoveEvent(EventType.HOLD, EventSource.USER)); // New Mapping
-            case N        -> controller.createNewGame();
+            case N, R       -> controller.createNewGame();
             case ESCAPE   -> controller.togglePause();
             default       -> { }
         }
