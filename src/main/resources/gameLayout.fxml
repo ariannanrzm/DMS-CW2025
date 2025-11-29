@@ -10,11 +10,15 @@
 <Pane fx:controller="com.comp2042.ui.GuiController"
       xmlns:fx="http://javafx.com/fxml">
 
-    <VBox layoutX="230" layoutY="370" styleClass="scoreBox" spacing="5" alignment="CENTER" minWidth="130">
 
+    <VBox layoutX="230" layoutY="320" styleClass="scoreBox" spacing="5" alignment="CENTER" minWidth="130">
         <Label text="LINES" styleClass="scoreTitle"/>
         <Label fx:id="linesLabel" text="0" styleClass="scoreValue"/>
+    </VBox>
 
+
+
+    <VBox layoutX="230" layoutY="400" styleClass="scoreBox" spacing="5" alignment="CENTER" minWidth="130">
         <Label text="SCORE" styleClass="scoreTitle"/>
         <Label fx:id="scoreLabel" text="0" styleClass="scoreValue"/>
 
