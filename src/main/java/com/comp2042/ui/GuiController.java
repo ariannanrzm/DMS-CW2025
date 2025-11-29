@@ -44,6 +44,7 @@ public class GuiController implements Initializable {
     @FXML private Label scoreLabel;
     @FXML private Label linesLabel;
     @FXML private VBox nextBrickContainer;
+    @FXML private VBox holdBrickContainer;
 
     private Rectangle[][] displayMatrix;
     private Rectangle[][] rectangles;
@@ -92,6 +93,7 @@ public class GuiController implements Initializable {
         initBrickPanel(brick, BRICK_SIZE);
         updateBrickPanelPosition(brick);
         refreshNextBricks(brick.getNextBricks());
+        refreshHeldBrick(brick.getHeldBrickData());
 
         timeLine = new Timeline(new KeyFrame(
                 Duration.millis(GameConfig.get().getDropInterval()),
@@ -100,6 +102,7 @@ public class GuiController implements Initializable {
         timeLine.setCycleCount(Timeline.INDEFINITE);
         timeLine.play();
     }
+
 
     private void initGhostPanel(int brickSize) {
         ghostPanel = new GridPane();
@@ -185,6 +188,7 @@ public class GuiController implements Initializable {
     public void refreshBrick(ViewData brick) {
         updateBrickPanelPosition(brick);
         refreshNextBricks(brick.getNextBricks());
+        refreshHeldBrick(brick.getHeldBrickData());
 
         for (int i = 0; i < brick.getBrickData().length; i++) {
             for (int j = 0; j < brick.getBrickData()[i].length; j++) {
@@ -203,6 +207,34 @@ public class GuiController implements Initializable {
                 setRectangleData(brick.getBrickData()[i][j], rectangles[i][j]);
             }
         }
+    }
+
+    private void refreshHeldBrick(int[][] matrix) {
+        holdBrickContainer.getChildren().clear();
+        Label title = new Label("HOLD");
+        title.getStyleClass().add("scoreTitle");
+        holdBrickContainer.getChildren().add(title);
+
+        if (matrix == null) return;
+
+        int PREVIEW_SIZE = 15;
+        GridPane previewPane = new GridPane();
+        previewPane.setAlignment(Pos.CENTER);
+        previewPane.setHgap(1);
+        previewPane.setVgap(1);
+
+        for (int row = 0; row < matrix.length; row++) {
+            for (int col = 0; col < matrix[row].length; col++) {
+                if (matrix[row][col] != 0) {
+                    Rectangle r = new Rectangle(PREVIEW_SIZE, PREVIEW_SIZE);
+                    r.setFill(getFillColor(matrix[row][col]));
+                    r.setArcWidth(5);
+                    r.setArcHeight(5);
+                    previewPane.add(r, col, row);
+                }
+            }
+        }
+        holdBrickContainer.getChildren().add(previewPane);
     }
 
     private void refreshNextBricks(List<int[][]> nextBricks) {

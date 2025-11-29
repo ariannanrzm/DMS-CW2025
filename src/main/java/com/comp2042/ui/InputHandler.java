@@ -5,7 +5,6 @@ import com.comp2042.game.events.EventSource;
 import com.comp2042.game.events.EventType;
 import com.comp2042.game.events.MoveEvent;
 import javafx.scene.Node;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
 /**
@@ -32,6 +31,7 @@ public class InputHandler {
             case UP, W    -> controller.onRotateEvent(new MoveEvent(EventType.ROTATE, EventSource.USER));
             case DOWN, S  -> controller.onDownEvent(new MoveEvent(EventType.DOWN, EventSource.USER));
             case SPACE    -> controller.onHardDropEvent(new MoveEvent(EventType.HARD_DROP, EventSource.USER));
+            case C        -> controller.onHoldEvent(new MoveEvent(EventType.HOLD, EventSource.USER)); // New Mapping
             case N        -> controller.createNewGame();
             case ESCAPE   -> controller.togglePause();
             default       -> { }

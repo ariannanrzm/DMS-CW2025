@@ -24,4 +24,7 @@ public class GameOverState implements GameState {
 
     @Override
     public DownData handleHardDropEvent(MoveEvent event) { return null; }
+
+    @Override
+    public ViewData handleHoldEvent(MoveEvent event) { return null; }
 }

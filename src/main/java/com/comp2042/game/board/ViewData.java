@@ -14,6 +14,7 @@ public final class ViewData {
     private final int yPosition;
     private final int ghostYPosition;
     private final List<int[][]> nextBricks;
+    private final int[][] heldBrickData;
 
     /**
      * Constructs a new immutable ViewData object.
@@ -24,12 +25,13 @@ public final class ViewData {
      * @param ghostYPosition  y-position of the ghost brick
      * @param nextBricks      list of matrices for upcoming bricks
      */
-    public ViewData(int[][] brickData, int xPosition, int yPosition, int ghostYPosition, List<int[][]> nextBricks) {
+    public ViewData(int[][] brickData, int xPosition, int yPosition, int ghostYPosition, List<int[][]> nextBricks, int[][] heldBrickData) {
         this.brickData = brickData;
         this.xPosition = xPosition;
         this.yPosition = yPosition;
         this.ghostYPosition = ghostYPosition;
         this.nextBricks = nextBricks;
+        this.heldBrickData = heldBrickData;
     }
 
     /**
@@ -63,4 +65,9 @@ public final class ViewData {
     public List<int[][]> getNextBricks() {
         return ArrayOperations.deepCopyList(nextBricks);
     }
+
+    public int[][] getHeldBrickData() {
+        return heldBrickData != null ? ArrayOperations.copy(heldBrickData) : null;
+    }
+
 }

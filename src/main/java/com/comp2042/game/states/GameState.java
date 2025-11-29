@@ -14,4 +14,6 @@ public interface GameState {
     ViewData handleRotateEvent(MoveEvent event);
 
     DownData handleHardDropEvent(MoveEvent event);
+
+    ViewData handleHoldEvent(MoveEvent event);
 }

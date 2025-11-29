@@ -33,4 +33,7 @@ public class PausedState implements GameState {
 
     @Override
     public DownData handleHardDropEvent(MoveEvent event) { return null; }
+
+    @Override
+    public ViewData handleHoldEvent(MoveEvent event) { return null; }
 }

@@ -7,38 +7,49 @@
 <?import javafx.scene.text.Text?>
 <?import java.net.URL?>
 
-<Pane fx:controller="com.comp2042.ui.GuiController"
-      xmlns:fx="http://javafx.com/fxml">
+<StackPane fx:controller="com.comp2042.ui.GuiController"
+           xmlns:fx="http://javafx.com/fxml"
+           styleClass="root">
 
-    <VBox fx:id="nextBrickContainer" layoutX="230" layoutY="20" spacing="15" alignment="CENTER" minWidth="130" styleClass="scoreBox">
-        <Label text="NEXT " styleClass="scoreTitle"/>
-    </VBox>
+    <Pane prefWidth="600" prefHeight="600" maxWidth="600" maxHeight="600" minWidth="600" minHeight="600">
 
-    <VBox layoutX="230" layoutY="320" styleClass="scoreBox" spacing="5" alignment="CENTER" minWidth="130">
-        <Label text="LINES" styleClass="scoreTitle"/>
-        <Label fx:id="linesLabel" text="0" styleClass="scoreValue"/>
-    </VBox>
-
-
-    <VBox layoutX="230" layoutY="400" styleClass="scoreBox" spacing="5" alignment="CENTER" minWidth="130">
-        <Label text="SCORE" styleClass="scoreTitle"/>
-        <Label fx:id="scoreLabel" text="0" styleClass="scoreValue"/>
-
-    </VBox>
-
-    <GridPane fx:id="brickPanel" vgap="1" hgap="1"/>
-    <BorderPane styleClass="gameBoard" fx:id="gameBoard">
-        <center>
-            <GridPane fx:id="gamePanel" hgap="1" vgap="1" layoutY="30" layoutX="40"/>
-        </center>
-    </BorderPane>
-
-    <Group fx:id="groupNotification" layoutX="14" layoutY="203">
-        <VBox alignment="CENTER">
-            <GameOverPanel fx:id="gameOverPanel"/>
+        <VBox fx:id="holdBrickContainer" layoutX="20" layoutY="20" spacing="15" alignment="CENTER" minWidth="130" styleClass="scoreBox">
+            <Label text="HOLD" styleClass="scoreTitle"/>
         </VBox>
-    </Group>
+
+        <Pane layoutX="180" layoutY="0">
+            <GridPane fx:id="brickPanel" vgap="1" hgap="1"/>
+
+            <BorderPane styleClass="gameBoard" fx:id="gameBoard">
+                <center>
+                    <GridPane fx:id="gamePanel" hgap="1" vgap="1" layoutY="30" layoutX="40"/>
+                </center>
+            </BorderPane>
+
+            <Group fx:id="groupNotification" layoutX="25" layoutY="203">
+                <VBox alignment="CENTER">
+                    <GameOverPanel fx:id="gameOverPanel"/>
+                </VBox>
+            </Group>
+        </Pane>
+
+        <VBox fx:id="nextBrickContainer" layoutX="450" layoutY="20" spacing="15" alignment="CENTER" minWidth="130" styleClass="scoreBox">
+            <Label text="NEXT" styleClass="scoreTitle"/>
+        </VBox>
+
+        <VBox layoutX="450" layoutY="320" styleClass="scoreBox" spacing="5" alignment="CENTER" minWidth="130">
+            <Label text="LINES" styleClass="scoreTitle"/>
+            <Label fx:id="linesLabel" text="0" styleClass="scoreValue"/>
+        </VBox>
+
+        <VBox layoutX="450" layoutY="400" styleClass="scoreBox" spacing="5" alignment="CENTER" minWidth="130" minHeight="120">
+            <Label text="SCORE" styleClass="scoreTitle"/>
+            <Label fx:id="scoreLabel" text="0" styleClass="scoreValue"/>
+        </VBox>
+
+    </Pane>
+
     <stylesheets>
         <URL value="@window_style.css"/>
     </stylesheets>
-</Pane>
+</StackPane>

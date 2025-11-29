@@ -102,4 +102,13 @@ public class PlayingState implements GameState {
 
         return data;
     }
+
+    @Override
+    public ViewData handleHoldEvent(MoveEvent event) {
+        boolean success = context.getBoard().holdBrick();
+        if (success) {
+            context.getGuiController().refreshBrick(context.getBoard().getViewData());
+        }
+        return context.getBoard().getViewData();
+    }
 }

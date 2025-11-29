@@ -102,6 +102,11 @@ public class GameController implements InputEventListener {
         viewGuiController.resetGameView();
     }
 
+    @Override
+    public ViewData onHoldEvent(MoveEvent event) {
+        return currentState.handleHoldEvent(event);
+    }
+
     public void togglePause() {
         // Prevent pausing if the game is already over
         if (currentState == gameOverState) return;
