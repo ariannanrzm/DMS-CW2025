@@ -1,12 +1,11 @@
 package com.comp2042.game.board;
 
 import com.comp2042.util.ArrayOperations;
+import java.util.List;
 
 /**
  * ViewData is an immutable data transfer object used to pass
- * rendering information from the game logic (Board) to the UI
- * (GuiController). It provides the current brick matrix, its
- * position on the board, and the next brick preview matrix.
+ * rendering information from the game logic (Board) to the UI.
  */
 public final class ViewData {
 
@@ -14,7 +13,7 @@ public final class ViewData {
     private final int xPosition;
     private final int yPosition;
     private final int ghostYPosition;
-    private final int[][] nextBrickData;
+    private final List<int[][]> nextBricks;
 
     /**
      * Constructs a new immutable ViewData object.
@@ -22,14 +21,15 @@ public final class ViewData {
      * @param brickData       the matrix of the active brick
      * @param xPosition       x-position of the active brick
      * @param yPosition       y-position of the active brick
-     * @param nextBrickData   matrix of the upcoming brick
+     * @param ghostYPosition  y-position of the ghost brick
+     * @param nextBricks      list of matrices for upcoming bricks
      */
-    public ViewData(int[][] brickData, int xPosition, int yPosition, int ghostYPosition, int[][] nextBrickData) {
+    public ViewData(int[][] brickData, int xPosition, int yPosition, int ghostYPosition, List<int[][]> nextBricks) {
         this.brickData = brickData;
         this.xPosition = xPosition;
         this.yPosition = yPosition;
         this.ghostYPosition = ghostYPosition;
-        this.nextBrickData = nextBrickData;
+        this.nextBricks = nextBricks;
     }
 
     /**
@@ -60,7 +60,7 @@ public final class ViewData {
     /**
      * @return a defensive copy of the next brick's shape matrix
      */
-    public int[][] getNextBrickData() {
-        return ArrayOperations.copy(nextBrickData);
+    public List<int[][]> getNextBricks() {
+        return ArrayOperations.deepCopyList(nextBricks);
     }
 }

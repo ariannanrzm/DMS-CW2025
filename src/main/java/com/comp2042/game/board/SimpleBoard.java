@@ -3,6 +3,8 @@ package com.comp2042.game.board;
 import com.comp2042.game.bricks.*;
 import com.comp2042.game.scoring.Score;
 import com.comp2042.util.MatrixOperations;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -14,10 +16,10 @@ public class SimpleBoard implements Board {
 
     private static final int SPAWN_X = 4;
     private static final int SPAWN_Y = 0;
-
     private static final int MOVE_LEFT = -1;
     private static final int MOVE_RIGHT = 1;
     private static final int MOVE_DOWN = 1;
+    private static final int NEXT_BRICK_COUNT = 3;
 
     private final int width;
     private final int height;
@@ -54,7 +56,6 @@ public class SimpleBoard implements Board {
      */
 
     private boolean tryMove(int dx, int dy) {
-
         GamePoint newOffset = currentOffset.translate(dx, dy);
 
         if (!isMoveValid((newOffset.x()), newOffset.y(), brickRotator.getCurrentShape())){
@@ -65,16 +66,13 @@ public class SimpleBoard implements Board {
         return true;
     }
 
-    // Helper method to calculate where the ghost lands
+    // Calculate where the ghost lands
     private int calculateGhostY() {
         int ghostY = currentOffset.y();
         int[][] currentShape = brickRotator.getCurrentShape();
 
         while (true) {
-            // Check if we can move one step further down
-            boolean canMoveFurther = isMoveValid(currentOffset.x(), ghostY + 1, currentShape);
-
-            if (canMoveFurther) {
+            if (isMoveValid(currentOffset.x(), ghostY + 1, currentShape)) {
                 ghostY++;
             } else {
                 break;
@@ -114,7 +112,6 @@ public class SimpleBoard implements Board {
     public boolean createNewBrick() {
         Brick currentBrick = brickGenerator.getBrick();
         brickRotator.setBrick(currentBrick);
-
         currentOffset = new GamePoint(SPAWN_X, SPAWN_Y);
 
         return !isMoveValid(
@@ -133,12 +130,16 @@ public class SimpleBoard implements Board {
 
     @Override
     public ViewData getViewData() {
+        List<int[][]> nextBricks = brickGenerator.getNextBricks(NEXT_BRICK_COUNT).stream()
+                .map(b -> b.getShapeMatrix().get(0))
+                .collect(Collectors.toList());
+
         return new ViewData(
                 brickRotator.getCurrentShape(),
                 currentOffset.x(),
                 currentOffset.y(),
                 calculateGhostY(),
-                brickGenerator.getNextBrick().getShapeMatrix().get(0)
+                nextBricks
         );
     }
 
