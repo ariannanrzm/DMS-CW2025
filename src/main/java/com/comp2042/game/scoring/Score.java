@@ -9,18 +9,25 @@ public final class Score {
 
     private final IntegerProperty score = new SimpleIntegerProperty(0);
 
+    private final IntegerProperty lines = new SimpleIntegerProperty(0);
+
     public IntegerProperty scoreProperty() {
         return score;
     }
 
+    public IntegerProperty linesProperty() {
+        return lines;
+    }
     /**
      * Calculates and adds points for cleared lines.
      */
 
-    public int addLinesCleared(int lines) {
-        if (lines > 0) {
-            int bonus = 50 * lines * lines;
+    public int addLinesCleared(int count) {
+        if (count > 0) {
+            int bonus = 50 * count * count;
             score.setValue(score.getValue() + bonus);
+            lines.setValue(lines.getValue() + count);
+
             return bonus;
         }
         return 0;
@@ -39,6 +46,7 @@ public final class Score {
 
     public void reset() {
         score.setValue(0);
+        lines.setValue(0);
     }
 
     /** Convenience getter  */

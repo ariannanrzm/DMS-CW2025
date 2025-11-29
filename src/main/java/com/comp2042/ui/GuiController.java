@@ -40,6 +40,7 @@ public class GuiController implements Initializable {
     @FXML private GridPane brickPanel;
     @FXML private GameOverPanel gameOverPanel;
     @FXML private Label scoreLabel;
+    @FXML private Label linesLabel;
 
     private Rectangle[][] displayMatrix;
     private Rectangle[][] rectangles;
@@ -127,15 +128,9 @@ public class GuiController implements Initializable {
 
 
     private void showClearRowNotication(ClearRow clearRow){
-        if (clearRow != null && clearRow.getLinesRemoved() > 0) {
-            NotificationPanel notif = new NotificationPanel("Lines Cleared: " + clearRow.getLinesRemoved());
-            groupNotification.getChildren().add(notif);
-            notif.showScore(groupNotification.getChildren());
-        }
     }
 
     public void showNotificationIfRowsCleared(ClearRow clearRow) {
-        showClearRowNotication(clearRow);
     }
 
     private void updateBrickPanelPosition(ViewData brick) {
@@ -238,6 +233,10 @@ public class GuiController implements Initializable {
 
     public void bindScore(IntegerProperty property) {
         scoreLabel.textProperty().bind(property.asString("%d"));
+    }
+
+    public void bindLines(IntegerProperty property) {
+        linesLabel.textProperty().bind(property.asString("%d"));
     }
 
     public void gameOver() {

@@ -50,6 +50,7 @@ public class GameController implements InputEventListener {
         board.createNewBrick();
         this.viewGuiController.initGameView(board.getBoardMatrix(), board.getViewData());
         this.viewGuiController.bindScore(board.getScore().scoreProperty());
+        this.viewGuiController.bindLines(board.getScore().linesProperty());
     }
 
     public void setState(GameState state) {
