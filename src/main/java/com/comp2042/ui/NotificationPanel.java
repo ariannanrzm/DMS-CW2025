@@ -17,10 +17,10 @@ import javafx.util.Duration;
 public class NotificationPanel extends BorderPane {
 
     public NotificationPanel(String text) {
-        setMinHeight(200);
-        setMinWidth(220);
+        setMinHeight(100);
+        setMinWidth(150);
         final Label score = new Label(text);
-        score.getStyleClass().add("bonusStyle");
+        score.getStyleClass().add("sideNotification");
         final Effect glow = new Glow(0.6);
         score.setEffect(glow);
         score.setTextFill(Color.WHITE);
@@ -30,17 +30,15 @@ public class NotificationPanel extends BorderPane {
 
     public void showScore(ObservableList<Node> list) {
         FadeTransition ft = new FadeTransition(Duration.millis(2000), this);
-        TranslateTransition tt = new TranslateTransition(Duration.millis(2500), this);
-        tt.setToY(this.getLayoutY() - 40);
         ft.setFromValue(1);
         ft.setToValue(0);
-        ParallelTransition transition = new ParallelTransition(tt, ft);
-        transition.setOnFinished(new EventHandler<ActionEvent>() {
+
+        ft.setOnFinished(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 list.remove(NotificationPanel.this);
             }
         });
-        transition.play();
+        ft.play();
     }
 }

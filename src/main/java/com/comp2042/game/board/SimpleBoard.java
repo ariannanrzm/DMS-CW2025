@@ -190,6 +190,8 @@ public class SimpleBoard implements Board {
 
         if (clearRow.getLinesRemoved() > 0) {
             score.addLinesCleared(clearRow.getLinesRemoved());
+        } else {
+            score.resetCombo();
         }
 
         currentGameMatrix = clearRow.getNewMatrix();

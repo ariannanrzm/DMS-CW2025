@@ -142,6 +142,30 @@ public class GuiController implements Initializable {
     }
 
     public void showNotificationIfRowsCleared(ClearRow clearRow) {
+        String text = switch (clearRow.getLinesRemoved()) {
+            case 1 -> "SINGLE";
+            case 2 -> "DOUBLE";
+            case 3 -> "TRIPLE";
+            case 4 -> "TETRIS";
+            default -> "";
+        };
+
+        if (!text.isEmpty()) {
+            NotificationPanel notification = new NotificationPanel(text);
+            groupNotification.getChildren().add(notification);
+            notification.showScore(groupNotification.getChildren());
+        }
+
+        //  Check for Combo
+        int currentCombo = gameController.getBoard().getScore().getComboCount();
+
+        if (currentCombo > 0) {
+            // Delay the combo notification slightly or stack it
+            NotificationPanel comboNotification = new NotificationPanel("COMBO x" + currentCombo);
+            comboNotification.setTranslateY(30);
+            groupNotification.getChildren().add(comboNotification);
+            comboNotification.showScore(groupNotification.getChildren());
+        }
     }
 
     private void updateBrickPanelPosition(ViewData brick) {

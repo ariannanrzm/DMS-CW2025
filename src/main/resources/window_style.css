@@ -54,6 +54,15 @@
     -fx-font-size: 10px;
 }
 
+.sideNotification {
+    -fx-font-family: "Let's go Digital";
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-fill: white;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(one-pass-box, black, 8, 0.0, 2, 0);
+}
+
 .bonusStyle {
     -fx-font-size: 40px;
     -fx-font-weight: bold;

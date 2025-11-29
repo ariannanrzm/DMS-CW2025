@@ -25,13 +25,11 @@
                     <GridPane fx:id="gamePanel" hgap="1" vgap="1" layoutY="30" layoutX="40"/>
                 </center>
             </BorderPane>
-
-            <Group fx:id="groupNotification" layoutX="25" layoutY="203">
-                <VBox alignment="CENTER">
-                    <GameOverPanel fx:id="gameOverPanel"/>
-                </VBox>
-            </Group>
-        </Pane>
+        </Pane>  <Group fx:id="groupNotification" layoutX="25" layoutY="250">
+        <VBox alignment="CENTER">
+            <GameOverPanel fx:id="gameOverPanel"/>
+        </VBox>
+    </Group>
 
         <VBox fx:id="nextBrickContainer" layoutX="450" layoutY="20" spacing="15" alignment="CENTER" minWidth="130" styleClass="scoreBox">
             <Label text="NEXT" styleClass="scoreTitle"/>

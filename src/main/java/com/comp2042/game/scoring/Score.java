@@ -6,10 +6,16 @@ import javafx.beans.property.SimpleIntegerProperty;
 public final class Score {
     private static final int SOFT_DROP_SCORE = 1;
     private static final int HARD_DROP_SCORE = 2;
+    private static final int SCORE_SINGLE = 100;
+    private static final int SCORE_DOUBLE = 300;
+    private static final int SCORE_TRIPLE = 500;
+    private static final int SCORE_TETRIS = 800;
+    private static final int SCORE_COMBO_BONUS = 50;
 
     private final IntegerProperty score = new SimpleIntegerProperty(0);
-
     private final IntegerProperty lines = new SimpleIntegerProperty(0);
+
+    private int comboCount = -1;
 
     public IntegerProperty scoreProperty() {
         return score;
@@ -24,13 +30,37 @@ public final class Score {
 
     public int addLinesCleared(int count) {
         if (count > 0) {
-            int bonus = 50 * count * count;
-            score.setValue(score.getValue() + bonus);
+            comboCount++;
+
+            int baseScore = 0;
+            switch (count) {
+                case 1 -> baseScore = SCORE_SINGLE;
+                case 2 -> baseScore = SCORE_DOUBLE;
+                case 3 -> baseScore = SCORE_TRIPLE;
+                case 4 -> baseScore = SCORE_TETRIS;
+            }
+
+            int comboBonus = (comboCount > 0) ? (comboCount * SCORE_COMBO_BONUS) : 0;
+
+            int totalPoints = baseScore + comboBonus;
+
+            score.setValue(score.getValue() + totalPoints);
             lines.setValue(lines.getValue() + count);
 
-            return bonus;
+            return totalPoints;
         }
         return 0;
+    }
+
+    /**
+     * Resets the combo counter when a piece locks without clearing lines.
+     */
+    public void resetCombo() {
+        comboCount = -1;
+    }
+
+    public int getComboCount() {
+        return Math.max(0, comboCount);
     }
 
     public void addSoftDrop() {
@@ -47,6 +77,7 @@ public final class Score {
     public void reset() {
         score.setValue(0);
         lines.setValue(0);
+        comboCount = -1;
     }
 
     /** Convenience getter  */
