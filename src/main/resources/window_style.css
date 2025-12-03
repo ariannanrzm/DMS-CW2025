@@ -1,10 +1,13 @@
 .root {
-    -fx-background-color: rgba(25, 19, 29, 1);
+    -fx-background-image: url(" bgimg.jpeg");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: cover;
+    -fx-background-position: center;
 }
 
 .game-grid {
-    -fx-background-color: rgba(25, 19, 29, 1);
-    -fx-border-color: whitesmoke;
+    -fx-background-color: rgba(25, 19, 29, 0.8);
+
     -fx-effect: dropshadow(three-pass-box, rgbargba(17, 12, 17, 1), 20, 0, 0, 0);
 }
 
@@ -82,25 +85,36 @@
 }
 
 .scoreBox {
-    -fx-background-color: rgba(0, 0, 0, 0.8);
-    -fx-border-color: whitesmoke;
-    -fx-border-width: 1px;
-    -fx-border-radius: 10px;
-    -fx-background-radius: 10px;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0); /* Shadow for depth */
-    -fx-padding: 18 px;
-    -fx-alignment: center;
+    -fx-background-color: rgba(45, 27, 46, 0.85);
+       -fx-background-radius: 5px;
+       -fx-border-radius: 5px;
+       -fx-border-color: #F3D1B0;
+       -fx-border-width: 0.5px;
+
+       -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 5, 0, 0, 3);
 }
 
 .scoreTitle {
     -fx-font-family: "Let's go Digital";
-    -fx-font-size: 20px;
-    -fx-text-fill: white;
+    -fx-font-size: 24px;
+    -fx-text-fill: #F3D1B0;
 }
 
 .scoreValue {
     -fx-font-family: "Let's go Digital";
-    -fx-font-size: 28px;
-    -fx-text-fill: yellow;
+    -fx-font-size: 32px;
+    -fx-text-fill: #F1FA8C;
 }
-St
+
+.game-block {
+ /*   -fx-stroke: null;
+ -fx-border-color: rgba(255,255,255,0.5) rgba(0,0,0,0.3) rgba(0,0,0,0.3) rgba(255,255,255,0.5);
+     -fx-border-width: 3px;
+     -fx-border-style: solid;
+
+*/
+    -fx-stroke: null;
+    -fx-effect: innershadow(one-pass-box, rgba(255,255,255,0.4), 0, 0, 3, 3);
+
+
+}
