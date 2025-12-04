@@ -4,6 +4,7 @@ import com.comp2042.game.bricks.*;
 import com.comp2042.game.scoring.Score;
 import com.comp2042.util.MatrixOperations;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 
@@ -234,5 +235,29 @@ public class SimpleBoard implements Board {
         score.reset();
         heldBrick = null;
         createNewBrick();
+    }
+
+    @Override
+    public void addGarbageRow() {
+        // Shift all rows up by 1
+        int rows = currentGameMatrix.length;
+        int cols = currentGameMatrix[0].length;
+
+        for (int i = 0; i < rows - 1; i++) {
+            currentGameMatrix[i] = currentGameMatrix[i + 1];
+        }
+
+        // 2. Create the new garbage row
+        int[] garbageRow = new int[cols];
+        int gapIndex = ThreadLocalRandom.current().nextInt(cols);
+
+        for (int j = 0; j < cols; j++) {
+            if (j == gapIndex) {
+                garbageRow[j] = 0; // The gap
+            } else {
+                garbageRow[j] = ThreadLocalRandom.current().nextInt(1, 8);
+            }
+        }
+        currentGameMatrix[rows - 1] = garbageRow;
     }
 }

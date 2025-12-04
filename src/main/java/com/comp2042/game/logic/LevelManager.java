@@ -25,8 +25,8 @@ public class LevelManager {
         linesClearedInCurrentLevel += lines;
 
         if (linesClearedInCurrentLevel >= LINES_PER_LEVEL) {
-            levelUp();
             linesClearedInCurrentLevel -= LINES_PER_LEVEL;
+            levelUp();
         }
     }
 

@@ -28,6 +28,7 @@ public class GameController implements InputEventListener  {
     private final GameState gameOverState;
     private GameState currentState;
     private final GameMode gameMode;
+    private int linesSinceLastGarbage = 0;
 
 
     public GameController(GuiController viewGuiController, GameMode gameMode) {
@@ -65,32 +66,45 @@ public class GameController implements InputEventListener  {
         this.viewGuiController.bindLines(board.getScore().linesProperty());
         this.viewGuiController.bindLevel(levelManager.levelProperty());
 
+        // Listen for Level Changes
+        levelManager.levelProperty().addListener((obs, oldVal, newVal) -> {
+            int level = newVal.intValue();
+            viewGuiController.updateGameSpeed(levelManager.getCurrentSpeed());
+            viewGuiController.showLevelUpNotification(level);
+            System.out.println("Level Up! New Speed: " + levelManager.getCurrentSpeed());
 
+            // Level 3 Mechanic: Add 1 Random Garbage Row immediately
+            if (level == 3 && gameMode == GameMode.ADVENTURE) {
+                board.addGarbageRow();
+                viewGuiController.refreshGameBackground(board.getBoardMatrix());
+            }
+        });
     }
 
     public void notifyLinesCleared(int count) {
         if (count > 0 && (gameMode == GameMode.ADVENTURE)) {
             levelManager.onLinesCleared(count);
+
+            // Level 4 Mechanic: Add 1 Garbage Row every 10 lines
+            if (levelManager.getCurrentLevel() >= 4) {
+                linesSinceLastGarbage += count;
+
+                while (linesSinceLastGarbage >= 10) {
+                    linesSinceLastGarbage -= 10;
+                    board.addGarbageRow();
+                    viewGuiController.refreshGameBackground(board.getBoardMatrix());
+                }
+            }
         }
     }
 
 
-    public void setState(GameState state) {
-        this.currentState = state;
-    }
-
+    public void setState(GameState state) { this.currentState = state;}
     public GameState getPlayingState() { return playingState; }
     public GameState getPausedState() { return pausedState; }
     public GameState getGameOverState() { return gameOverState; }
-
-    // Getters for State classes to access Board/View
-    public Board getBoard() {
-        return board;
-    }
-
-    public GuiController getGuiController() {
-        return viewGuiController;
-    }
+    public Board getBoard() {return board;}
+    public GuiController getGuiController() {return viewGuiController;}
 
     @Override
     public DownData onDownEvent(MoveEvent event) {
@@ -121,15 +135,14 @@ public class GameController implements InputEventListener  {
     public void createNewGame() {
         board.newGame();
         levelManager.reset();
+        linesSinceLastGarbage = 0;
         setState(getPlayingState());
         viewGuiController.resetGameView();
         viewGuiController.updateGameSpeed(levelManager.getCurrentSpeed());
     }
 
     @Override
-    public ViewData onHoldEvent(MoveEvent event) {
-        return currentState.handleHoldEvent(event);
-    }
+    public ViewData onHoldEvent(MoveEvent event) { return currentState.handleHoldEvent(event); }
 
     public void togglePause() {
         // Prevent pausing if the game is already over
