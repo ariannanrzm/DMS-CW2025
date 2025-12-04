@@ -9,6 +9,7 @@ import com.comp2042.game.events.EventType;
 import com.comp2042.game.events.InputEventListener;
 import com.comp2042.game.events.MoveEvent;
 import com.comp2042.game.config.GameConfig;
+import com.comp2042.game.config.GameMode;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.property.IntegerProperty;
@@ -96,6 +97,19 @@ public class GuiController implements Initializable {
         this.inputHandler = new InputHandler(controller);
         inputHandler.attachTo(gamePanel);
     }
+
+    public void startGame(GameMode mode) {
+        // Stop any existing game loop first
+        if (timeLine != null) {
+            timeLine.stop();
+            timeLine = null;
+        }
+
+        new GameController(this, mode);
+        // Focus the game panel so keyboard controls work immediately
+        gamePanel.requestFocus();
+    }
+
 
     public void initGameView(int[][] boardMatrix, ViewData brick, double initialSpeed) {
         displayMatrix = new StackPane[boardMatrix.length][boardMatrix[0].length];
@@ -419,6 +433,21 @@ public class GuiController implements Initializable {
         ));
         timeLine.setCycleCount(Timeline.INDEFINITE);
         timeLine.play();
+    }
+
+    @FXML
+    public void startClassicGame(ActionEvent e) {
+        startGame(GameMode.CLASSIC);
+    }
+
+    @FXML
+    public void startZenGame(ActionEvent e) {
+        startGame(GameMode.ZEN);
+    }
+
+    @FXML
+    public void startChaosGame(ActionEvent e) {
+        startGame(GameMode.CHAOS);
     }
 
 }

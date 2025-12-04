@@ -1,33 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
 <?import com.comp2042.ui.GameOverPanel?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ToggleButton?>
-<?import javafx.scene.Group?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Text?>
+
 <?import java.net.URL?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
-<StackPane fx:controller="com.comp2042.ui.GuiController"
-           xmlns:fx="http://javafx.com/fxml"
-           styleClass="root">
+<StackPane styleClass="root" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/25" fx:controller="com.comp2042.ui.GuiController">
 
-    <Pane prefWidth="600" prefHeight="600" maxWidth="600" maxHeight="600" minWidth="600" minHeight="600">
+    <Pane maxHeight="600" maxWidth="600" minHeight="600" minWidth="600" prefHeight="600" prefWidth="600">
 
-        <VBox fx:id="holdBrickContainer" layoutX="20" layoutY="60" spacing="15" alignment="CENTER" minWidth="130" styleClass="scoreBox">
-            <Label text="HOLD" styleClass="scoreTitle"/>
+              <VBox fx:id="holdBrickContainer" alignment="CENTER" layoutX="20" layoutY="60" minWidth="130" prefHeight="120.0" prefWidth="130.0" spacing="15" styleClass="scoreBox">
+            <Label styleClass="scoreTitle" text="HOLD" />
         </VBox>
 
-        <VBox layoutX="20" layoutY="240" styleClass="scoreBox" spacing="5" alignment="CENTER" minWidth="130">
-            <Label text="LEVEL" styleClass="scoreTitle"/>
-            <Label fx:id="levelLabel" text="1" styleClass="scoreValue"/>
+        <VBox alignment="CENTER" layoutX="20" layoutY="240" minWidth="130" spacing="5" styleClass="scoreBox">
+            <Label styleClass="scoreTitle" text="LEVEL" />
+            <Label fx:id="levelLabel" styleClass="scoreValue" text="1" />
         </VBox>
 
         <Pane layoutX="180" layoutY="60">
-            <GridPane fx:id="brickPanel" vgap="1" hgap="1"/>
+            <GridPane fx:id="brickPanel" hgap="1" vgap="1" />
 
-            <BorderPane styleClass="gameBoard" fx:id="gameBoard">
+            <BorderPane fx:id="gameBoard" styleClass="gameBoard">
                 <center>
-                    <GridPane fx:id="gamePanel" hgap="1" vgap="1" layoutY="30" layoutX="40"/>
+                    <GridPane fx:id="gamePanel" hgap="1" layoutX="40" layoutY="30" vgap="1" />
                 </center>
             </BorderPane>
         </Pane>  <Group fx:id="groupNotification" layoutX="25" layoutY="250">
@@ -36,24 +38,24 @@
         </VBox>
     </Group>
 
-        <VBox fx:id="nextBrickContainer" layoutX="450" layoutY="60" spacing="15" alignment="CENTER" minWidth="130" styleClass="scoreBox">
-            <Label text="NEXT" styleClass="scoreTitle"/>
+        <VBox fx:id="nextBrickContainer" alignment="CENTER" layoutX="450" layoutY="60" minWidth="130" spacing="15" styleClass="scoreBox">
+            <Label styleClass="scoreTitle" text="NEXT" />
         </VBox>
 
-        <VBox layoutX="450" layoutY="320" styleClass="scoreBox" spacing="5" alignment="CENTER" minWidth="130">
-            <Label text="LINES" styleClass="scoreTitle"/>
-            <Label fx:id="linesLabel" text="0" styleClass="scoreValue"/>
+        <VBox alignment="CENTER" layoutX="450" layoutY="320" minWidth="130" spacing="5" styleClass="scoreBox">
+            <Label styleClass="scoreTitle" text="LINES" />
+            <Label fx:id="linesLabel" styleClass="scoreValue" text="0" />
         </VBox>
 
 
-        <VBox layoutX="450" layoutY="400" styleClass="scoreBox" spacing="5" alignment="CENTER" minWidth="130" minHeight="120">
-            <Label text="SCORE" styleClass="scoreTitle"/>
-            <Label fx:id="scoreLabel" text="0" styleClass="scoreValue"/>
+        <VBox alignment="CENTER" layoutX="450" layoutY="400" minHeight="120" minWidth="130" spacing="5" styleClass="scoreBox">
+            <Label styleClass="scoreTitle" text="SCORE" />
+            <Label fx:id="scoreLabel" styleClass="scoreValue" text="0" />
         </VBox>
 
     </Pane>
 
     <stylesheets>
-        <URL value="@window_style.css"/>
+        <URL value="@window_style.css" />
     </stylesheets>
 </StackPane>

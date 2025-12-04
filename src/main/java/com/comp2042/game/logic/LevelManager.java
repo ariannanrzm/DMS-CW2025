@@ -6,7 +6,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 public class LevelManager {
 
     private static final int MAX_LEVEL = 6;
-    private static final int LINES_PER_LEVEL = 10;
+    private static final int LINES_PER_LEVEL = 5;
 
     // Speed curve
     private static final double[] SPEED_CURVE = {

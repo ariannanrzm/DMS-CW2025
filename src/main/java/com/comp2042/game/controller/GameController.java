@@ -11,6 +11,7 @@ import com.comp2042.game.events.InputEventListener;
 import com.comp2042.game.events.MoveEvent;
 import com.comp2042.game.config.GameConfig;
 import com.comp2042.game.logic.LevelManager;
+import com.comp2042.game.config.GameMode;
 
 
 /**
@@ -26,16 +27,20 @@ public class GameController implements InputEventListener  {
     private final GameState pausedState;
     private final GameState gameOverState;
     private GameState currentState;
+    private final GameMode gameMode;
 
-    public GameController(GuiController viewGuiController) {
+
+    public GameController(GuiController viewGuiController, GameMode gameMode) {
         this.viewGuiController = viewGuiController;
         this.levelManager = new LevelManager();
+        this.gameMode = gameMode;
 
         this.board = new SimpleBoard(
                 GameConfig.get().getBoardHeight(),
                 GameConfig.get().getBoardWidth(),
                 new RandomBrickGenerator()
         );
+
 
         // Initialize States
         this.playingState = new PlayingState(this);
@@ -61,15 +66,16 @@ public class GameController implements InputEventListener  {
         this.viewGuiController.bindLevel(levelManager.levelProperty());
 
 
-        levelManager.levelProperty().addListener((obs, oldVal, newVal) -> {
-            viewGuiController.updateGameSpeed(levelManager.getCurrentSpeed());
-            viewGuiController.showLevelUpNotification(newVal.intValue());
-
-        });
+        if (gameMode == GameMode.CLASSIC || gameMode == GameMode.CHAOS) {
+            levelManager.levelProperty().addListener((obs, oldVal, newVal) -> {
+                viewGuiController.updateGameSpeed(levelManager.getCurrentSpeed());
+                viewGuiController.showLevelUpNotification(newVal.intValue());
+            });
+        }
     }
 
     public void notifyLinesCleared(int count) {
-        if (count > 0) {
+        if (count > 0 && (gameMode == GameMode.CLASSIC || gameMode == GameMode.CHAOS)) {
             levelManager.onLinesCleared(count);
         }
     }
