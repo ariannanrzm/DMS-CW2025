@@ -42,8 +42,8 @@ public class MainMenuController {
     }
 
     @FXML
-    private void startClassic(ActionEvent event) {
-        loadGame(GameMode.CLASSIC);
+    private void startAdventure(ActionEvent event) {
+        loadGame(GameMode.ADVENTURE);
     }
 
     @FXML
@@ -51,8 +51,4 @@ public class MainMenuController {
         loadGame(GameMode.ZEN);
     }
 
-    @FXML
-    private void startChaos(ActionEvent event) {
-        loadGame(GameMode.CHAOS);
-    }
 }

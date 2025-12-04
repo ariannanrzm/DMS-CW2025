@@ -66,16 +66,10 @@ public class GameController implements InputEventListener  {
         this.viewGuiController.bindLevel(levelManager.levelProperty());
 
 
-        if (gameMode == GameMode.CLASSIC || gameMode == GameMode.CHAOS) {
-            levelManager.levelProperty().addListener((obs, oldVal, newVal) -> {
-                viewGuiController.updateGameSpeed(levelManager.getCurrentSpeed());
-                viewGuiController.showLevelUpNotification(newVal.intValue());
-            });
-        }
     }
 
     public void notifyLinesCleared(int count) {
-        if (count > 0 && (gameMode == GameMode.CLASSIC || gameMode == GameMode.CHAOS)) {
+        if (count > 0 && (gameMode == GameMode.ADVENTURE)) {
             levelManager.onLinesCleared(count);
         }
     }

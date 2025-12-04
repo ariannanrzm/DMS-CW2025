@@ -436,8 +436,8 @@ public class GuiController implements Initializable {
     }
 
     @FXML
-    public void startClassicGame(ActionEvent e) {
-        startGame(GameMode.CLASSIC);
+    public void startAdventureGame(ActionEvent e) {
+        startGame(GameMode.ADVENTURE);
     }
 
     @FXML
@@ -445,9 +445,5 @@ public class GuiController implements Initializable {
         startGame(GameMode.ZEN);
     }
 
-    @FXML
-    public void startChaosGame(ActionEvent e) {
-        startGame(GameMode.CHAOS);
-    }
 
 }
