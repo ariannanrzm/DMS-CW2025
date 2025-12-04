@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+
+<StackPane xmlns="http://javafx.com/javafx/8"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="com.comp2042.ui.MainMenuController"
+           style="-fx-background-color: #1e1e1e;">
+
+    <VBox alignment="CENTER" spacing="20">
+
+        <Label text="TETRIS" style="-fx-font-size: 32; -fx-text-fill: white;"/>
+
+        <Button text="Classic Mode" fx:id="classicBtn" onAction="#startClassic"/>
+        <Button text="Zen Mode" fx:id="zenBtn" onAction="#startZen"/>
+        <Button text="Chaos Mode" fx:id="chaosBtn" onAction="#startChaos"/>
+
+    </VBox>
+
+</StackPane>
