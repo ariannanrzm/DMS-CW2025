@@ -10,17 +10,17 @@ import com.comp2042.game.board.*;
 import com.comp2042.game.events.InputEventListener;
 import com.comp2042.game.events.MoveEvent;
 import com.comp2042.game.config.GameConfig;
+import com.comp2042.game.logic.LevelManager;
+
 
 /**
  * GameController handles only game logic and communication with the Board.
  */
-public class GameController implements InputEventListener {
+public class GameController implements InputEventListener  {
 
     /** Game logic board */
     private final Board board;
-
-
-    /** GUI controller (only for view updates, not game logic) */
+    private final LevelManager levelManager;
     private final GuiController viewGuiController;
     private final GameState playingState;
     private final GameState pausedState;
@@ -29,6 +29,7 @@ public class GameController implements InputEventListener {
 
     public GameController(GuiController viewGuiController) {
         this.viewGuiController = viewGuiController;
+        this.levelManager = new LevelManager();
 
         this.board = new SimpleBoard(
                 GameConfig.get().getBoardHeight(),
@@ -48,10 +49,31 @@ public class GameController implements InputEventListener {
         this.viewGuiController.setEventListener(this);
 
         board.createNewBrick();
-        this.viewGuiController.initGameView(board.getBoardMatrix(), board.getViewData());
+
+        this.viewGuiController.initGameView(
+                board.getBoardMatrix(),
+                board.getViewData(),
+                levelManager.getCurrentSpeed()
+        );
+
         this.viewGuiController.bindScore(board.getScore().scoreProperty());
         this.viewGuiController.bindLines(board.getScore().linesProperty());
+        this.viewGuiController.bindLevel(levelManager.levelProperty());
+
+
+        levelManager.levelProperty().addListener((obs, oldVal, newVal) -> {
+            viewGuiController.updateGameSpeed(levelManager.getCurrentSpeed());
+            viewGuiController.showLevelUpNotification(newVal.intValue());
+
+        });
     }
+
+    public void notifyLinesCleared(int count) {
+        if (count > 0) {
+            levelManager.onLinesCleared(count);
+        }
+    }
+
 
     public void setState(GameState state) {
         this.currentState = state;
@@ -98,8 +120,10 @@ public class GameController implements InputEventListener {
     @Override
     public void createNewGame() {
         board.newGame();
-        setState(playingState);
+        levelManager.reset();
+        setState(getPlayingState());
         viewGuiController.resetGameView();
+        viewGuiController.updateGameSpeed(levelManager.getCurrentSpeed());
     }
 
     @Override

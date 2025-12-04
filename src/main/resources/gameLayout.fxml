@@ -17,6 +17,11 @@
             <Label text="HOLD" styleClass="scoreTitle"/>
         </VBox>
 
+        <VBox layoutX="20" layoutY="240" styleClass="scoreBox" spacing="5" alignment="CENTER" minWidth="130">
+            <Label text="LEVEL" styleClass="scoreTitle"/>
+            <Label fx:id="levelLabel" text="1" styleClass="scoreValue"/>
+        </VBox>
+
         <Pane layoutX="180" layoutY="60">
             <GridPane fx:id="brickPanel" vgap="1" hgap="1"/>
 
@@ -39,6 +44,7 @@
             <Label text="LINES" styleClass="scoreTitle"/>
             <Label fx:id="linesLabel" text="0" styleClass="scoreValue"/>
         </VBox>
+
 
         <VBox layoutX="450" layoutY="400" styleClass="scoreBox" spacing="5" alignment="CENTER" minWidth="130" minHeight="120">
             <Label text="SCORE" styleClass="scoreTitle"/>

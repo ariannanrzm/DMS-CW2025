@@ -50,6 +50,7 @@ public class GuiController implements Initializable {
     @FXML private Label linesLabel;
     @FXML private VBox nextBrickContainer;
     @FXML private VBox holdBrickContainer;
+    @FXML private Label levelLabel;
 
 
     private StackPane[][] displayMatrix;
@@ -96,7 +97,7 @@ public class GuiController implements Initializable {
         inputHandler.attachTo(gamePanel);
     }
 
-    public void initGameView(int[][] boardMatrix, ViewData brick) {
+    public void initGameView(int[][] boardMatrix, ViewData brick, double initialSpeed) {
         displayMatrix = new StackPane[boardMatrix.length][boardMatrix[0].length];
 
         int HIDDEN_ROWS = GameConfig.get().getHiddenRows();
@@ -119,12 +120,7 @@ public class GuiController implements Initializable {
         refreshNextBricks(brick.getNextBricks());
         refreshHeldBrick(brick.getHeldBrickData());
 
-        timeLine = new Timeline(new KeyFrame(
-                Duration.millis(GameConfig.get().getDropInterval()),
-                ae -> moveDown(new MoveEvent(EventType.DOWN, EventSource.THREAD))
-        ));
-        timeLine.setCycleCount(Timeline.INDEFINITE);
-        timeLine.play();
+        updateGameSpeed(initialSpeed);
     }
 
 
@@ -166,6 +162,12 @@ public class GuiController implements Initializable {
     }
 
     private void showClearRowNotication(ClearRow clearRow){
+    }
+
+    public void showLevelUpNotification(int newLevel) {
+        NotificationPanel notification = new NotificationPanel("LEVEL " + newLevel);
+        groupNotification.getChildren().add(notification);
+        notification.showScore(groupNotification.getChildren());
     }
 
     public void showNotificationIfRowsCleared(ClearRow clearRow) {
@@ -400,6 +402,23 @@ public class GuiController implements Initializable {
         } else {
             timeLine.play();
         }
+    }
+
+    public void bindLevel(IntegerProperty property) {
+        levelLabel.textProperty().bind(property.asString("%d"));
+    }
+
+    public void updateGameSpeed(double delayMillis) {
+        if (timeLine != null) {
+            timeLine.stop();
+        }
+
+        timeLine = new Timeline(new KeyFrame(
+                Duration.millis(delayMillis),
+                ae -> moveDown(new MoveEvent(EventType.DOWN, EventSource.THREAD))
+        ));
+        timeLine.setCycleCount(Timeline.INDEFINITE);
+        timeLine.play();
     }
 
 }
