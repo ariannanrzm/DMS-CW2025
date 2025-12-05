@@ -22,7 +22,6 @@ import javafx.scene.Group;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.control.Label;
 import javafx.util.Duration;
@@ -52,6 +51,7 @@ public class GuiController implements Initializable {
     @FXML private VBox nextBrickContainer;
     @FXML private VBox holdBrickContainer;
     @FXML private Label levelLabel;
+    @FXML private Label timeLabel;
 
 
     private StackPane[][] displayMatrix;
@@ -61,7 +61,6 @@ public class GuiController implements Initializable {
     private InputHandler inputHandler;
     private GameController gameController;
     private GridPane ghostPanel;
-
     private StackPane[][] ghostRectangles;
     private List<int[][]> lastNextBricks;
 
@@ -106,10 +105,14 @@ public class GuiController implements Initializable {
         }
 
         new GameController(this, mode);
-        // Focus the game panel so keyboard controls work immediately
         gamePanel.requestFocus();
     }
 
+    public void updateTimer(String timeString) {
+        if (timeLabel != null) {
+            timeLabel.setText(timeString);
+        }
+    }
 
     public void initGameView(int[][] boardMatrix, ViewData brick, double initialSpeed) {
         displayMatrix = new StackPane[boardMatrix.length][boardMatrix[0].length];
@@ -402,7 +405,6 @@ public class GuiController implements Initializable {
     public void newGame(ActionEvent e) {
         eventListener.createNewGame();
     }
-
     public void pauseGame(ActionEvent e) {
         gamePanel.requestFocus();
     }

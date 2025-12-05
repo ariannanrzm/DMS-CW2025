@@ -25,7 +25,6 @@ public class PlayingState implements GameState {
             ClearRow clearRow = context.getBoard().clearRows();
 
             if (clearRow.getLinesRemoved() > 0) {
-                System.out.println("DEBUG: PlayingState detected " + clearRow.getLinesRemoved() + " lines!"); // <--- ADD THIS
                 context.notifyLinesCleared(clearRow.getLinesRemoved());
             }
 
@@ -96,8 +95,8 @@ public class PlayingState implements GameState {
         context.getGuiController().refreshBrick(data.getViewData());
         context.getGuiController().showNotificationIfRowsCleared(data.getClearRow());
 
-        if (data.getClearRow().getLinesRemoved() > 0) {  // <--- ADD THIS
-            context.notifyLinesCleared(data.getClearRow().getLinesRemoved()); // <--- ADD THIS
+        if (data.getClearRow().getLinesRemoved() > 0) {
+            context.notifyLinesCleared(data.getClearRow().getLinesRemoved());
         }
 
         // Only refresh the brick if the game is not over

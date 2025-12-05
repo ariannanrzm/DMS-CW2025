@@ -24,6 +24,11 @@
             <Label fx:id="levelLabel" styleClass="scoreValue" text="1" />
         </VBox>
 
+        <VBox alignment="CENTER" layoutX="20" layoutY="320" minWidth="130" spacing="5" styleClass="scoreBox">
+            <Label styleClass="scoreTitle" text="TIME" />
+            <Label fx:id="timeLabel" styleClass="scoreValue" text="00:00" />
+        </VBox>
+
         <Pane layoutX="180" layoutY="60">
             <GridPane fx:id="brickPanel" hgap="1" vgap="1" />
 
@@ -32,7 +37,9 @@
                     <GridPane fx:id="gamePanel" hgap="1" layoutX="40" layoutY="30" vgap="1" />
                 </center>
             </BorderPane>
-        </Pane>  <Group fx:id="groupNotification" layoutX="25" layoutY="250">
+        </Pane>
+
+        <Group fx:id="groupNotification" layoutX="25" layoutY="250">
         <VBox alignment="CENTER">
             <GameOverPanel fx:id="gameOverPanel"/>
         </VBox>

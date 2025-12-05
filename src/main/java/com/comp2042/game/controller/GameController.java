@@ -12,7 +12,9 @@ import com.comp2042.game.events.MoveEvent;
 import com.comp2042.game.config.GameConfig;
 import com.comp2042.game.logic.LevelManager;
 import com.comp2042.game.config.GameMode;
-
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.util.Duration;
 
 /**
  * GameController handles only game logic and communication with the Board.
@@ -29,6 +31,8 @@ public class GameController implements InputEventListener  {
     private GameState currentState;
     private final GameMode gameMode;
     private int linesSinceLastGarbage = 0;
+    private Timeline stopwatchTimeline;
+    private int secondsElapsed;
 
 
     public GameController(GuiController viewGuiController, GameMode gameMode) {
@@ -79,6 +83,24 @@ public class GameController implements InputEventListener  {
                 viewGuiController.refreshGameBackground(board.getBoardMatrix());
             }
         });
+        setupStopwatch();
+    }
+
+    private void setupStopwatch() {
+        this.secondsElapsed = 0;
+        this.stopwatchTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            secondsElapsed++;
+            updateTimeLabel();
+        }));
+        this.stopwatchTimeline.setCycleCount(Timeline.INDEFINITE);
+        this.stopwatchTimeline.play();
+    }
+
+    private void updateTimeLabel() {
+        int minutes = secondsElapsed / 60;
+        int seconds = secondsElapsed % 60;
+        String formattedTime = String.format("%02d:%02d", minutes, seconds);
+        viewGuiController.updateTimer(formattedTime);
     }
 
     public void notifyLinesCleared(int count) {
@@ -99,7 +121,14 @@ public class GameController implements InputEventListener  {
     }
 
 
-    public void setState(GameState state) { this.currentState = state;}
+    public void setState(GameState state) {
+        this.currentState = state;
+
+        if (state == gameOverState && stopwatchTimeline != null) {
+            stopwatchTimeline.stop();
+        }
+    }
+
     public GameState getPlayingState() { return playingState; }
     public GameState getPausedState() { return pausedState; }
     public GameState getGameOverState() { return gameOverState; }
@@ -137,6 +166,13 @@ public class GameController implements InputEventListener  {
         levelManager.reset();
         linesSinceLastGarbage = 0;
         setState(getPlayingState());
+
+        // Reset and Restart Stopwatch
+        if (stopwatchTimeline != null) {
+            stopwatchTimeline.stop();
+        }
+        setupStopwatch();
+
         viewGuiController.resetGameView();
         viewGuiController.updateGameSpeed(levelManager.getCurrentSpeed());
     }
@@ -150,10 +186,11 @@ public class GameController implements InputEventListener  {
 
         if (currentState == playingState) {
             setState(pausedState);
+            if (stopwatchTimeline != null) stopwatchTimeline.pause(); // Pause Timer
         } else if (currentState == pausedState) {
             setState(playingState);
             viewGuiController.showPauseMessage(false);
+            if (stopwatchTimeline != null) stopwatchTimeline.play(); // Resume Timer
         }
     }
-
 }
