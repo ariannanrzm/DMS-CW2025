@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 public class SimpleBoard implements Board {
 
-    private static final int SPAWN_X = 4;
+    private static final int SPAWN_X = 3;
     private static final int SPAWN_Y = 0;
     private static final int MOVE_LEFT = -1;
     private static final int MOVE_RIGHT = 1;

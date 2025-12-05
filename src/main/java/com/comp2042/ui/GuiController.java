@@ -28,13 +28,13 @@ import javafx.util.Duration;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 
 /**
  * GuiController manages visual updates and animations.
  */
 public class GuiController implements Initializable {
 
-    private static final int BOARD_BORDER_OFFSET = 2;
     private final Paint[] paintCache = new Paint[8];
     private final Border BLOCK_BORDER = new Border(new BorderStroke(
             Color.web("rgba(255,255,255,0.4)"), Color.TRANSPARENT, Color.TRANSPARENT, Color.web("rgba(255,255,255,0.4)"),
@@ -139,7 +139,7 @@ public class GuiController implements Initializable {
 
         initGhostPanel(BRICK_SIZE);
         initBrickPanel(brick, BRICK_SIZE);
-        updateBrickPanelPosition(brick);
+        Platform.runLater(() -> updateBrickPanelPosition(brick));
         refreshNextBricks(brick.getNextBricks());
         refreshHeldBrick(brick.getHeldBrickData());
 
@@ -231,7 +231,6 @@ public class GuiController implements Initializable {
         final int CELL_STEP = BRICK_SIZE + 1;
 
         brickPanel.setLayoutX(gamePanel.getLayoutX()
-                + BOARD_BORDER_OFFSET
                 + brick.getxPosition() * CELL_STEP
         );
 
@@ -239,7 +238,7 @@ public class GuiController implements Initializable {
                 + brick.getyPosition() * CELL_STEP);
 
         if (ghostPanel != null) {
-            ghostPanel.setLayoutX(gamePanel.getLayoutX() + BOARD_BORDER_OFFSET + brick.getxPosition() * CELL_STEP);
+            ghostPanel.setLayoutX(gamePanel.getLayoutX() + brick.getxPosition() * CELL_STEP);
             ghostPanel.setLayoutY(TOP_OFFSET + gamePanel.getLayoutY() + brick.getGhostYPosition() * CELL_STEP);
         }
     }
