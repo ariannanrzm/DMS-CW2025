@@ -13,7 +13,7 @@ public class LevelManager {
             800, // Level 1
             700, // Level 2
             600, // Level 3
-            500, // Level 4
+            600, // Level 4
             400, // Level 5
             300  // Level 6
     };

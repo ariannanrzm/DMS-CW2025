@@ -33,6 +33,7 @@ public class GameController implements InputEventListener  {
     private int linesSinceLastGarbage = 0;
     private Timeline stopwatchTimeline;
     private int secondsElapsed;
+    private int garbageTimer = 0;
 
 
     public GameController(GuiController viewGuiController, GameMode gameMode) {
@@ -77,11 +78,8 @@ public class GameController implements InputEventListener  {
             viewGuiController.showLevelUpNotification(level);
             System.out.println("Level Up! New Speed: " + levelManager.getCurrentSpeed());
 
-            // Level 3 Mechanic: Add 1 Random Garbage Row immediately
-            if (level == 3 && gameMode == GameMode.ADVENTURE) {
-                board.addGarbageRow();
-                viewGuiController.refreshGameBackground(board.getBoardMatrix());
-            }
+            // Reset garbage timer when entering a new level
+            garbageTimer = 0;
         });
         setupStopwatch();
     }
@@ -91,9 +89,43 @@ public class GameController implements InputEventListener  {
         this.stopwatchTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
             secondsElapsed++;
             updateTimeLabel();
+
+            if (currentState == playingState && gameMode == GameMode.ADVENTURE) {
+                handleGarbageGeneration();
+            }
         }));
         this.stopwatchTimeline.setCycleCount(Timeline.INDEFINITE);
         this.stopwatchTimeline.play();
+    }
+
+    private void handleGarbageGeneration() {
+        garbageTimer++;
+        int currentLevel = levelManager.getCurrentLevel();
+
+        // Level 3: Garbage every 15 seconds
+        if (currentLevel == 3) {
+            if (garbageTimer >= 15) {
+                triggerGarbageRow();
+                garbageTimer = 0;
+            }
+        }
+        // Level 4+: Garbage every 10 seconds
+        else if (currentLevel >= 4) {
+            if (garbageTimer >= 10) {
+                triggerGarbageRow();
+                garbageTimer = 0;
+            }
+        }
+        // Reset timer for lower levels to prevent accumulation before reaching level 3
+        else {
+            garbageTimer = 0;
+        }
+    }
+
+    private void triggerGarbageRow() {
+        board.addGarbageRow();
+        viewGuiController.refreshGameBackground(board.getBoardMatrix());
+        System.out.println("Garbage Row Added via Timer!");
     }
 
     private void updateTimeLabel() {
@@ -106,17 +138,6 @@ public class GameController implements InputEventListener  {
     public void notifyLinesCleared(int count) {
         if (count > 0 && (gameMode == GameMode.ADVENTURE)) {
             levelManager.onLinesCleared(count);
-
-            // Level 4 Mechanic: Add 1 Garbage Row every 10 lines
-            if (levelManager.getCurrentLevel() >= 4) {
-                linesSinceLastGarbage += count;
-
-                while (linesSinceLastGarbage >= 10) {
-                    linesSinceLastGarbage -= 10;
-                    board.addGarbageRow();
-                    viewGuiController.refreshGameBackground(board.getBoardMatrix());
-                }
-            }
         }
     }
 
