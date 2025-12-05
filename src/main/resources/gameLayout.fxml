@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.comp2042.ui.GameOverPanel?>
-
 <?import java.net.URL?>
 <?import javafx.scene.Group?>
 <?import javafx.scene.control.Label?>
@@ -15,7 +14,7 @@
 
     <Pane maxHeight="600" maxWidth="600" minHeight="600" minWidth="600" prefHeight="600" prefWidth="600">
 
-              <VBox fx:id="holdBrickContainer" alignment="CENTER" layoutX="20" layoutY="60" minWidth="130" prefHeight="120.0" prefWidth="130.0" spacing="15" styleClass="scoreBox">
+        <VBox fx:id="holdBrickContainer" alignment="CENTER" layoutX="20" layoutY="60" minWidth="130" prefHeight="120.0" prefWidth="130.0" spacing="15" styleClass="scoreBox">
             <Label styleClass="scoreTitle" text="HOLD" />
         </VBox>
 
@@ -29,16 +28,23 @@
             <Label fx:id="timeLabel" styleClass="scoreValue" text="00:00" />
         </VBox>
 
-        <Pane layoutX="180" layoutY="60">
-            <GridPane fx:id="brickPanel" hgap="1" vgap="1" />
+        <StackPane layoutX="180" layoutY="60">
+            <Pane>
+                <GridPane fx:id="brickPanel" hgap="1" vgap="1" />
 
-            <BorderPane fx:id="gameBoard" styleClass="gameBoard">
-                <center>
-                    <GridPane fx:id="gamePanel" hgap="1" layoutX="40" layoutY="30" vgap="1" />
-                </center>
-            </BorderPane>
-        </Pane>
+                <BorderPane fx:id="gameBoard" styleClass="gameBoard">
+                    <center>
+                        <GridPane fx:id="gamePanel" hgap="1" layoutX="40" layoutY="30" vgap="1" />
+                    </center>
+                </BorderPane>
+            </Pane>
 
+            <StackPane fx:id="centerNotificationOverlay"
+                       alignment="CENTER"
+                       mouseTransparent="true"
+                       prefWidth="220" prefHeight="440" />
+
+        </StackPane>
         <Group fx:id="groupNotification" layoutX="25" layoutY="250">
         <VBox alignment="CENTER">
             <GameOverPanel fx:id="gameOverPanel"/>
