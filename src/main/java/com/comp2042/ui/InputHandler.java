@@ -26,13 +26,25 @@ public class InputHandler {
 
     private void handleKeyPress(KeyEvent event) {
         switch (event.getCode()) {
-            case LEFT, A  -> controller.onLeftEvent(new MoveEvent(EventType.LEFT, EventSource.USER));
-            case RIGHT, D -> controller.onRightEvent(new MoveEvent(EventType.RIGHT, EventSource.USER));
+            case LEFT, A -> {
+                if (controller.isControlsReversed()) {
+                    controller.onRightEvent(new MoveEvent(EventType.RIGHT, EventSource.USER));
+                } else {
+                    controller.onLeftEvent(new MoveEvent(EventType.LEFT, EventSource.USER));
+                }
+            }
+            case RIGHT, D -> {
+                if (controller.isControlsReversed()) {
+                    controller.onLeftEvent(new MoveEvent(EventType.LEFT, EventSource.USER));
+                } else {
+                    controller.onRightEvent(new MoveEvent(EventType.RIGHT, EventSource.USER));
+                }
+            }
             case UP, W    -> controller.onRotateEvent(new MoveEvent(EventType.ROTATE, EventSource.USER));
             case DOWN, S  -> controller.onDownEvent(new MoveEvent(EventType.DOWN, EventSource.USER));
             case SPACE    -> controller.onHardDropEvent(new MoveEvent(EventType.HARD_DROP, EventSource.USER));
-            case C        -> controller.onHoldEvent(new MoveEvent(EventType.HOLD, EventSource.USER)); // New Mapping
-            case N, R       -> controller.createNewGame();
+            case C        -> controller.onHoldEvent(new MoveEvent(EventType.HOLD, EventSource.USER));
+            case N, R     -> controller.createNewGame();
             case ESCAPE   -> controller.togglePause();
             default       -> { }
         }

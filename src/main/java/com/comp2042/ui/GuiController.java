@@ -52,6 +52,12 @@ public class GuiController implements Initializable {
     @FXML private VBox holdBrickContainer;
     @FXML private Label levelLabel;
     @FXML private Label timeLabel;
+    @FXML private StackPane centerNotificationOverlay;
+
+    @FXML
+    public void initialize() {
+        centerNotificationOverlay.getChildren().clear(); // removes the dummy label at runtime
+    }
 
 
     private StackPane[][] displayMatrix;
@@ -187,6 +193,9 @@ public class GuiController implements Initializable {
         notification.showScore(groupNotification.getChildren());
     }
 
+    public void showChaosNotification(String message) {
+        NotificationPanel notification = new NotificationPanel(message);
+        notification.showScore(centerNotificationOverlay.getChildren());    }
     public void showNotificationIfRowsCleared(ClearRow clearRow) {
         String text = switch (clearRow.getLinesRemoved()) {
             case 1 -> "SINGLE";

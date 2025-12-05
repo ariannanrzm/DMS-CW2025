@@ -13,6 +13,7 @@ import com.comp2042.game.config.GameConfig;
 import com.comp2042.game.logic.LevelManager;
 import com.comp2042.game.config.GameMode;
 import javafx.animation.KeyFrame;
+import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
 
@@ -34,6 +35,7 @@ public class GameController implements InputEventListener  {
     private Timeline stopwatchTimeline;
     private int secondsElapsed;
     private int garbageTimer = 0;
+    private boolean controlsReversed = false;
 
 
     public GameController(GuiController viewGuiController, GameMode gameMode) {
@@ -76,12 +78,30 @@ public class GameController implements InputEventListener  {
             int level = newVal.intValue();
             viewGuiController.updateGameSpeed(levelManager.getCurrentSpeed());
             viewGuiController.showLevelUpNotification(level);
-            System.out.println("Level Up! New Speed: " + levelManager.getCurrentSpeed());
 
             // Reset garbage timer when entering a new level
             garbageTimer = 0;
+
+            // trigger reverse controls
+            if (level == 5) {
+                controlsReversed = true;
+                viewGuiController.showChaosNotification("CHAOS MODE");
+                System.out.println("CHAOS MODE STARTED");
+            } else {
+                if (controlsReversed) {
+                    controlsReversed = false;
+                    viewGuiController.showChaosNotification("CHAOS MODE ENDED");
+                    System.out.println("CHAOS MODE ENDED");
+                }
+            }
         });
         setupStopwatch();
+
+        
+    }
+
+    public boolean isControlsReversed() {
+        return controlsReversed;
     }
 
     private void setupStopwatch() {
@@ -125,7 +145,6 @@ public class GameController implements InputEventListener  {
     private void triggerGarbageRow() {
         board.addGarbageRow();
         viewGuiController.refreshGameBackground(board.getBoardMatrix());
-        System.out.println("Garbage Row Added via Timer!");
     }
 
     private void updateTimeLabel() {
@@ -186,6 +205,7 @@ public class GameController implements InputEventListener  {
         board.newGame();
         levelManager.reset();
         linesSinceLastGarbage = 0;
+        controlsReversed = false;
         setState(getPlayingState());
 
         // Reset and Restart Stopwatch
