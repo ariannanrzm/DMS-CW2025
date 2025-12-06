@@ -10,12 +10,12 @@ public class LevelManager {
 
     // Speed curve
     private static final double[] SPEED_CURVE = {
-            800, // Level 1
-            700, // Level 2
-            600, // Level 3
+            900, // Level 1
+            800, // Level 2
+            700, // Level 3
             600, // Level 4
-            400, // Level 5
-            300  // Level 6
+            600, // Level 5
+            500  // Level 6
     };
 
     private final IntegerProperty currentLevel = new SimpleIntegerProperty(1);

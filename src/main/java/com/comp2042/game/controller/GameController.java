@@ -13,7 +13,6 @@ import com.comp2042.game.config.GameConfig;
 import com.comp2042.game.logic.LevelManager;
 import com.comp2042.game.config.GameMode;
 import javafx.animation.KeyFrame;
-import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
 
@@ -35,6 +34,7 @@ public class GameController implements InputEventListener  {
     private Timeline stopwatchTimeline;
     private int secondsElapsed;
     private int garbageTimer = 0;
+    private int chaosTimer = 0;
     private boolean controlsReversed = false;
 
 
@@ -82,16 +82,17 @@ public class GameController implements InputEventListener  {
             // Reset garbage timer when entering a new level
             garbageTimer = 0;
 
-            // trigger reverse controls
+            // Trigger reverse controls
             if (level == 5) {
+                chaosTimer = 0;
                 controlsReversed = true;
                 viewGuiController.showChaosNotification("CHAOS MODE");
                 System.out.println("CHAOS MODE STARTED");
             } else {
                 if (controlsReversed) {
                     controlsReversed = false;
-                    viewGuiController.showChaosNotification("CHAOS MODE ENDED");
-                    System.out.println("CHAOS MODE ENDED");
+                    viewGuiController.showChaosNotification("CHAOS ENDED");
+                    System.out.println("CHAOS ENDED");
                 }
             }
         });
@@ -112,10 +113,35 @@ public class GameController implements InputEventListener  {
 
             if (currentState == playingState && gameMode == GameMode.ADVENTURE) {
                 handleGarbageGeneration();
+                handleChaosMode();
             }
         }));
         this.stopwatchTimeline.setCycleCount(Timeline.INDEFINITE);
         this.stopwatchTimeline.play();
+    }
+
+    private void handleChaosMode() {
+        // Only active in Level 5
+        if (levelManager.getCurrentLevel() != 5) return;
+
+        chaosTimer++;
+
+
+        int cyclePosition = chaosTimer % 13;
+
+        if (cyclePosition < 3) {
+            // First 4 seconds: Controls Reversed
+            if (!controlsReversed) {
+                controlsReversed = true;
+                viewGuiController.showChaosNotification("CHAOS MODE");
+            }
+        } else {
+            // Next 10 seconds: Controls Normal
+            if (controlsReversed) {
+                controlsReversed = false;
+                viewGuiController.showChaosNotification("NORMAL MODE");
+            }
+        }
     }
 
     private void handleGarbageGeneration() {
@@ -129,8 +155,8 @@ public class GameController implements InputEventListener  {
                 garbageTimer = 0;
             }
         }
-        // Level 4+: Garbage every 10 seconds
-        else if (currentLevel >= 4) {
+        // Level 4: Garbage every 10 seconds
+        else if (currentLevel == 4) {
             if (garbageTimer >= 10) {
                 triggerGarbageRow();
                 garbageTimer = 0;
