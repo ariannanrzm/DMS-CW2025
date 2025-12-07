@@ -9,6 +9,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
 
 <StackPane styleClass="root" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.comp2042.ui.GuiController">
 
@@ -42,24 +43,19 @@
                     </center>
                 </BorderPane>
             </Pane>
+        </StackPane> <StackPane fx:id="groupNotification"
+                                layoutX="8.0"
+                                layoutY="380.0"
+                                prefWidth="130.0"
+                                prefHeight="40.0"
+                                mouseTransparent="true">
 
-            <StackPane fx:id="centerNotificationOverlay" alignment="CENTER" mouseTransparent="true" prefHeight="440" prefWidth="220" />
+        <Label alignment="CENTER"
+               prefWidth="130.0"
+               styleClass="sideNotification"
+               text="TETRIS" />
 
-        </StackPane>
-
-        <StackPane fx:id="groupNotification"
-                   layoutX="8.0"
-                   layoutY="380.0"
-                   prefWidth="130.0"
-                   prefHeight="40.0"
-                   mouseTransparent="true">
-
-            <Label alignment="CENTER"
-                   prefWidth="130.0"
-                   styleClass="sideNotification"
-                   text="TETRIS" />
-
-        </StackPane>
+    </StackPane>
 
         <VBox fx:id="nextBrickContainer" alignment="TOP_CENTER" layoutX="448.0" layoutY="60.0" minWidth="130" prefHeight="184.0" prefWidth="130.0" spacing="15" styleClass="scoreBox">
             <Label alignment="TOP_CENTER" prefHeight="81.0" prefWidth="60.0" styleClass="scoreTitle" text="NEXT">
@@ -78,7 +74,20 @@
             <Label styleClass="scoreTitle" text="SCORE" />
             <Label fx:id="scoreLabel" styleClass="scoreValue" text="0" />
         </VBox>
+
     </Pane>
+
+    <StackPane fx:id="centerNotificationOverlay"
+               mouseTransparent="true"
+               prefHeight="100.0"
+               prefWidth="500.0" />
+
+    <Rectangle fx:id="redFlashOverlay"
+               fill="RED"
+               height="600.0"
+               width="600.0"
+               opacity="0.0"
+               mouseTransparent="true" />
 
     <stylesheets>
         <URL value="@window_style.css" />
