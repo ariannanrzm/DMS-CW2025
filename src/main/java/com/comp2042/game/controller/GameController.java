@@ -1,6 +1,7 @@
 package com.comp2042.game.controller;
 
 import com.comp2042.game.bricks.RandomBrickGenerator;
+import com.comp2042.game.logic.HighScoreManager;
 import com.comp2042.game.states.GameOverState;
 import com.comp2042.game.states.GameState;
 import com.comp2042.game.states.PausedState;
@@ -80,7 +81,9 @@ public class GameController implements InputEventListener  {
             int level = newVal.intValue();
 
             if (level > 6) {
-                viewGuiController.gameWon();
+                HighScoreManager.tryUpdateFastestTime(secondsElapsed);
+                HighScoreManager.tryUpdateHighScore(board.getScore().getScore());
+                viewGuiController.gameWon(secondsElapsed);
                 setState(gameOverState);
                 return;
             }
@@ -207,8 +210,13 @@ public class GameController implements InputEventListener  {
     public void setState(GameState state) {
         this.currentState = state;
 
-        if (state == gameOverState && stopwatchTimeline != null) {
-            stopwatchTimeline.stop();
+        if (state == gameOverState) {
+            int currentScore = board.getScore().getScore();
+            HighScoreManager.tryUpdateHighScore(currentScore);
+
+            if (stopwatchTimeline != null) {
+                stopwatchTimeline.stop();
+            }
         }
     }
 
@@ -217,6 +225,7 @@ public class GameController implements InputEventListener  {
     public GameState getGameOverState() { return gameOverState; }
     public Board getBoard() {return board;}
     public GuiController getGuiController() {return viewGuiController;}
+    public int getSecondsElapsed() { return secondsElapsed;}
 
     @Override
     public DownData onDownEvent(MoveEvent event) {
@@ -287,4 +296,5 @@ public class GameController implements InputEventListener  {
             if (stopwatchTimeline != null) stopwatchTimeline.play(); // Resume Timer
         }
     }
+
 }

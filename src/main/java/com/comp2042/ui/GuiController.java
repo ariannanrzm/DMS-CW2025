@@ -36,7 +36,6 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import javafx.animation.*;
 import javafx.scene.shape.Rectangle;
-import javafx.util.Duration;
 
 /**
  * GuiController manages visual updates and animations.
@@ -64,6 +63,8 @@ public class GuiController implements Initializable {
     @FXML private BorderPane gameBoard;
     @FXML private StackPane scoreOverlay;
     @FXML private StackPane pauseMenu;
+    @FXML private Label highScoreLabel;
+    @FXML private Label bestTimeLabel;
 
 
 
@@ -108,9 +109,26 @@ public class GuiController implements Initializable {
            paintCache[i] = c;
         }
 
+        if (highScoreLabel != null) {
+            highScoreLabel.setText("" + com.comp2042.game.logic.HighScoreManager.getHighScore());
+        }
+        refreshBestTime();
     }
 
 
+    private String formatTime(int totalSeconds) {
+        int minutes = totalSeconds / 60;
+        int seconds = totalSeconds % 60;
+        return String.format("%02d:%02d", minutes, seconds);
+    }
+
+    private void refreshBestTime() {
+        if (bestTimeLabel != null) {
+            int best = com.comp2042.game.logic.HighScoreManager.getFastestTime();
+            String text = (best == Integer.MAX_VALUE) ? "--:--" : formatTime(best);
+            bestTimeLabel.setText(text);
+        }
+    }
     public void setGameController(GameController controller) {
         this.gameController = controller;
         this.inputHandler = new InputHandler(controller);
@@ -122,6 +140,11 @@ public class GuiController implements Initializable {
         if (timeLine != null) {
             timeLine.stop();
             timeLine = null;
+
+            if (highScoreLabel != null) {
+                highScoreLabel.setText("" + com.comp2042.game.logic.HighScoreManager.getHighScore());
+            }
+            refreshBestTime();
         }
 
         new GameController(this, mode);
@@ -495,10 +518,9 @@ public class GuiController implements Initializable {
         linesLabel.textProperty().bind(property.asString("%d"));
     }
 
-    public void gameWon() {
+    public void gameWon(int finalSeconds) {
         timeLine.stop();
-        switchToGameOverScene(true);
-    }
+        switchToGameOverScene(true, finalSeconds);    }
 
     public void gameOver() {
         timeLine.stop();
@@ -519,12 +541,13 @@ public class GuiController implements Initializable {
         ParallelTransition boardDeath = new ParallelTransition(fadeBoard, shrinkBoard);
 
         SequentialTransition sequence = new SequentialTransition(flash, boardDeath);
+        int finalSeconds = (gameController != null) ? gameController.getSecondsElapsed() : 0;
+        sequence.setOnFinished(e -> switchToGameOverScene(false, finalSeconds));
 
-        sequence.setOnFinished(e -> switchToGameOverScene(false));
         sequence.play();
     }
 
-    private void switchToGameOverScene(boolean isVictory) {
+    private void switchToGameOverScene(boolean isVictory, int finalSeconds) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/GameOver.fxml"));
             Parent gameOverRoot = loader.load();
@@ -534,10 +557,13 @@ public class GuiController implements Initializable {
             // Parse score safely
             int finalScore = 0;
             try {
-                finalScore = Integer.parseInt(scoreLabel.getText());
+                if (scoreLabel != null) {
+                    finalScore = Integer.parseInt(scoreLabel.getText());
+                }
             } catch (NumberFormatException ignored) {}
 
             controller.setScore(finalScore);
+            controller.setGameTime(finalSeconds);
 
             if (isVictory) {
                 controller.setTitle("YOU WON!", Color.web("#50FA7B"));
@@ -674,6 +700,15 @@ public class GuiController implements Initializable {
     public void quitGame(ActionEvent event) {
         Platform.exit();
         System.exit(0);
+    }
+
+    /**
+     * Explicitly requests focus for the game panel to ensure keyboard input works.
+     */
+    public void focusGamePanel() {
+        if (gamePanel != null) {
+            gamePanel.requestFocus();
+        }
     }
 
 }
