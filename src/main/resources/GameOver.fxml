@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import java.net.URL?>
+
+<StackPane xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="com.comp2042.ui.GameOverController"
+           prefHeight="600.0" prefWidth="600.0"
+           styleClass="root">
+
+    <StackPane style="-fx-background-color: rgba(0, 0, 0, 0.7);"/>
+
+    <VBox alignment="CENTER" spacing="30">
+        <Label text="GAME OVER" style="-fx-font-family: 'Press Start 2P'; -fx-font-size: 50px; -fx-text-fill: red;" />
+
+        <Label fx:id="scoreLabel" text="SCORE: 0" style="-fx-font-family: 'Press Start 2P'; -fx-font-size: 20px; -fx-text-fill: white;" />
+
+        <VBox prefHeight="20" />
+
+        <Button text="RETRY" onAction="#retryGame" styleClass="button"/>
+        <Button text="MAIN MENU" onAction="#backToMenu" styleClass="button"/>
+        <Button text="QUIT" onAction="#quitGame" styleClass="button"/>
+    </VBox>
+
+    <stylesheets>
+        <URL value="@window_style.css" />
+    </stylesheets>
+
+</StackPane>

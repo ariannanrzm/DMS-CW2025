@@ -29,6 +29,14 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import java.io.IOException;
+import javafx.animation.*;
+import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 
 /**
  * GuiController manages visual updates and animations.
@@ -45,7 +53,6 @@ public class GuiController implements Initializable {
     @FXML private GridPane gamePanel;
     @FXML private Group groupNotification;
     @FXML private GridPane brickPanel;
-    @FXML private GameOverPanel gameOverPanel;
     @FXML private Label scoreLabel;
     @FXML private Label linesLabel;
     @FXML private VBox nextBrickContainer;
@@ -53,6 +60,8 @@ public class GuiController implements Initializable {
     @FXML private Label levelLabel;
     @FXML private Label timeLabel;
     @FXML private StackPane centerNotificationOverlay;
+    @FXML private Rectangle redFlashOverlay;
+    @FXML private BorderPane gameBoard;
 
     @FXML
     public void initialize() {
@@ -76,8 +85,6 @@ public class GuiController implements Initializable {
         brickPanel.toFront();
         gamePanel.setFocusTraversable(true);
         gamePanel.requestFocus();
-        gameOverPanel.setVisible(false);
-
         for (int i = 0; i < 8; i++) {
             Color c;
             switch (i) {
@@ -116,6 +123,13 @@ public class GuiController implements Initializable {
     public void updateTimer(String timeString) {
         if (timeLabel != null) {
             timeLabel.setText(timeString);
+        }
+    }
+
+    public void resetTimeline() {
+        if (timeLine != null) {
+            timeLine.stop();
+            timeLine.play();
         }
     }
 
@@ -382,17 +396,57 @@ public class GuiController implements Initializable {
 
     public void gameOver() {
         timeLine.stop();
-        gameOverPanel.setVisible(true);
-        brickPanel.setVisible(false);
-        if (ghostPanel != null) {
-            ghostPanel.setVisible(false);
-        }
+
+        //  Red Flash Animation
+        FadeTransition flash = new FadeTransition(Duration.millis(150), redFlashOverlay);
+        flash.setFromValue(0.0);
+        flash.setToValue(0.6); // 60% opacity red
+        flash.setCycleCount(2);
+        flash.setAutoReverse(true);
+
+        // 2. Board "Death" Animation (Fade out + Shrink)
+        FadeTransition fadeBoard = new FadeTransition(Duration.millis(600), gameBoard);
+        fadeBoard.setToValue(0.3);
+
+        ScaleTransition shrinkBoard = new ScaleTransition(Duration.millis(600), gameBoard);
+        shrinkBoard.setToX(0.9);
+        shrinkBoard.setToY(0.9);
+
+        // Run Fade and Shrink at the same time
+        ParallelTransition boardDeath = new ParallelTransition(fadeBoard, shrinkBoard);
+
+        // Play Flash first, THEN Board Death
+        SequentialTransition sequence = new SequentialTransition(flash, boardDeath);
+
+        //When animation finishes, switch scenes
+        sequence.setOnFinished(e -> switchToGameOverScene());
+
+        sequence.play();
     }
 
-    public void resetTimeline() {
-        if (timeLine != null) {
-            timeLine.stop();
-            timeLine.play();
+    private void switchToGameOverScene() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/GameOver.fxml"));
+            Parent gameOverRoot = loader.load();
+
+            GameOverController controller = loader.getController();
+            // Parse score safely
+            int finalScore = 0;
+            try {
+                finalScore = Integer.parseInt(scoreLabel.getText());
+            } catch (NumberFormatException ignored) {}
+
+            controller.setScore(finalScore);
+            controller.animateEntry();
+
+            Stage stage = (Stage) gamePanel.getScene().getWindow();
+            Scene scene = new Scene(gameOverRoot, 650, 600);
+            stage.setScene(scene);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Could not load GameOver.fxml");
         }
     }
 
@@ -400,7 +454,6 @@ public class GuiController implements Initializable {
      * Resets the view for a new game.
      */
     public void resetGameView() {
-        gameOverPanel.setVisible(false);
         brickPanel.setVisible(true);
         if (ghostPanel != null) {
             ghostPanel.setVisible(true);

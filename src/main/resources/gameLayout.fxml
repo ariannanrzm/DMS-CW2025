@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.comp2042.ui.GameOverPanel?>
-
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Group?>
@@ -12,6 +10,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
 
 <StackPane styleClass="root" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.comp2042.ui.GuiController">
 
@@ -23,10 +22,11 @@
 
         <VBox alignment="CENTER" layoutX="20" layoutY="240.0" minWidth="130" prefHeight="55.0" spacing="10.0" styleClass="scoreBox">
             <Label prefHeight="30.0" prefWidth="75.0" styleClass="scoreTitle" text="LEVEL" />
-            <Label fx:id="levelLabel" prefHeight="22.0" prefWidth="16.0" styleClass="scoreValue" text="1">
-            <padding>
-               <Insets top="-10.0" />
-            </padding></Label>
+            <Label fx:id="levelLabel" prefHeight="22.0" styleClass="scoreValue" text="1">
+                <padding>
+                    <Insets top="-10.0" />
+                </padding>
+            </Label>
         </VBox>
 
         <HBox alignment="CENTER" layoutX="19.0" layoutY="466.0" minWidth="130" prefHeight="25.0" prefWidth="130.0" spacing="10" styleClass="scoreBox">
@@ -48,17 +48,15 @@
             <StackPane fx:id="centerNotificationOverlay" alignment="CENTER" mouseTransparent="true" prefHeight="440" prefWidth="220" />
 
         </StackPane>
-        <Group fx:id="groupNotification" layoutX="25" layoutY="250">
-        <VBox alignment="CENTER">
-            <GameOverPanel fx:id="gameOverPanel"/>
-        </VBox>
-    </Group>
+
+        <Group fx:id="groupNotification" layoutX="25" layoutY="250" />
 
         <VBox fx:id="nextBrickContainer" alignment="TOP_CENTER" layoutX="448.0" layoutY="60.0" minWidth="130" prefHeight="184.0" prefWidth="130.0" spacing="15" styleClass="scoreBox">
             <Label alignment="TOP_CENTER" prefHeight="81.0" prefWidth="60.0" styleClass="scoreTitle" text="NEXT">
-            <padding>
-               <Insets top="10.0" />
-            </padding></Label>
+                <padding>
+                    <Insets top="10.0" />
+                </padding>
+            </Label>
         </VBox>
 
         <VBox alignment="CENTER" layoutX="19.0" layoutY="307.0" minWidth="130" prefHeight="55.0" prefWidth="130.0" spacing="5" styleClass="scoreBox">
@@ -66,13 +64,14 @@
             <Label fx:id="linesLabel" styleClass="scoreValue" text="0" />
         </VBox>
 
-
         <VBox alignment="CENTER" layoutX="449.0" layoutY="284.0" minHeight="120" minWidth="130" spacing="5" styleClass="scoreBox">
             <Label styleClass="scoreTitle" text="SCORE" />
             <Label fx:id="scoreLabel" styleClass="scoreValue" text="0" />
         </VBox>
 
     </Pane>
+
+    <Rectangle fx:id="redFlashOverlay" fill="RED" height="600" mouseTransparent="true" opacity="0.0" width="650" />
 
     <stylesheets>
         <URL value="@window_style.css" />
