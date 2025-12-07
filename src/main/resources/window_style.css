@@ -152,3 +152,42 @@
     -fx-effect: dropshadow(one-pass-box, black, 2, 0.0, 1, 1);
     -fx-font-weight: bold;
 }
+
+.pause-overlay {
+    -fx-background-color: rgba(20, 15, 25, 0.85); /* Dark purple-tinted black */
+}
+
+.pause-title {
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 40px;
+    -fx-text-fill: #FF79C6; /* Pink */
+    -fx-effect: dropshadow(three-pass-box, rgba(255, 121, 198, 0.6), 10, 0, 0, 0);
+    -fx-padding: 0 0 20 0;
+}
+
+.button {
+    -fx-background-color: rgba(45, 27, 46, 0.9);
+    -fx-background-radius: 2;
+    -fx-border-color: #BD93F9;
+    -fx-border-width: 3px;
+    -fx-text-fill: white;
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 14px;
+    -fx-padding: 12 25 12 25;
+    -fx-cursor: hand;
+    -fx-min-width: 200px;
+}
+
+.button:hover {
+    -fx-border-color: #50FA7B; /* Green border on hover */
+    -fx-text-fill: #F1FA8C;    /* Yellow text on hover */
+    -fx-background-color: rgba(60, 40, 60, 1.0);
+    -fx-effect: dropshadow(one-pass-box, rgba(80, 250, 123, 0.4), 10, 0, 0, 0);
+}
+
+/* Specific color tweaks for Quit button if desired */
+.cute-button.quit:hover {
+    -fx-border-color: #FF5555; /* Red border */
+    -fx-text-fill: #FF5555;
+    -fx-effect: dropshadow(one-pass-box, rgba(255, 85, 85, 0.4), 10, 0, 0, 0);
+}

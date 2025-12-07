@@ -11,6 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 
+<?import javafx.scene.control.Button?>
 <StackPane styleClass="root" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.comp2042.ui.GuiController">
 
     <Pane maxHeight="600" maxWidth="600" minHeight="600" minWidth="600" prefHeight="600" prefWidth="600">
@@ -74,8 +75,18 @@
             <Label styleClass="scoreTitle" text="SCORE" />
             <Label fx:id="scoreLabel" styleClass="scoreValue" text="0" />
         </VBox>
-
     </Pane>
+
+    <StackPane fx:id="pauseMenu" visible="false" styleClass="pause-overlay">
+        <VBox alignment="CENTER" spacing="20">
+            <Label text="PAUSED" styleClass="pause-title"/>
+
+            <Button text="RESUME" onAction="#resumeGame" styleClass="cute-button"/>
+            <Button text="RESTART" onAction="#restartGame" styleClass="cute-button"/>
+            <Button text="MAIN MENU" onAction="#backToMenu" styleClass="cute-button"/>
+            <Button text="QUIT" onAction="#quitGame" styleClass="cute-button, quit"/>
+        </VBox>
+    </StackPane>
 
     <StackPane fx:id="centerNotificationOverlay"
                mouseTransparent="true"

@@ -264,15 +264,18 @@ public class GameController implements InputEventListener  {
     public ViewData onHoldEvent(MoveEvent event) { return currentState.handleHoldEvent(event); }
 
     public void togglePause() {
-        // Prevent pausing if the game is already over
         if (currentState == gameOverState) return;
 
         if (currentState == playingState) {
             setState(pausedState);
+            viewGuiController.showPauseMessage(true);
+
             if (stopwatchTimeline != null) stopwatchTimeline.pause(); // Pause Timer
+
         } else if (currentState == pausedState) {
             setState(playingState);
             viewGuiController.showPauseMessage(false);
+
             if (stopwatchTimeline != null) stopwatchTimeline.play(); // Resume Timer
         }
     }

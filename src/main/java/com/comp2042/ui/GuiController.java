@@ -63,6 +63,7 @@ public class GuiController implements Initializable {
     @FXML private Rectangle redFlashOverlay;
     @FXML private BorderPane gameBoard;
     @FXML private StackPane scoreOverlay;
+    @FXML private StackPane pauseMenu;
 
 
 
@@ -525,12 +526,13 @@ public class GuiController implements Initializable {
 
     public void showPauseMessage(boolean isPaused) {
         if (isPaused) {
-            NotificationPanel notif = new NotificationPanel("PAUSED");
-            groupNotification.getChildren().add(notif);
-            notif.showScore(groupNotification.getChildren());
+            pauseMenu.setVisible(true);
+            pauseMenu.toFront();
             timeLine.pause();
         } else {
+            pauseMenu.setVisible(false);
             timeLine.play();
+            gamePanel.requestFocus();
         }
     }
 
@@ -583,5 +585,43 @@ public class GuiController implements Initializable {
         startGame(GameMode.ZEN);
     }
 
+    @FXML
+    public void resumeGame(ActionEvent event) {
+        // Toggle pause back to playing
+        if (gameController != null) {
+            gameController.togglePause();
+        }
+        gamePanel.requestFocus();
+    }
+
+    @FXML
+    public void restartGame(ActionEvent event) {
+        pauseMenu.setVisible(false);
+        gameController.createNewGame();
+        gamePanel.requestFocus();
+    }
+
+    @FXML
+    public void backToMenu(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/MainMenu.fxml"));
+            Parent root = loader.load();
+
+            MainMenuController controller = loader.getController();
+            Stage stage = (Stage) pauseMenu.getScene().getWindow();
+            controller.setStage(stage);
+
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void quitGame(ActionEvent event) {
+        Platform.exit();
+        System.exit(0);
+    }
 
 }
