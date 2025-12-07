@@ -34,17 +34,19 @@
             <Label fx:id="timeLabel" styleClass="timeLabelStyle" text="00:00" />
         </HBox>
 
-        <StackPane layoutX="180" layoutY="60">
-            <Pane>
-                <GridPane fx:id="brickPanel" hgap="1" vgap="1" />
+    <StackPane layoutX="196" layoutY="60">
+        <Pane>
+            <GridPane fx:id="brickPanel" hgap="1" vgap="1" />
 
-                <BorderPane fx:id="gameBoard" styleClass="gameBoard">
-                    <center>
-                        <GridPane fx:id="gamePanel" hgap="1" layoutX="40" layoutY="30" vgap="1" />
-                    </center>
-                </BorderPane>
-            </Pane>
-        </StackPane> <StackPane fx:id="groupNotification"
+            <BorderPane fx:id="gameBoard" styleClass="gameBoard">
+                <center>
+                    <GridPane fx:id="gamePanel" hgap="1" layoutX="40" layoutY="30" vgap="1" />
+                </center>
+            </BorderPane>
+        </Pane>
+        </StackPane>
+
+        <StackPane fx:id="groupNotification"
                                 layoutX="8.0"
                                 layoutY="380.0"
                                 prefWidth="130.0"
@@ -81,10 +83,10 @@
         <VBox alignment="CENTER" spacing="20">
             <Label text="PAUSED" styleClass="pause-title"/>
 
-            <Button text="RESUME" onAction="#resumeGame" styleClass="cute-button"/>
-            <Button text="RESTART" onAction="#restartGame" styleClass="cute-button"/>
-            <Button text="MAIN MENU" onAction="#backToMenu" styleClass="cute-button"/>
-            <Button text="QUIT" onAction="#quitGame" styleClass="cute-button, quit"/>
+            <Button text="RESUME" onAction="#resumeGame" styleClass="button"/>
+            <Button text="RESTART" onAction="#restartGame" styleClass="button"/>
+            <Button text="MAIN MENU" onAction="#backToMenu" styleClass="button"/>
+            <Button text="QUIT" onAction="#quitGame" styleClass="button, quit"/>
         </VBox>
     </StackPane>
 

@@ -350,40 +350,18 @@ public class GuiController implements Initializable {
         }
     }
 
-    private void refreshHeldBrick(int[][] matrix) {
-        holdBrickContainer.getChildren().clear();
-        Label title = new Label("HOLD");
-        title.getStyleClass().add("scoreTitle");
-        holdBrickContainer.getChildren().add(title);
-
-        if (matrix == null) return;
-
-        int PREVIEW_SIZE = 15;
-        GridPane previewPane = new GridPane();
-        previewPane.setAlignment(Pos.CENTER);
-        previewPane.setHgap(1);
-        previewPane.setVgap(1);
-
-        for (int row = 0; row < matrix.length; row++) {
-            for (int col = 0; col < matrix[row].length; col++) {
-                if (matrix[row][col] != 0) {
-                    StackPane r = new StackPane();
-                    r.setPrefSize(PREVIEW_SIZE, PREVIEW_SIZE);
-                    r.getStyleClass().add("game-block");
-                    r.setBackground(new Background(new BackgroundFill(getFillColor(matrix[row][col]), CornerRadii.EMPTY, Insets.EMPTY)));
-
-                    previewPane.add(r, col, row);
-                }
-            }
-        }
-        holdBrickContainer.getChildren().add(previewPane);
-    }
-
     private void refreshNextBricks(List<int[][]> nextBricks) {
-        nextBrickContainer.getChildren().clear();
-        Label title = new Label("NEXT");
-        title.getStyleClass().add("scoreTitle");
-        nextBrickContainer.getChildren().add(title);
+        // 1. Keep the Title Label (index 0)
+        while (nextBrickContainer.getChildren().size() > 1) {
+            nextBrickContainer.getChildren().remove(1);
+        }
+
+        // 2. FIX: Reset the label height so it doesn't push bricks down
+        if (!nextBrickContainer.getChildren().isEmpty()
+                && nextBrickContainer.getChildren().get(0) instanceof Label label) {
+            label.setPrefHeight(-1); // -1 = USE_COMPUTED_SIZE (Auto)
+            label.setMinHeight(-1);
+        }
 
         int PREVIEW_SIZE = 15;
 
@@ -393,21 +371,89 @@ public class GuiController implements Initializable {
             previewPane.setHgap(1);
             previewPane.setVgap(1);
 
+            int renderRow = 0;
+
             for (int row = 0; row < matrix.length; row++) {
+                boolean rowHasBlock = false;
+                // Check if this row is empty
                 for (int col = 0; col < matrix[row].length; col++) {
                     if (matrix[row][col] != 0) {
+                        rowHasBlock = true;
+                        break;
+                    }
+                }
+
+                // Only add the row if it contains parts of the brick
+                if (rowHasBlock) {
+                    for (int col = 0; col < matrix[row].length; col++) {
                         StackPane r = new StackPane();
                         r.setPrefSize(PREVIEW_SIZE, PREVIEW_SIZE);
-                        r.getStyleClass().add("game-block");
 
-                        r.setBackground(new Background(new BackgroundFill(getFillColor(matrix[row][col]), CornerRadii.EMPTY, Insets.EMPTY)));
-
-                        previewPane.add(r, col, row);
+                        if (matrix[row][col] != 0) {
+                            r.getStyleClass().add("game-block");
+                            r.setBackground(new Background(new BackgroundFill(getFillColor(matrix[row][col]), CornerRadii.EMPTY, Insets.EMPTY)));
+                        } else {
+                            // Add transparent spacer to maintain 4-column alignment
+                            r.setBackground(Background.EMPTY);
+                        }
+                        previewPane.add(r, col, renderRow);
                     }
+                    renderRow++;
                 }
             }
             nextBrickContainer.getChildren().add(previewPane);
         }
+    }
+
+    private void refreshHeldBrick(int[][] matrix) {
+        // 1. Keep the Title Label (index 0)
+        while (holdBrickContainer.getChildren().size() > 1) {
+            holdBrickContainer.getChildren().remove(1);
+        }
+
+        // 2. FIX: Reset the label height
+        if (!holdBrickContainer.getChildren().isEmpty()
+                && holdBrickContainer.getChildren().get(0) instanceof Label label) {
+            label.setPrefHeight(-1);
+            label.setMinHeight(-1);
+        }
+
+        if (matrix == null) return;
+
+        int PREVIEW_SIZE = 15;
+        GridPane previewPane = new GridPane();
+        previewPane.setAlignment(Pos.CENTER);
+        previewPane.setHgap(1);
+        previewPane.setVgap(1);
+
+        int renderRow = 0;
+
+        for (int row = 0; row < matrix.length; row++) {
+            boolean rowHasBlock = false;
+            for (int col = 0; col < matrix[row].length; col++) {
+                if (matrix[row][col] != 0) {
+                    rowHasBlock = true;
+                    break;
+                }
+            }
+
+            if (rowHasBlock) {
+                for (int col = 0; col < matrix[row].length; col++) {
+                    StackPane r = new StackPane();
+                    r.setPrefSize(PREVIEW_SIZE, PREVIEW_SIZE);
+
+                    if (matrix[row][col] != 0) {
+                        r.getStyleClass().add("game-block");
+                        r.setBackground(new Background(new BackgroundFill(getFillColor(matrix[row][col]), CornerRadii.EMPTY, Insets.EMPTY)));
+                    } else {
+                        r.setBackground(Background.EMPTY);
+                    }
+                    previewPane.add(r, col, renderRow);
+                }
+                renderRow++;
+            }
+        }
+        holdBrickContainer.getChildren().add(previewPane);
     }
 
     public void refreshGameBackground(int[][] board) {

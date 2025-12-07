@@ -84,9 +84,9 @@
 
 .grid-cell {
 
-        -fx-border-color: rgba(255, 255, 255, 0.1);
+    -fx-border-color: rgba(255, 255, 255, 0.1);
     -fx-border-width: 0.5px;
--fx-background-color: rgba(255, 255, 255, 0.3);}
+    -fx-background-color: rgba(255, 255, 255, 0.3);}
 
 .bonusStyle {
     -fx-font-size: 40px;
@@ -108,10 +108,10 @@
 
 .scoreBox {
     -fx-background-color: rgba(45, 27, 46, 0.85);
-    -fx-background-radius: 0;
-    -fx-border-radius: 0;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
     -fx-border-color: #F3D1B0;
-     -fx-border-width: 1px;
+     -fx-border-width: 0.5px;
      -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 5, 0, 0, 3);
 }
 
@@ -167,7 +167,8 @@
 
 .button {
     -fx-background-color: rgba(45, 27, 46, 0.9);
-    -fx-background-radius: 2;
+    -fx-background-radius:15;
+    -fx-border-radius: 5;
     -fx-border-color: #BD93F9;
     -fx-border-width: 3px;
     -fx-text-fill: white;
@@ -179,14 +180,14 @@
 }
 
 .button:hover {
-    -fx-border-color: #50FA7B; /* Green border on hover */
+    -fx-border-color: #96d6d5; /* Green border on hover */
     -fx-text-fill: #F1FA8C;    /* Yellow text on hover */
     -fx-background-color: rgba(60, 40, 60, 1.0);
     -fx-effect: dropshadow(one-pass-box, rgba(80, 250, 123, 0.4), 10, 0, 0, 0);
 }
 
 /* Specific color tweaks for Quit button if desired */
-.cute-button.quit:hover {
+.button.quit:hover {
     -fx-border-color: #FF5555; /* Red border */
     -fx-text-fill: #FF5555;
     -fx-effect: dropshadow(one-pass-box, rgba(255, 85, 85, 0.4), 10, 0, 0, 0);
