@@ -18,7 +18,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -65,9 +64,12 @@ public class GuiController implements Initializable {
     @FXML private StackPane pauseMenu;
     @FXML private Label highScoreLabel;
     @FXML private Label bestTimeLabel;
-
-
-
+    @FXML private VBox levelContainer;
+    @FXML private VBox linesContainer;
+    @FXML private HBox bestTimeContainer;
+    @FXML private HBox highScoreContainer;
+    @FXML private VBox scoreContainer;
+    @FXML private StackPane rootPane;
 
     private StackPane[][] displayMatrix;
     private StackPane[][] rectangles;
@@ -77,8 +79,8 @@ public class GuiController implements Initializable {
     private GameController gameController;
     private GridPane ghostPanel;
     private StackPane[][] ghostRectangles;
-    private List<int[][]> lastNextBricks;
     private SequentialTransition hardDropBounce;
+    private GameMode currentMode;
 
 
     @Override
@@ -136,19 +138,44 @@ public class GuiController implements Initializable {
     }
 
     public void startGame(GameMode mode) {
+        this.currentMode = mode; // Save mode
+
         // Stop any existing game loop first
         if (timeLine != null) {
             timeLine.stop();
             timeLine = null;
-
-            if (highScoreLabel != null) {
-                highScoreLabel.setText("" + com.comp2042.game.logic.HighScoreManager.getHighScore());
-            }
-            refreshBestTime();
         }
+
+        if (rootPane != null) {
+            rootPane.getStyleClass().remove("zen-mode");
+
+            if (mode == GameMode.ZEN) {
+                rootPane.getStyleClass().add("zen-mode");
+            }
+        }
+
+        if (highScoreLabel != null) {
+            highScoreLabel.setText("" + com.comp2042.game.logic.HighScoreManager.getHighScore());
+        }
+        refreshBestTime();
+
+        // zen mode logic
+        boolean isZen = (mode == GameMode.ZEN);
+        setVisible(levelContainer, !isZen);
+        setVisible(linesContainer, !isZen);
+        setVisible(bestTimeContainer, !isZen);
+        setVisible(highScoreContainer, !isZen);
+        setVisible(scoreContainer, !isZen);
 
         new GameController(this, mode);
         gamePanel.requestFocus();
+    }
+
+    private void setVisible(Pane pane, boolean visible) {
+        if (pane != null) {
+            pane.setVisible(visible);
+            pane.setManaged(visible);
+        }
     }
 
     public void updateTimer(String timeString) {
@@ -232,6 +259,7 @@ public class GuiController implements Initializable {
     }
 
     public void showLevelUpNotification(int newLevel) {
+        if (currentMode == GameMode.ZEN) return;
         NotificationPanel notification = new NotificationPanel("LEVEL UP!");
         centerNotificationOverlay.getChildren().add(notification);
         TranslateTransition moveUp = new TranslateTransition(Duration.millis(500), notification);
@@ -261,6 +289,7 @@ public class GuiController implements Initializable {
     }
 
     public void showNotificationIfRowsCleared(ClearRow clearRow) {
+        if (currentMode == GameMode.ZEN) return;
         String text = switch (clearRow.getLinesRemoved()) {
             case 1 -> "SINGLE";
             case 2 -> "DOUBLE";
@@ -523,6 +552,13 @@ public class GuiController implements Initializable {
         switchToGameOverScene(true, finalSeconds);    }
 
     public void gameOver() {
+
+        if (currentMode == GameMode.ZEN) {
+            timeLine.stop();
+            gameController.createNewGame();
+            return;
+        }
+
         timeLine.stop();
 
         FadeTransition flash = new FadeTransition(Duration.millis(150), redFlashOverlay);

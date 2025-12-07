@@ -186,9 +186,15 @@
     -fx-effect: dropshadow(one-pass-box, rgba(80, 250, 123, 0.4), 10, 0, 0, 0);
 }
 
-/* Specific color tweaks for Quit button if desired */
 .button.quit:hover {
     -fx-border-color: #FF5555; /* Red border */
     -fx-text-fill: #FF5555;
     -fx-effect: dropshadow(one-pass-box, rgba(255, 85, 85, 0.4), 10, 0, 0, 0);
+}
+
+.zen-mode {
+    -fx-background-image: url("2.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: cover;
+    -fx-background-position: center;
 }

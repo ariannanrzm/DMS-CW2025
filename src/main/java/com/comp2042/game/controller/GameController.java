@@ -201,6 +201,10 @@ public class GameController implements InputEventListener  {
     }
 
     public void notifyLinesCleared(int count) {
+
+        if (gameMode == GameMode.ZEN) {
+            return;
+        }
         if (count > 0 && (gameMode == GameMode.ADVENTURE)) {
             levelManager.onLinesCleared(count);
         }
