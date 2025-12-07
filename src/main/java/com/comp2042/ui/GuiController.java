@@ -78,6 +78,8 @@ public class GuiController implements Initializable {
     private GridPane ghostPanel;
     private StackPane[][] ghostRectangles;
     private List<int[][]> lastNextBricks;
+    private SequentialTransition hardDropBounce;
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -380,6 +382,7 @@ public class GuiController implements Initializable {
                 refreshBrick(downData.getViewData());
             }
         }
+
     }
 
     public void setEventListener(InputEventListener listener) {
@@ -495,6 +498,34 @@ public class GuiController implements Initializable {
         ));
         timeLine.setCycleCount(Timeline.INDEFINITE);
         timeLine.play();
+    }
+
+    public void playHardDropBounce() {
+        if (gameBoard == null) return;
+
+        // Foreground UI (prevents background from moving)
+        javafx.scene.Node target = gameBoard.getParent();
+        if (target == null) return;
+
+        // Stop previous animation + reset
+        if (hardDropBounce != null) {
+            hardDropBounce.stop();
+        }
+        target.setTranslateY(0);
+
+        // --- IMPACT (fast + tiny) ---
+        TranslateTransition impact = new TranslateTransition(Duration.millis(45), target);
+        impact.setByY(1.5);   // ONLY 1.5 px — feels like impact, not bounce
+
+        // --- RECOVER (slightly slower) ---
+        TranslateTransition recover = new TranslateTransition(Duration.millis(70), target);
+        recover.setByY(-1.5);
+
+        // No scaling at all — MORE realistic, LESS cartoony
+
+        hardDropBounce = new SequentialTransition(impact, recover);
+        hardDropBounce.setCycleCount(1);
+        hardDropBounce.playFromStart();
     }
 
     @FXML

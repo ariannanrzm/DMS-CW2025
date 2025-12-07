@@ -12,9 +12,11 @@ import com.comp2042.game.events.MoveEvent;
 import com.comp2042.game.config.GameConfig;
 import com.comp2042.game.logic.LevelManager;
 import com.comp2042.game.config.GameMode;
+import com.comp2042.game.events.EventSource;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
+
 
 /**
  * GameController handles only game logic and communication with the Board.
@@ -223,7 +225,14 @@ public class GameController implements InputEventListener  {
 
     @Override
     public DownData onHardDropEvent(MoveEvent event) {
-        return currentState.handleHardDropEvent(event);
+        DownData data = currentState.handleHardDropEvent(event);
+
+        // Only bounce for hard drops
+        if (data != null && event.getEventSource() == EventSource.USER) {
+            viewGuiController.playHardDropBounce();
+        }
+
+        return data;
     }
 
     @Override
