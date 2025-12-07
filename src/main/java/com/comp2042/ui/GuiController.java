@@ -207,9 +207,17 @@ public class GuiController implements Initializable {
     }
 
     public void showLevelUpNotification(int newLevel) {
-        NotificationPanel notification = new NotificationPanel("LEVEL " + newLevel);
-        groupNotification.getChildren().add(notification);
-        notification.showScore(groupNotification.getChildren());
+        NotificationPanel notification = new NotificationPanel("LEVEL UP!");
+        centerNotificationOverlay.getChildren().add(notification);
+        TranslateTransition moveUp = new TranslateTransition(Duration.millis(500), notification);
+        moveUp.setByY(-80);
+        FadeTransition fadeOut = new FadeTransition(Duration.millis(500), notification);
+        fadeOut.setFromValue(1.0);
+        fadeOut.setToValue(0.0);
+
+        ParallelTransition animation = new ParallelTransition(moveUp, fadeOut);
+        animation.setOnFinished(e -> centerNotificationOverlay.getChildren().remove(notification));
+        animation.play();
     }
 
     public void showChaosNotification(String message) {
@@ -507,25 +515,19 @@ public class GuiController implements Initializable {
     public void playHardDropBounce() {
         if (gameBoard == null) return;
 
-        // Foreground UI (prevents background from moving)
+
         javafx.scene.Node target = gameBoard.getParent();
         if (target == null) return;
 
-        // Stop previous animation + reset
         if (hardDropBounce != null) {
             hardDropBounce.stop();
         }
         target.setTranslateY(0);
 
-        // --- IMPACT (fast + tiny) ---
         TranslateTransition impact = new TranslateTransition(Duration.millis(45), target);
-        impact.setByY(1.5);   // ONLY 1.5 px — feels like impact, not bounce
-
-        // --- RECOVER (slightly slower) ---
+        impact.setByY(1.5);
         TranslateTransition recover = new TranslateTransition(Duration.millis(70), target);
         recover.setByY(-1.5);
-
-        // No scaling at all — MORE realistic, LESS cartoony
 
         hardDropBounce = new SequentialTransition(impact, recover);
         hardDropBounce.setCycleCount(1);

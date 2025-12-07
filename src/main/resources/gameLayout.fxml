@@ -54,7 +54,6 @@
                    prefHeight="40.0"
                    mouseTransparent="true">
 
-            <!-- PLACEHOLDER FOR SCENE BUILDER PREVIEW -->
             <Label alignment="CENTER"
                    prefWidth="130.0"
                    styleClass="sideNotification"
