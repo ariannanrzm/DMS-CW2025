@@ -164,6 +164,13 @@ public class GameController implements InputEventListener  {
                 garbageTimer = 0;
             }
         }
+        // Level 5: Garbage every 7 seconds
+        else if (currentLevel == 5) {
+            if (garbageTimer >= 7) {
+                triggerGarbageRow();
+                garbageTimer = 0;
+            }
+        }
         // Reset timer for lower levels to prevent accumulation before reaching level 3
         else {
             garbageTimer = 0;

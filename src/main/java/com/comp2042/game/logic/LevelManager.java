@@ -6,7 +6,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 public class LevelManager {
 
     private static final int MAX_LEVEL = 6;
-    private static final int LINES_PER_LEVEL = 5;
+    private static final int LINES_PER_LEVEL = 5; // User has to complete 5 lines
 
     // Speed curve
     private static final double[] SPEED_CURVE = {
@@ -14,8 +14,8 @@ public class LevelManager {
             800, // Level 2
             700, // Level 3
             600, // Level 4
-            600, // Level 5
-            500  // Level 6
+            500, // Level 5
+
     };
 
     private final IntegerProperty currentLevel = new SimpleIntegerProperty(1);
