@@ -67,7 +67,19 @@
     -fx-background-color: rgba(40, 20, 60, 0.45);
     -fx-padding: 6 10 6 10;
     -fx-background-radius: 4;
-    -fx-text-fill: F3D1B0;
+    -fx-text-fill: #F3D1B0;
+}
+.centerMessage {
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-fill: white;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(one-pass-box, black, 8, 0.0, 2, 0);
+    -fx-background-color: rgba(40, 20, 60, 0.45);
+    -fx-padding: 6 10 6 10;
+    -fx-background-radius: 4;
+    -fx-text-fill: #F3D1B0;
 }
 
 .grid-cell {
@@ -112,7 +124,7 @@
 .scoreValue {
    -fx-font-family: "Press Start 2P";
    -fx-font-size: 16px;
-   -fx-text-fill: #ffffff;
+   -fx-text-fill: #ffdc69;
 }
 
 .game-block {

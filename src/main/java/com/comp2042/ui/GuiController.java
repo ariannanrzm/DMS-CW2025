@@ -222,7 +222,19 @@ public class GuiController implements Initializable {
 
     public void showChaosNotification(String message) {
         NotificationPanel notification = new NotificationPanel(message);
-        notification.showScore(centerNotificationOverlay.getChildren());    }
+        notification.setStyleClass("centerMessage");
+
+        centerNotificationOverlay.getChildren().add(notification);
+
+        FadeTransition fadeOut = new FadeTransition(Duration.seconds(2), notification);
+        fadeOut.setFromValue(1.0);
+        fadeOut.setToValue(0.0);
+
+        fadeOut.setOnFinished(e -> centerNotificationOverlay.getChildren().remove(notification));
+
+        fadeOut.play();
+    }
+
     public void showNotificationIfRowsCleared(ClearRow clearRow) {
         String text = switch (clearRow.getLinesRemoved()) {
             case 1 -> "SINGLE";

@@ -84,17 +84,19 @@ public class GameController implements InputEventListener  {
             // Reset garbage timer when entering a new level
             garbageTimer = 0;
 
+            // Notify player of rising levels (Garbage Mode)
+            if (level == 3 || level == 4) {
+                viewGuiController.showChaosNotification("LEVELS RISING..");
+            }
+
             // Trigger reverse controls
             if (level == 5) {
                 chaosTimer = 0;
                 controlsReversed = true;
-                viewGuiController.showChaosNotification("CHAOS MODE");
-                System.out.println("CHAOS MODE STARTED");
+                viewGuiController.showChaosNotification("RANDOM CONTROLS");
             } else {
                 if (controlsReversed) {
                     controlsReversed = false;
-                    viewGuiController.showChaosNotification("CHAOS ENDED");
-                    System.out.println("CHAOS ENDED");
                 }
             }
         });
@@ -135,13 +137,11 @@ public class GameController implements InputEventListener  {
             // First 4 seconds: Controls Reversed
             if (!controlsReversed) {
                 controlsReversed = true;
-                viewGuiController.showChaosNotification("CHAOS MODE");
             }
         } else {
             // Next 10 seconds: Controls Normal
             if (controlsReversed) {
                 controlsReversed = false;
-                viewGuiController.showChaosNotification("NORMAL MODE");
             }
         }
     }

@@ -34,6 +34,13 @@ public class NotificationPanel extends BorderPane {
         }
     }
 
+    public void setStyleClass(String className) {
+        if (notificationLabel != null) {
+            notificationLabel.getStyleClass().remove("sideNotification");
+            notificationLabel.getStyleClass().add(className);
+        }
+    }
+
     public void showScore(ObservableList<Node> list) {
         FadeTransition ft = new FadeTransition(Duration.millis(2000), this);
         ft.setFromValue(1);
