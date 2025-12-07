@@ -724,8 +724,7 @@ public class GuiController implements Initializable {
             MainMenuController controller = loader.getController();
             Stage stage = (Stage) pauseMenu.getScene().getWindow();
             controller.setStage(stage);
-
-            stage.setScene(new Scene(root));
+            stage.setScene(new Scene(root, 650, 600));
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();

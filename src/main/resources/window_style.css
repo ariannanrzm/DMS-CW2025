@@ -1,5 +1,5 @@
 .root {
-    -fx-background-image: url("3.png");
+    -fx-background-image: url("adventure.png");
     -fx-background-repeat: no-repeat;
     -fx-background-size: cover;
     -fx-background-position: center;
@@ -34,7 +34,6 @@
     -fx-background-insets: 0, 1, 4, 5, 6;
     -fx-background-radius: 9, 8, 5, 4, 3;
     -fx-padding: 8;
-    /*-fx-font-family: "Helvetica";*/
     -fx-font-family: "Press Start 2P";
     -fx-font-size: 22px;
     -fx-font-weight: bold;
@@ -154,13 +153,13 @@
 }
 
 .pause-overlay {
-    -fx-background-color: rgba(20, 15, 25, 0.85); /* Dark purple-tinted black */
+    -fx-background-color: rgba(20, 15, 25, 0.85);
 }
 
 .pause-title {
     -fx-font-family: "Press Start 2P";
     -fx-font-size: 40px;
-    -fx-text-fill: #FF79C6; /* Pink */
+    -fx-text-fill: #FF79C6;
     -fx-effect: dropshadow(three-pass-box, rgba(255, 121, 198, 0.6), 10, 0, 0, 0);
     -fx-padding: 0 0 20 0;
 }
@@ -180,21 +179,22 @@
 }
 
 .button:hover {
-    -fx-border-color: #96d6d5; /* Green border on hover */
-    -fx-text-fill: #F1FA8C;    /* Yellow text on hover */
+    -fx-border-color: #96d6d5;
+    -fx-text-fill: #F1FA8C;
     -fx-background-color: rgba(60, 40, 60, 1.0);
     -fx-effect: dropshadow(one-pass-box, rgba(80, 250, 123, 0.4), 10, 0, 0, 0);
 }
 
 .button.quit:hover {
-    -fx-border-color: #FF5555; /* Red border */
+    -fx-border-color: #FF5555;
     -fx-text-fill: #FF5555;
     -fx-effect: dropshadow(one-pass-box, rgba(255, 85, 85, 0.4), 10, 0, 0, 0);
 }
 
 .zen-mode {
-    -fx-background-image: url("2.png");
+    -fx-background-image: url("zen.png");
     -fx-background-repeat: no-repeat;
     -fx-background-size: cover;
     -fx-background-position: center;
 }
+

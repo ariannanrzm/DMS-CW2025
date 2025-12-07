@@ -113,8 +113,7 @@ public class GameOverController {
             MainMenuController controller = loader.getController();
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             controller.setStage(stage);
-
-            stage.setScene(new Scene(root));
+            stage.setScene(new Scene(root, 650, 600));
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();

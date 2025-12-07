@@ -1,24 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.geometry.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import java.net.URL?>
 
-<StackPane xmlns="http://javafx.com/javafx/8"
-           xmlns:fx="http://javafx.com/fxml"
-           fx:controller="com.comp2042.ui.MainMenuController"
-           style="-fx-background-color: #1e1e1e;">
+<StackPane styleClass="main-menu-bg"
+           xmlns="http://javafx.com/javafx/25"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.comp2042.ui.MainMenuController">
 
-    <VBox alignment="CENTER" spacing="20">
+    <StackPane style="-fx-background-color: rgba(0, 0, 0, 0.3);" />
 
-        <Label text="TETRIS" style="-fx-font-size: 32; -fx-text-fill: white;"/>
-        <Button text="Zen Mode" fx:id="zenBtn" onAction="#startZen"/>
-        <Button text="Adventure Mode" fx:id="AdventureBtn" onAction="#startAdventure"/>
+    <VBox alignment="CENTER" spacing="30">
 
+        <Label text="TETRIS"
+               style="-fx-font-family: 'Press Start 2P'; -fx-font-size: 60px; -fx-text-fill: #e0d5c1; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 5);"
+        />
+
+        <VBox prefHeight="20" />
+
+        <Button text="ADVENTURE MODE" fx:id="AdventureBtn" onAction="#startAdventure" styleClass="cute-button"/>
+        <Button text="ZEN MODE" fx:id="zenBtn" onAction="#startZen" styleClass="cute-button"/>
 
     </VBox>
+
+    <stylesheets>
+        <URL value="@window_style.css" />
+    </stylesheets>
 
 </StackPane>
