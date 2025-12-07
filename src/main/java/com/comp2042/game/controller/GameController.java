@@ -78,6 +78,13 @@ public class GameController implements InputEventListener  {
         // Listen for Level Changes
         levelManager.levelProperty().addListener((obs, oldVal, newVal) -> {
             int level = newVal.intValue();
+
+            if (level > 6) {
+                viewGuiController.gameWon();
+                setState(gameOverState);
+                return;
+            }
+
             viewGuiController.updateGameSpeed(levelManager.getCurrentSpeed());
             viewGuiController.showLevelUpNotification(level);
 
@@ -94,7 +101,15 @@ public class GameController implements InputEventListener  {
                 chaosTimer = 0;
                 controlsReversed = true;
                 viewGuiController.showChaosNotification("RANDOM CONTROLS");
-            } else {
+            }
+            // Level 6 Start: Final
+            else if (level == 6) {
+                chaosTimer = 0;
+                controlsReversed = true; // Ensure controls stay chaotic
+                viewGuiController.showChaosNotification("FINAL LEVEL!!");
+            }
+
+            else {
                 if (controlsReversed) {
                     controlsReversed = false;
                 }
@@ -126,23 +141,17 @@ public class GameController implements InputEventListener  {
 
     private void handleChaosMode() {
         // Only active in Level 5
-        if (levelManager.getCurrentLevel() != 5) return;
+        int lvl = levelManager.getCurrentLevel();
+        if (lvl != 5 && lvl != 6) return;
 
         chaosTimer++;
-
 
         int cyclePosition = chaosTimer % 13;
 
         if (cyclePosition < 3) {
-            // First 4 seconds: Controls Reversed
-            if (!controlsReversed) {
-                controlsReversed = true;
-            }
+            if (!controlsReversed) controlsReversed = true;
         } else {
-            // Next 10 seconds: Controls Normal
-            if (controlsReversed) {
-                controlsReversed = false;
-            }
+            if (controlsReversed) controlsReversed = false;
         }
     }
 
@@ -164,14 +173,13 @@ public class GameController implements InputEventListener  {
                 garbageTimer = 0;
             }
         }
-        // Level 5: Garbage every 7 seconds
-        else if (currentLevel == 5) {
+        // Level 5&6: Garbage every 7 seconds
+        else if (currentLevel == 5 || currentLevel == 6) {
             if (garbageTimer >= 7) {
                 triggerGarbageRow();
                 garbageTimer = 0;
             }
         }
-        // Reset timer for lower levels to prevent accumulation before reaching level 3
         else {
             garbageTimer = 0;
         }

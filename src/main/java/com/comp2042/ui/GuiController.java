@@ -495,17 +495,20 @@ public class GuiController implements Initializable {
         linesLabel.textProperty().bind(property.asString("%d"));
     }
 
+    public void gameWon() {
+        timeLine.stop();
+        switchToGameOverScene(true);
+    }
+
     public void gameOver() {
         timeLine.stop();
 
-        //  Red Flash Animation
         FadeTransition flash = new FadeTransition(Duration.millis(150), redFlashOverlay);
         flash.setFromValue(0.0);
-        flash.setToValue(0.6); // 60% opacity red
+        flash.setToValue(0.6);
         flash.setCycleCount(2);
         flash.setAutoReverse(true);
 
-        // 2. Board "Death" Animation (Fade out + Shrink)
         FadeTransition fadeBoard = new FadeTransition(Duration.millis(600), gameBoard);
         fadeBoard.setToValue(0.3);
 
@@ -513,24 +516,21 @@ public class GuiController implements Initializable {
         shrinkBoard.setToX(0.9);
         shrinkBoard.setToY(0.9);
 
-        // Run Fade and Shrink at the same time
         ParallelTransition boardDeath = new ParallelTransition(fadeBoard, shrinkBoard);
 
-        // Play Flash first, THEN Board Death
         SequentialTransition sequence = new SequentialTransition(flash, boardDeath);
 
-        //When animation finishes, switch scenes
-        sequence.setOnFinished(e -> switchToGameOverScene());
-
+        sequence.setOnFinished(e -> switchToGameOverScene(false));
         sequence.play();
     }
 
-    private void switchToGameOverScene() {
+    private void switchToGameOverScene(boolean isVictory) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/GameOver.fxml"));
             Parent gameOverRoot = loader.load();
 
             GameOverController controller = loader.getController();
+
             // Parse score safely
             int finalScore = 0;
             try {
@@ -538,6 +538,12 @@ public class GuiController implements Initializable {
             } catch (NumberFormatException ignored) {}
 
             controller.setScore(finalScore);
+
+            if (isVictory) {
+                controller.setTitle("YOU WON!", Color.web("#50FA7B"));
+            } else {
+                controller.setTitle("GAME OVER", Color.RED);
+            }
             controller.animateEntry();
 
             Stage stage = (Stage) gamePanel.getScene().getWindow();

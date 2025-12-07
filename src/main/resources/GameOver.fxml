@@ -15,10 +15,10 @@
     <StackPane style="-fx-background-color: rgba(0, 0, 0, 0.7);"/>
 
     <VBox alignment="CENTER" spacing="30">
-        <Label text="GAME OVER" style="-fx-font-family: 'Press Start 2P'; -fx-font-size: 50px; -fx-text-fill: red;" />
-
-        <Label fx:id="scoreLabel" text="SCORE: 0" style="-fx-font-family: 'Press Start 2P'; -fx-font-size: 20px; -fx-text-fill: white;" />
-
+        <Label fx:id="titleLabel"
+               text="GAME OVER"
+               style="-fx-font-family: 'Press Start 2P'; -fx-font-size: 50px;"/>
+        <Label fx:id="scoreLabel" text="SCORE: 0" style="-fx-font-family: 'Press Start 2P'; -fx-font-size: 20px; -fx-text-fill: white;"/>
         <VBox prefHeight="20" />
 
         <Button text="RETRY" onAction="#retryGame" styleClass="button"/>

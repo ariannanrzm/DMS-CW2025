@@ -18,6 +18,7 @@ import javafx.util.Duration;
 public class GameOverController {
 
     @FXML private Label scoreLabel;
+    @FXML private Label titleLabel;
 
 
     /**
@@ -25,6 +26,13 @@ public class GameOverController {
      */
     public void setScore(int score) {
         scoreLabel.setText("SCORE: " + score);
+    }
+
+    public void setTitle(String text, javafx.scene.paint.Paint color) {
+        if (titleLabel != null) {
+            titleLabel.setText(text);
+            titleLabel.setTextFill(color);
+        }
     }
 
     /**
