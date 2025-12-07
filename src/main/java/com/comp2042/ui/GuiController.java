@@ -62,6 +62,7 @@ public class GuiController implements Initializable {
     @FXML private StackPane centerNotificationOverlay;
     @FXML private Rectangle redFlashOverlay;
     @FXML private BorderPane gameBoard;
+    @FXML private StackPane scoreOverlay;
 
 
 
@@ -260,6 +261,32 @@ public class GuiController implements Initializable {
             groupNotification.getChildren().add(comboNotification);
             comboNotification.showScore(groupNotification.getChildren());
         }
+
+        // SHOW SCORE POPUP (Small floating number)
+        if (clearRow.getScoreBonus() > 0) {
+            showScorePopup(clearRow.getScoreBonus());
+        }
+    }
+
+    /**
+     * Shows a small floating score number in the center overlay.
+     */
+    private void showScorePopup(int score) {
+        Label scoreLabel = new Label("+" + score);
+        scoreLabel.getStyleClass().add("scorePopup");
+        scoreLabel.setMouseTransparent(true);
+
+        scoreOverlay.getChildren().add(scoreLabel);
+        TranslateTransition floatUp = new TranslateTransition(Duration.millis(1000), scoreLabel);
+        floatUp.setByY(-50);
+
+        FadeTransition fadeOut = new FadeTransition(Duration.millis(1000), scoreLabel);
+        fadeOut.setFromValue(1.0);
+        fadeOut.setToValue(0.0);
+
+        ParallelTransition animation = new ParallelTransition(floatUp, fadeOut);
+        animation.setOnFinished(e -> centerNotificationOverlay.getChildren().remove(scoreLabel));
+        animation.play();
     }
 
     private void updateBrickPanelPosition(ViewData brick) {

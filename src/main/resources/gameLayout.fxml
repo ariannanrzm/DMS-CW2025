@@ -82,6 +82,12 @@
                prefHeight="100.0"
                prefWidth="500.0" />
 
+    <StackPane fx:id="scoreOverlay"
+               mouseTransparent="true"
+               translateY="130"
+               prefHeight="100.0"
+               prefWidth="500.0" />
+
     <Rectangle fx:id="redFlashOverlay"
                fill="RED"
                height="600.0"

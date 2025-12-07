@@ -187,16 +187,17 @@ public class SimpleBoard implements Board {
 
     @Override
     public ClearRow clearRows() {
-        ClearRow clearRow = MatrixOperations.removeCompletedRows(currentGameMatrix);
+        ClearRow basicRow = MatrixOperations.removeCompletedRows(currentGameMatrix);
+        int points = 0;
 
-        if (clearRow.getLinesRemoved() > 0) {
-            score.addLinesCleared(clearRow.getLinesRemoved());
+        if (basicRow.getLinesRemoved() > 0) {
+            points = score.addLinesCleared(basicRow.getLinesRemoved());
         } else {
             score.resetCombo();
         }
+        currentGameMatrix = basicRow.getNewMatrix();
 
-        currentGameMatrix = clearRow.getNewMatrix();
-        return clearRow;
+        return new ClearRow(basicRow.getLinesRemoved(), basicRow.getNewMatrix(), points);
     }
 
 

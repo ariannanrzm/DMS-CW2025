@@ -144,3 +144,11 @@
     -fx-font-size: 10px;
     -fx-text-fill: white;
 }
+
+.scorePopup {
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 20px;
+    -fx-text-fill: #fff6b9;
+    -fx-effect: dropshadow(one-pass-box, black, 2, 0.0, 1, 1);
+    -fx-font-weight: bold;
+}
