@@ -51,7 +51,7 @@ public class GuiController implements Initializable {
     ));
 
     @FXML private GridPane gamePanel;
-    @FXML private Group groupNotification;
+    @FXML private StackPane groupNotification;
     @FXML private GridPane brickPanel;
     @FXML private Label scoreLabel;
     @FXML private Label linesLabel;
@@ -63,10 +63,7 @@ public class GuiController implements Initializable {
     @FXML private Rectangle redFlashOverlay;
     @FXML private BorderPane gameBoard;
 
-    @FXML
-    public void initialize() {
-        centerNotificationOverlay.getChildren().clear(); // removes the dummy label at runtime
-    }
+
 
 
     private StackPane[][] displayMatrix;
@@ -83,6 +80,13 @@ public class GuiController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        if (centerNotificationOverlay != null) {
+            centerNotificationOverlay.getChildren().clear();
+        }
+        if (groupNotification != null) {
+            groupNotification.getChildren().clear();
+        }
+
         Font.loadFont(getClass().getClassLoader().getResourceAsStream("PressStart2P.ttf"), 38);        gamePanel.getStyleClass().add("game-grid");
         brickPanel.toFront();
         gamePanel.setFocusTraversable(true);

@@ -2,7 +2,6 @@
 
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.Group?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.GridPane?>
@@ -10,7 +9,6 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Rectangle?>
 
 <StackPane styleClass="root" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.comp2042.ui.GuiController">
 
@@ -29,7 +27,7 @@
             </Label>
         </VBox>
 
-        <HBox alignment="CENTER" layoutX="19.0" layoutY="466.0" minWidth="130" prefHeight="25.0" prefWidth="130.0" spacing="10" styleClass="scoreBox">
+        <HBox alignment="CENTER" layoutX="20.0" layoutY="501.0" minWidth="130" prefHeight="25.0" prefWidth="130.0" spacing="10" styleClass="scoreBox">
             <Label styleClass="timeLabelStyle" text="TIME:" />
             <Label fx:id="timeLabel" styleClass="timeLabelStyle" text="00:00" />
         </HBox>
@@ -49,7 +47,20 @@
 
         </StackPane>
 
-        <Group fx:id="groupNotification" layoutX="25" layoutY="250" />
+        <StackPane fx:id="groupNotification"
+                   layoutX="8.0"
+                   layoutY="380.0"
+                   prefWidth="130.0"
+                   prefHeight="40.0"
+                   mouseTransparent="true">
+
+            <!-- PLACEHOLDER FOR SCENE BUILDER PREVIEW -->
+            <Label alignment="CENTER"
+                   prefWidth="130.0"
+                   styleClass="sideNotification"
+                   text="TETRIS" />
+
+        </StackPane>
 
         <VBox fx:id="nextBrickContainer" alignment="TOP_CENTER" layoutX="448.0" layoutY="60.0" minWidth="130" prefHeight="184.0" prefWidth="130.0" spacing="15" styleClass="scoreBox">
             <Label alignment="TOP_CENTER" prefHeight="81.0" prefWidth="60.0" styleClass="scoreTitle" text="NEXT">
@@ -68,10 +79,7 @@
             <Label styleClass="scoreTitle" text="SCORE" />
             <Label fx:id="scoreLabel" styleClass="scoreValue" text="0" />
         </VBox>
-
     </Pane>
-
-    <Rectangle fx:id="redFlashOverlay" fill="RED" height="600" mouseTransparent="true" opacity="0.0" width="650" />
 
     <stylesheets>
         <URL value="@window_style.css" />

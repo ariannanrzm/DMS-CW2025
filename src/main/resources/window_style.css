@@ -59,15 +59,19 @@
 
 .sideNotification {
     -fx-font-family: "Press Start 2P";
-    -fx-font-size: 22px;
+    -fx-font-size: 16px;
     -fx-font-weight: bold;
     -fx-fill: white;
     -fx-text-fill: white;
     -fx-effect: dropshadow(one-pass-box, black, 8, 0.0, 2, 0);
+    -fx-background-color: rgba(40, 20, 60, 0.45);
+    -fx-padding: 6 10 6 10;
+    -fx-background-radius: 4;
+    -fx-text-fill: F3D1B0;
 }
 
 .grid-cell {
-    /* Too faint! (5% white) */
+
         -fx-border-color: rgba(255, 255, 255, 0.1);
     -fx-border-width: 0.5px;
 -fx-background-color: rgba(255, 255, 255, 0.3);}

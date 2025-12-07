@@ -5,9 +5,15 @@
 <?import javafx.scene.layout.BorderPane?>
 
 <fx:root type="javafx.scene.layout.BorderPane"
-         xmlns="http://javafx.com/javafx"
+         xmlns="http://javafx.com//javafx"
          xmlns:fx="http://javafx.com/fxml"
-         minHeight="100" minWidth="150">
+        minHeight="100" minWidth="150"
+        stylesheets="@window_style.css">
+
+<!--<BorderPane xmlns="http://javafx.com/javafx"-->
+<!--            xmlns:fx="http://javafx.com/fxml"-->
+<!--            fx:controller="com.comp2042.ui.NotificationPanel"-->
+<!--            minHeight="100" minWidth="150">-->
 
     <center>
         <Label fx:id="notificationLabel" text="NOTIFICATION" textFill="WHITE" styleClass="sideNotification">
@@ -16,5 +22,5 @@
             </effect>
         </Label>
     </center>
-
+<!--</BorderPane>-->
 </fx:root>
