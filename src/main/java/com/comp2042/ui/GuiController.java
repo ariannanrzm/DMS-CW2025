@@ -59,7 +59,7 @@ public class GuiController implements Initializable {
     @FXML private Label timeLabel;
     @FXML private StackPane centerNotificationOverlay;
     @FXML private Rectangle redFlashOverlay;
-    @FXML private BorderPane gameBoard;
+    @FXML private Pane gameBoard;
     @FXML private StackPane scoreOverlay;
     @FXML private StackPane pauseMenu;
     @FXML private Label highScoreLabel;
@@ -70,6 +70,7 @@ public class GuiController implements Initializable {
     @FXML private HBox highScoreContainer;
     @FXML private VBox scoreContainer;
     @FXML private StackPane rootPane;
+    @FXML private StackPane scalableContainer;
 
     private StackPane[][] displayMatrix;
     private StackPane[][] rectangles;
@@ -109,14 +110,45 @@ public class GuiController implements Initializable {
                 default -> c = Color.TRANSPARENT;
             }
            paintCache[i] = c;
+
         }
 
         if (highScoreLabel != null) {
             highScoreLabel.setText("" + com.comp2042.game.logic.HighScoreManager.getHighScore());
         }
         refreshBestTime();
+
+        Platform.runLater(() -> {
+            if (rootPane != null && rootPane.getScene() != null) {
+                Stage stage = (Stage) rootPane.getScene().getWindow();
+
+                stage.widthProperty().addListener((obs, oldVal, newVal) -> scaleGame(stage));
+                stage.heightProperty().addListener((obs, oldVal, newVal) -> scaleGame(stage));
+
+                scaleGame(stage);
+            }
+        });
     }
 
+    private void scaleGame(Stage stage) {
+        if (scalableContainer == null) return;
+
+        final double DESIGN_WIDTH = 650;
+        final double DESIGN_HEIGHT = 600;
+
+        double windowWidth = stage.getScene().getWidth();
+        double windowHeight = stage.getScene().getHeight();
+
+        double scaleX = windowWidth / DESIGN_WIDTH;
+        double scaleY = windowHeight / DESIGN_HEIGHT;
+
+        double scale = Math.min(scaleX, scaleY);
+
+        if (scale < 0.5) scale = 0.5;
+
+        scalableContainer.setScaleX(scale);
+        scalableContainer.setScaleY(scale);
+    }
 
     private String formatTime(int totalSeconds) {
         int minutes = totalSeconds / 60;

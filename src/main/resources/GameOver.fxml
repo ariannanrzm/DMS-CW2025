@@ -6,7 +6,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import java.net.URL?>
 
-<StackPane xmlns="http://javafx.com/javafx"
+<StackPane fx:id="rootPane"
+        xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml"
            fx:controller="com.comp2042.ui.GameOverController"
            prefHeight="600.0" prefWidth="600.0"
@@ -37,9 +38,9 @@
         <VBox prefHeight="10" />
 
         <VBox alignment="CENTER" spacing="15">
-            <Button text="RETRY" onAction="#retryGame" styleClass="cute-button"/>
-            <Button text="MAIN MENU" onAction="#backToMenu" styleClass="cute-button"/>
-            <Button text="QUIT" onAction="#quitGame" styleClass="cute-button, quit"/>
+            <Button text="RETRY" onAction="#retryGame" styleClass="button" prefWidth="260" />
+            <Button text="MAIN MENU" onAction="#backToMenu" styleClass="button" prefWidth="260" />
+            <Button text="QUIT" onAction="#quitGame" styleClass="button, quit" prefWidth="260" />
         </VBox>
     </VBox>
 

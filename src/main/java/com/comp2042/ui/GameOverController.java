@@ -18,12 +18,25 @@ import javafx.util.Duration;
 
 public class GameOverController {
 
+    @FXML private StackPane rootPane;
     @FXML private Label scoreLabel;
     @FXML private Label titleLabel;
     @FXML private Label highScoreLabel;
     @FXML private Label bestTimeLabel;
     @FXML private Label timeLabel;
 
+    @FXML
+    public void initialize() {
+        if (rootPane != null) {
+            rootPane.setOpacity(0);
+        }
+        if (scoreLabel != null) {
+            scoreLabel.setOpacity(0);
+        }
+        if (timeLabel != null) {
+            timeLabel.setOpacity(0);
+        }
+    }
 
     /**
      * Sets the score text.
@@ -71,15 +84,22 @@ public class GameOverController {
     public void animateEntry() {
         showRecords();
 
+        if (rootPane != null) {
+            FadeTransition ftRoot = new FadeTransition(Duration.millis(700), rootPane);
+            ftRoot.setFromValue(0.0);
+            ftRoot.setToValue(1.0);
+            ftRoot.play();
+        }
+
         if (scoreLabel != null) {
-            FadeTransition ft = new FadeTransition(Duration.millis(1000), scoreLabel);
-            ft.setFromValue(0.0);
-            ft.setToValue(1.0);
-            ft.play();
+            FadeTransition ftScore = new FadeTransition(Duration.millis(900), scoreLabel);
+            ftScore.setFromValue(0.0);
+            ftScore.setToValue(1.0);
+            ftScore.play();
         }
 
         if (timeLabel != null) {
-            FadeTransition ftTime = new FadeTransition(Duration.millis(1000), timeLabel);
+            FadeTransition ftTime = new FadeTransition(Duration.millis(900), timeLabel);
             ftTime.setFromValue(0.0);
             ftTime.setToValue(1.0);
             ftTime.play();
@@ -112,9 +132,15 @@ public class GameOverController {
 
             MainMenuController controller = loader.getController();
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            controller.setStage(stage);
-            stage.setScene(new Scene(root, 650, 600));
+
+            Scene scene = new Scene(root, 650, 600);
+            scene.getStylesheets().add(getClass().getResource("/window_style.css").toExternalForm());
+            stage.setScene(scene);
             stage.show();
+
+            controller.setStage(stage);
+            controller.playIntroAnimation();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -126,10 +152,4 @@ public class GameOverController {
         System.exit(0);
     }
 
-    @FXML
-    public void initialize() {
-        if (scoreLabel != null) {
-            scoreLabel.setOpacity(0);
-        }
-    }
 }

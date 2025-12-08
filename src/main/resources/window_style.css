@@ -165,7 +165,7 @@
 }
 
 .button {
-    -fx-background-color: rgba(45, 27, 46, 0.9);
+    /*-fx-background-color: rgba(45, 27, 46, 0.9);
     -fx-background-radius:15;
     -fx-border-radius: 5;
     -fx-border-color: #BD93F9;
@@ -175,14 +175,27 @@
     -fx-font-size: 14px;
     -fx-padding: 12 25 12 25;
     -fx-cursor: hand;
-    -fx-min-width: 200px;
+    -fx-min-width: 200px; */
+     -fx-background-color: rgba(40, 0, 60, 0.6);
+        -fx-background-radius: 10;
+         -fx-border-color: #BD93F9;
+         fx-border-width: 3px;
+        -fx-padding: 12 20;
+        -fx-text-fill: white;
+        -fx-font-family: "Press Start 2P";
+        -fx-font-size: 14px;
+        -fx-effect: dropshadow(gaussian, rgba(255,255,255,0.25), 8, 0.3, 0, 0);
+        -fx-transition: 0.15s;
+        -fx-translate-y: -2;
 }
 
 .button:hover {
     -fx-border-color: #96d6d5;
     -fx-text-fill: #F1FA8C;
-    -fx-background-color: rgba(60, 40, 60, 1.0);
-    -fx-effect: dropshadow(one-pass-box, rgba(80, 250, 123, 0.4), 10, 0, 0, 0);
+    /*-fx-background-color: rgba(60, 40, 60, 1.0);
+    -fx-effect: dropshadow(one-pass-box, rgba(80, 250, 123, 0.4), 10, 0, 0, 0);*/
+     -fx-background-color: rgba(60, 40, 60, 1.0);
+    -fx-effect: dropshadow(gaussian, rgba(255,255,255,0.5), 12, 0.6, 0, 0);
 }
 
 .button.quit:hover {
@@ -197,4 +210,27 @@
     -fx-background-size: cover;
     -fx-background-position: center;
 }
+
+.subtitle {
+    -fx-font-family: "Press Start 2P";
+    -fx-text-fill: white;
+   -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 6, 0.5, 0, 0);
+   -fx-padding: 10 0 20 0;
+}
+
+.menu-credit {
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 10px;
+    -fx-text-fill: rgba(255,255,255,0.4);
+}
+
+.title-text {
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 70px;
+-fx-text-fill: #FFF4DA;
+       -fx-effect: dropshadow(gaussian, rgba(255,255,255,0.5), 35, 0.8, 0, 0);
+}
+
+
+
 

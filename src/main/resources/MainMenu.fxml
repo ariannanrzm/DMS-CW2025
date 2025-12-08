@@ -6,28 +6,59 @@
 <?import javafx.scene.layout.VBox?>
 <?import java.net.URL?>
 
-<StackPane styleClass="main-menu-bg"
+<?import javafx.scene.layout.Region?>
+<StackPane fx:id="rootPane"
+           styleClass="main-menu-bg"
            xmlns="http://javafx.com/javafx/25"
            xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="com.comp2042.ui.MainMenuController">
 
     <StackPane style="-fx-background-color: rgba(0, 0, 0, 0.3);" />
 
-    <VBox alignment="CENTER" spacing="30">
+    <VBox alignment="CENTER"
+          spacing="18"
+          prefWidth="650"
+          prefHeight="600">
 
-        <Label text="TETRIS"
-               style="-fx-font-family: 'Press Start 2P'; -fx-font-size: 60px; -fx-text-fill: #e0d5c1; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 5);"
-        />
+
+        <Label fx:id="titleLabel"
+                text="TETRIS"
+               styleClass="title-text"/>
+
+
+        <Label text="Choose a Game Mode!"
+               styleClass="subtitle"
+               alignment="CENTER"
+               style="-fx-font-size: 18px;"
+               translateY="40"/>
 
         <VBox prefHeight="20" />
 
-        <Button text="ADVENTURE MODE" fx:id="AdventureBtn" onAction="#startAdventure" styleClass="cute-button"/>
-        <Button text="ZEN MODE" fx:id="zenBtn" onAction="#startZen" styleClass="cute-button"/>
+        <Button text="ZEN MODE"
+                fx:id="zenBtn"
+                onAction="#startZen"
+                styleClass="button"
+                prefWidth="260"
+        />
+
+        <Button text="ADVENTURE MODE"
+                fx:id="AdventureBtn"
+                onAction="#startAdventure"
+                styleClass="button"
+                prefWidth="260"
+        />
 
     </VBox>
+
+    <Label text="Made by Arianna Ainurizam © 2025"
+           styleClass="menu-credit"
+           StackPane.alignment="BOTTOM_RIGHT"
+           translateX="-20"
+           translateY="-15" />
 
     <stylesheets>
         <URL value="@window_style.css" />
     </stylesheets>
 
 </StackPane>
+
