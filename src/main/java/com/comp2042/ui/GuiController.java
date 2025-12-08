@@ -10,6 +10,7 @@ import com.comp2042.game.events.InputEventListener;
 import com.comp2042.game.events.MoveEvent;
 import com.comp2042.game.config.GameConfig;
 import com.comp2042.game.config.GameMode;
+import com.comp2042.util.SoundManager;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.property.IntegerProperty;
@@ -35,6 +36,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import javafx.animation.*;
 import javafx.scene.shape.Rectangle;
+import com.comp2042.util.MusicManager;
 
 /**
  * GuiController manages visual updates and animations.
@@ -118,6 +120,10 @@ public class GuiController implements Initializable {
         }
         refreshBestTime();
 
+        if (pauseMenu != null) {
+            Platform.runLater(() -> com.comp2042.util.SoundManager.getInstance().registerButtons(pauseMenu));
+        }
+
         Platform.runLater(() -> {
             if (rootPane != null && rootPane.getScene() != null) {
                 Stage stage = (Stage) rootPane.getScene().getWindow();
@@ -129,6 +135,8 @@ public class GuiController implements Initializable {
             }
         });
     }
+
+
 
     private void scaleGame(Stage stage) {
         if (scalableContainer == null) return;
@@ -171,6 +179,12 @@ public class GuiController implements Initializable {
 
     public void startGame(GameMode mode) {
         this.currentMode = mode; // Save mode
+
+        if (mode == GameMode.ZEN) {
+            MusicManager.getInstance().playMusic("zen.mp3", true);
+        } else if (mode == GameMode.ADVENTURE) {
+            MusicManager.getInstance().playMusic("adventure.mp3", true);
+        }
 
         // Stop any existing game loop first
         if (timeLine != null) {
@@ -340,11 +354,16 @@ public class GuiController implements Initializable {
         int currentCombo = gameController.getBoard().getScore().getComboCount();
 
         if (currentCombo > 0) {
+            com.comp2042.util.SoundManager.getInstance().playBonus();
+
             // Delay the combo notification slightly or stack it
             NotificationPanel comboNotification = new NotificationPanel("COMBO x" + currentCombo);
             comboNotification.setTranslateY(30);
             groupNotification.getChildren().add(comboNotification);
             comboNotification.showScore(groupNotification.getChildren());
+        }
+        if (clearRow.getLinesRemoved() == 4) {
+            com.comp2042.util.SoundManager.getInstance().playBonus();
         }
 
         // SHOW SCORE POPUP (Small floating number)
@@ -580,6 +599,7 @@ public class GuiController implements Initializable {
     }
 
     public void gameWon(int finalSeconds) {
+        MusicManager.getInstance().playMusic("win.mp3", false);
         timeLine.stop();
         switchToGameOverScene(true, finalSeconds);    }
 
@@ -590,7 +610,7 @@ public class GuiController implements Initializable {
             gameController.createNewGame();
             return;
         }
-
+        MusicManager.getInstance().playMusic("gameover.mp3", false);
         timeLine.stop();
 
         FadeTransition flash = new FadeTransition(Duration.millis(150), redFlashOverlay);

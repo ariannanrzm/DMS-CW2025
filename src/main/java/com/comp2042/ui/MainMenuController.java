@@ -11,6 +11,9 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.control.Label;
+import com.comp2042.util.SoundManager;
+import javafx.application.Platform;
+import com.comp2042.util.MusicManager;
 
 
 import java.net.URL;
@@ -37,6 +40,10 @@ public class MainMenuController {
         titlePulse.setAutoReverse(true);
         titlePulse.setCycleCount(FadeTransition.INDEFINITE);
         titlePulse.play();
+
+        // Register sounds for all buttons
+        Platform.runLater(() -> SoundManager.getInstance().registerButtons(rootPane));
+        MusicManager.getInstance().playMusic("menu.mp3", true);
     }
 
     /** Called whenever the menu is shown. */

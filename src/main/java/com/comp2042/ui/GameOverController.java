@@ -15,6 +15,7 @@ import java.io.IOException;
 import javafx.animation.FadeTransition;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
+import com.comp2042.util.SoundManager;
 
 public class GameOverController {
 
@@ -104,6 +105,8 @@ public class GameOverController {
             ftTime.setToValue(1.0);
             ftTime.play();
         }
+        // Register for sounds
+        Platform.runLater(() -> SoundManager.getInstance().registerButtons(rootPane));
     }
 
     @FXML
