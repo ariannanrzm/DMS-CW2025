@@ -1,5 +1,14 @@
 .root {
-    -fx-background-image: url("background_image.png");
+    -fx-background-image: url("adventure.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: cover;
+    -fx-background-position: center;
+}
+
+.game-grid {
+    -fx-background-color: rgba(25, 19, 29, 0.8);
+    -fx-effect: dropshadow(three-pass-box, rgba(17, 12, 17, 1), 20, 0, 0, 0);
+
 }
 
 .nextBrick {
@@ -8,14 +17,9 @@
     -fx-border-radius: 17px;
 }
 
-.gameBoard {
-    -fx-border-color: linear-gradient(#2A5058, #61a2b1);
-    -fx-border-width: 12px;
-    -fx-border-radius: 12px;
-}
 
 .nextBrickLabel {
-    -fx-font-family: "Let's go Digital";
+    -fx-font-family: "Press Start 2P";
     -fx-padding: 20px 0 0 0;
     -fx-font-size: 16px;
     -fx-text-fill: yellow;
@@ -30,8 +34,7 @@
     -fx-background-insets: 0, 1, 4, 5, 6;
     -fx-background-radius: 9, 8, 5, 4, 3;
     -fx-padding: 8;
-    /*-fx-font-family: "Helvetica";*/
-    -fx-font-family: "Let's go Digital";
+    -fx-font-family: "Press Start 2P";
     -fx-font-size: 22px;
     -fx-font-weight: bold;
     -fx-text-fill: white;
@@ -53,20 +56,185 @@
     -fx-font-size: 10px;
 }
 
+.sideNotification {
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-fill: white;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(one-pass-box, black, 8, 0.0, 2, 0);
+    -fx-background-color: rgba(40, 20, 60, 0.45);
+    -fx-padding: 6 10 6 10;
+    -fx-background-radius: 4;
+    -fx-text-fill: #F3D1B0;
+}
+.centerMessage {
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 19px;
+    -fx-font-weight: bold;
+    -fx-fill: white;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(one-pass-box, black, 8, 0.0, 2, 0);
+    -fx-background-color: rgba(40, 20, 60, 0.45);
+    -fx-padding: 6 10 6 10;
+    -fx-background-radius: 4;
+    -fx-text-fill: #F3D1B0;
+}
+
+.grid-cell {
+
+    -fx-border-color: rgba(255, 255, 255, 0.1);
+    -fx-border-width: 0.5px;
+    -fx-background-color: rgba(255, 255, 255, 0.3);}
+
 .bonusStyle {
     -fx-font-size: 40px;
     -fx-font-weight: bold;
 }
 
 .gameOverStyle {
-    -fx-font-family: "Let's go Digital";
+    -fx-font-family: "Press Start 2P";
     -fx-font-size: 48;
     -fx-background-color: red;
 }
 
 .scoreClass{
-    -fx-font-family: "Let's go Digital";
+    -fx-font-family: "Press Start 2P";
     -fx-font-size: 38;
     -fx-fill: yellow;
     -fx-text-fill: yellow;
 }
+
+.scoreBox {
+    -fx-background-color: rgba(45, 27, 46, 0.85);
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-border-color: #F3D1B0;
+     -fx-border-width: 0.5px;
+     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 5, 0, 0, 3);
+}
+
+.scoreTitle {
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 15px;
+    -fx-text-fill: #e0d5c1;
+}
+
+.scoreValue {
+   -fx-font-family: "Press Start 2P";
+   -fx-font-size: 16px;
+   -fx-text-fill: #ffdc69;
+}
+
+.game-block {
+ /*   -fx-stroke: null;
+ -fx-border-color: rgba(255,255,255,0.5) rgba(0,0,0,0.3) rgba(0,0,0,0.3) rgba(255,255,255,0.5);
+     -fx-border-width: 3px;
+     -fx-border-style: solid;
+
+*/
+    -fx-stroke: null;
+    -fx-effect: innershadow(one-pass-box, rgba(255,255,255,0.4), 0, 0, 3, 3);
+
+}
+
+.timeLabelStyle {
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 10px;
+    -fx-text-fill: white;
+}
+
+.scorePopup {
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 20px;
+    -fx-text-fill: #fff6b9;
+    -fx-effect: dropshadow(one-pass-box, black, 2, 0.0, 1, 1);
+    -fx-font-weight: bold;
+}
+
+.pause-overlay {
+    -fx-background-color: rgba(20, 15, 25, 0.85);
+}
+
+.pause-title {
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 40px;
+    -fx-text-fill: #FF79C6;
+    -fx-effect: dropshadow(three-pass-box, rgba(255, 121, 198, 0.6), 10, 0, 0, 0);
+    -fx-padding: 0 0 20 0;
+}
+
+.button {
+    /*-fx-background-color: rgba(45, 27, 46, 0.9);
+    -fx-background-radius:15;
+    -fx-border-radius: 5;
+    -fx-border-color: #BD93F9;
+    -fx-border-width: 3px;
+    -fx-text-fill: white;
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 14px;
+    -fx-padding: 12 25 12 25;
+    -fx-cursor: hand;
+    -fx-min-width: 200px; */
+     -fx-background-color: rgba(40, 0, 60, 0.6);
+        -fx-background-radius: 10;
+         -fx-border-color: #BD93F9;
+         fx-border-width: 3px;
+        -fx-padding: 12 20;
+        -fx-text-fill: white;
+        -fx-font-family: "Press Start 2P";
+        -fx-font-size: 14px;
+        -fx-effect: dropshadow(gaussian, rgba(255,255,255,0.25), 8, 0.3, 0, 0);
+        -fx-transition: 0.15s;
+        -fx-translate-y: -2;
+}
+
+.button:hover {
+    -fx-border-color: #96d6d5;
+    -fx-text-fill: #F1FA8C;
+    /*-fx-background-color: rgba(60, 40, 60, 1.0);
+    -fx-effect: dropshadow(one-pass-box, rgba(80, 250, 123, 0.4), 10, 0, 0, 0);*/
+     -fx-background-color: rgba(60, 40, 60, 1.0);
+    -fx-effect: dropshadow(gaussian, rgba(255,255,255,0.5), 12, 0.6, 0, 0);
+}
+
+.button.quit:hover {
+    -fx-border-color: #FF5555;
+    -fx-text-fill: #FF5555;
+    -fx-effect: dropshadow(one-pass-box, rgba(255, 85, 85, 0.4), 10, 0, 0, 0);
+}
+
+.zen-mode {
+    -fx-background-image: url("zen.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: cover;
+    -fx-background-position: center;
+}
+
+.subtitle {
+    -fx-font-family: "Press Start 2P";
+    -fx-text-fill: white;
+   -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 6, 0.5, 0, 0);
+   -fx-padding: 10 0 20 0;
+}
+
+.menu-credit {
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 10px;
+    -fx-text-fill: rgba(255,255,255,0.4);
+}
+
+.title-text {
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 70px;
+-fx-text-fill: #FFF4DA;
+       -fx-effect: dropshadow(gaussian, rgba(255,255,255,0.5), 35, 0.8, 0, 0);
+}
+
+.howto-line {
+    -fx-font-family: "Press Start 2P";
+    -fx-font-size: 10px;
+    -fx-text-fill: #f5f5f5;
+}
+
+
