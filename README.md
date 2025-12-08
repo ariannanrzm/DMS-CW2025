@@ -1,38 +1,8 @@
-# # **COMP2042 – Tetris Coursework (DMS-CW2025)**
+ # **COMP2042 – Tetris Coursework (DMS-CW2025)**
 
 A fully refactored and extended Tetris implementation focusing on **maintainability**, **testability**, and **modern gameplay enhancements**, built with Java 23, JavaFX 21, and Maven.
 
 ---
-
-#  **Table of Contents**
-
-1.0 [My GitHub](https://chatgpt.com/g/g-p-69169fc1461881919fdb97a76f2709f4/c/6936bc01-c760-8326-ba7d-c3c0b530e189#10-my-github)
-
-2.0 [Setup & Compilation Instructions](https://chatgpt.com/g/g-p-69169fc1461881919fdb97a76f2709f4/c/6936bc01-c760-8326-ba7d-c3c0b530e189#20-setup-and-compilation-instructions)
-    - Java, Maven, JavaFX installation
-    - Running with IntelliJ
-    - Running with Maven
-    - Common build/test commands
-
-3.0 [Features](https://chatgpt.com/g/g-p-69169fc1461881919fdb97a76f2709f4/c/6936bc01-c760-8326-ba7d-c3c0b530e189#30-features)
-    - Implemented & working properly
-    - Implemented but not working properly
-    - Not implemented
-
-4.0 [ Refactoring Process](https://chatgpt.com/g/g-p-69169fc1461881919fdb97a76f2709f4/c/6936bc01-c760-8326-ba7d-c3c0b530e189#40-refactoring-process)
-    - New Java classes
-    - Modified Java classes
-    - Summary of refactoring approach
-
-5.0 [Unexpected Problems](https://chatgpt.com/g/g-p-69169fc1461881919fdb97a76f2709f4/c/6936bc01-c760-8326-ba7d-c3c0b530e189#50-unexpected-problems)
-    - Time management
-    - Git merge conflicts
-    - GitHub privacy breach incident
-
-6.0 (Optional) Recommendations for further improvement
-
----
-
 #  **1.0 My GitHub**
 
 **Name:** Arianna binti Ainurizam
@@ -44,6 +14,7 @@ A fully refactored and extended Tetris implementation focusing on **maintainabil
 https://github.com/ariannanrzm/DMS-CW2025
 
 All documentation below refers to the **master** branch.
+
 
 ---
 
