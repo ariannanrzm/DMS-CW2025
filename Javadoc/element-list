@@ -1,0 +1,11 @@
+com.comp2042
+com.comp2042.game.board
+com.comp2042.game.bricks
+com.comp2042.game.config
+com.comp2042.game.controller
+com.comp2042.game.events
+com.comp2042.game.logic
+com.comp2042.game.scoring
+com.comp2042.game.states
+com.comp2042.ui
+com.comp2042.util
