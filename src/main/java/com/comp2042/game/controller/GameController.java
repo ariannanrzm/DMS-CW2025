@@ -1,5 +1,6 @@
 package com.comp2042.game.controller;
 
+import com.comp2042.game.bricks.BrickGenerator;
 import com.comp2042.game.bricks.RandomBrickGenerator;
 import com.comp2042.game.logic.HighScoreManager;
 import com.comp2042.game.states.GameOverState;
@@ -41,7 +42,7 @@ public class GameController implements InputEventListener  {
     private boolean controlsReversed = false;
 
 
-    public GameController(GuiController viewGuiController, GameMode gameMode) {
+    public GameController(GuiController viewGuiController, GameMode gameMode, BrickGenerator brickGenerator) {
         this.viewGuiController = viewGuiController;
         this.levelManager = new LevelManager();
         this.gameMode = gameMode;
@@ -49,7 +50,7 @@ public class GameController implements InputEventListener  {
         this.board = new SimpleBoard(
                 GameConfig.get().getBoardHeight(),
                 GameConfig.get().getBoardWidth(),
-                new RandomBrickGenerator()
+                brickGenerator
         );
 
 
@@ -64,63 +65,85 @@ public class GameController implements InputEventListener  {
         this.viewGuiController.setGameController(this);
         this.viewGuiController.setEventListener(this);
 
+        // Start Game
         board.createNewBrick();
+        initializeView();
+        setupLevelListeners();
+        setupStopwatch();
+    }
 
+
+    /**
+     * Convenience Constructor.
+     * Use this for normal Gameplay (defaults to RandomBrickGenerator).
+     */
+    public GameController(GuiController viewGuiController, GameMode gameMode) {
+        this(viewGuiController, gameMode, new RandomBrickGenerator());
+    }
+
+    private void initializeView() {
         this.viewGuiController.initGameView(
                 board.getBoardMatrix(),
                 board.getViewData(),
                 levelManager.getCurrentSpeed()
         );
-
         this.viewGuiController.bindScore(board.getScore().scoreProperty());
         this.viewGuiController.bindLines(board.getScore().linesProperty());
         this.viewGuiController.bindLevel(levelManager.levelProperty());
+    }
 
-        // Listen for Level Changes
-        levelManager.levelProperty().addListener((obs, oldVal, newVal) -> {
-            int level = newVal.intValue();
+    private void setupLevelListeners() {
+        levelManager.levelProperty().addListener((obs, oldVal, newVal) ->
+                handleLevelChange(newVal.intValue())
+        );
+    }
 
-            if (level > 6) {
-                HighScoreManager.tryUpdateFastestTime(secondsElapsed);
-                HighScoreManager.tryUpdateHighScore(board.getScore().getScore());
-                viewGuiController.gameWon(secondsElapsed);
-                setState(gameOverState);
-                return;
-            }
+    /**
+     * Handles all logic triggered when the level changes.
+     */
+    private void handleLevelChange(int level) {
+        // Check for Win Condition
+        if (level > 6) {
+            handleVictory();
+            return;
+        }
 
-            viewGuiController.updateGameSpeed(levelManager.getCurrentSpeed());
-            viewGuiController.showLevelUpNotification(level);
+        // Update UI and Mechanics
+        viewGuiController.updateGameSpeed(levelManager.getCurrentSpeed());
+        viewGuiController.showLevelUpNotification(level);
 
-            // Reset garbage timer when entering a new level
-            garbageTimer = 0;
+        // Reset mechanics for new level
+        garbageTimer = 0;
 
-            // Notify player of rising levels (Garbage Mode)
-            if (level == 3 || level == 4) {
-                viewGuiController.showChaosNotification("LEVELS RISING..");
-            }
+        applyLevelMechanics(level);
+    }
 
-            // Trigger reverse controls
-            if (level == 5) {
-                chaosTimer = 0;
-                controlsReversed = true;
-                viewGuiController.showChaosNotification("RANDOM CONTROLS");
-            }
-            // Level 6 Start: Final
-            else if (level == 6) {
-                chaosTimer = 0;
-                controlsReversed = true; // Ensure controls stay chaotic
-                viewGuiController.showChaosNotification("FINAL LEVEL!!");
-            }
+    private void handleVictory() {
+        HighScoreManager.tryUpdateFastestTime(secondsElapsed);
+        HighScoreManager.tryUpdateHighScore(board.getScore().getScore());
+        viewGuiController.gameWon(secondsElapsed);
+        setState(gameOverState);
+    }
 
-            else {
-                if (controlsReversed) {
-                    controlsReversed = false;
-                }
-            }
-        });
-        setupStopwatch();
+    private void applyLevelMechanics(int level) {
+        // Warning for Garbage Mode
+        if (level == 3 || level == 4) {
+            viewGuiController.showChaosNotification("LEVELS RISING..");
+        }
 
-        
+        // Logic for Reverse Controls
+        if (level == 5) {
+            chaosTimer = 0;
+            controlsReversed = true;
+            viewGuiController.showChaosNotification("RANDOM CONTROLS");
+        } else if (level == 6) {
+            chaosTimer = 0;
+            controlsReversed = true;
+            viewGuiController.showChaosNotification("FINAL LEVEL!!");
+        } else {
+            // Reset controls if we aren't in a chaos level
+            controlsReversed = false;
+        }
     }
 
     public boolean isControlsReversed() {
@@ -151,6 +174,7 @@ public class GameController implements InputEventListener  {
 
         int cyclePosition = chaosTimer % 13;
 
+        // Toggle controls based on timer
         if (cyclePosition < 3) {
             if (!controlsReversed) controlsReversed = true;
         } else {
@@ -161,31 +185,27 @@ public class GameController implements InputEventListener  {
     private void handleGarbageGeneration() {
         garbageTimer++;
         int currentLevel = levelManager.getCurrentLevel();
+        int interval = getGarbageInterval(currentLevel);
 
-        // Level 3: Garbage every 15 seconds
-        if (currentLevel == 3) {
-            if (garbageTimer >= 15) {
-                triggerGarbageRow();
-                garbageTimer = 0;
-            }
-        }
-        // Level 4: Garbage every 10 seconds
-        else if (currentLevel == 4) {
-            if (garbageTimer >= 10) {
-                triggerGarbageRow();
-                garbageTimer = 0;
-            }
-        }
-        // Level 5&6: Garbage every 7 seconds
-        else if (currentLevel == 5 || currentLevel == 6) {
-            if (garbageTimer >= 7) {
-                triggerGarbageRow();
-                garbageTimer = 0;
-            }
-        }
-        else {
+        if (interval > 0 && garbageTimer >= interval) {
+            triggerGarbageRow();
             garbageTimer = 0;
+        } else if (interval == -1) {
+            garbageTimer = 0; // Keep timer at 0 if no garbage this level
         }
+    }
+
+    /**
+     * Returns the garbage generation interval in seconds for a given level.
+     * Returns -1 if garbage generation is disabled for that level.
+     */
+    private int getGarbageInterval(int level) {
+        return switch (level) {
+            case 3 -> 15;
+            case 4 -> 10;
+            case 5, 6 -> 7;
+            default -> -1;
+        };
     }
 
     private void triggerGarbageRow() {
