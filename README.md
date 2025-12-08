@@ -20,7 +20,7 @@ The original Tetris implementation (provided by the module) has been extended an
 **Student ID:** 20619015
 > **Repository:** [https://github.com/ariannanrzm/DMS-CW2025/tree/Addition](https://github.com/ariannanrzm/DMS-CW2025/tree/Addition)
 
-All changes described in this document refer to the `Addition` branch.
+All changes described in this document refer to the `master` branch.
 
 ---
 
