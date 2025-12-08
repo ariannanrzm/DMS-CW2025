@@ -3,7 +3,7 @@ package com.comp2042.game.bricks;
 import java.util.ArrayList;
 import java.util.List;
 
-final class IBrick extends AbstractBrick {
+public final class IBrick extends AbstractBrick {
 
     public IBrick() {
         brickMatrix.add(new int[][]{

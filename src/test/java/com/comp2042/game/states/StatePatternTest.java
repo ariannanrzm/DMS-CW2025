@@ -1,13 +1,19 @@
 package com.comp2042.game.states;
 
 import com.comp2042.MockGuiController;
-import com.comp2042.game.board.DownData;
+import com.comp2042.game.bricks.Brick;
+import com.comp2042.game.bricks.BrickGenerator;
+import com.comp2042.game.bricks.OBrick;
+import com.comp2042.game.config.GameMode;
 import com.comp2042.game.controller.GameController;
 import com.comp2042.game.events.EventSource;
 import com.comp2042.game.events.EventType;
 import com.comp2042.game.events.MoveEvent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.Collections;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -16,15 +22,30 @@ class StatePatternTest {
     private GameController controller;
     private MockGuiController mockGui;
 
+    // Defined the stub here to isolate the test from random generation.
+    // Guarantees a simple O-Brick (Square) is always used.
+    class StubBrickGenerator implements BrickGenerator {
+        @Override
+        public Brick getBrick() { return new OBrick(); }
+        @Override
+        public Brick getNextBrick() { return new OBrick(); }
+        @Override
+        public List<Brick> getNextBricks(int count) {
+            return Collections.nCopies(count, new OBrick());
+        }
+    }
+
     @BeforeEach
     void setUp() {
         mockGui = new MockGuiController();
-        controller = new GameController(mockGui);
+
+        // Updated to use the DI constructor with GameMode and StubBrickGenerator
+        controller = new GameController(mockGui, GameMode.ADVENTURE, new StubBrickGenerator());
     }
 
     @Test
     void testInitialStateIsPlaying() {
-        // In PlayingState, a DOWN event should move the brick (change Y position)
+        // In PlayingState, a DOWN event should move the brick
         int initialY = controller.getBoard().getViewData().getyPosition();
 
         controller.onDownEvent(new MoveEvent(EventType.DOWN, EventSource.USER));
@@ -39,7 +60,7 @@ class StatePatternTest {
         int initialY = controller.getBoard().getViewData().getyPosition();
         int initialScore = controller.getBoard().getScore().getScore();
 
-        // Attempt to move/score
+        // Attempt to move/score while paused
         controller.onDownEvent(new MoveEvent(EventType.DOWN, EventSource.USER));
         controller.onLeftEvent(new MoveEvent(EventType.LEFT, EventSource.USER));
 
@@ -58,7 +79,7 @@ class StatePatternTest {
 
         int initialY = controller.getBoard().getViewData().getyPosition();
 
-        // Attempt move
+        // Attempt move after resume
         controller.onDownEvent(new MoveEvent(EventType.DOWN, EventSource.USER));
 
         int newY = controller.getBoard().getViewData().getyPosition();
@@ -67,7 +88,7 @@ class StatePatternTest {
 
     @Test
     void testGameOverLocksInput() {
-        // Force Game Over (simulate a stack reaching the top)
+        // Force Game Over
         controller.setState(controller.getGameOverState());
 
         int initialY = controller.getBoard().getViewData().getyPosition();

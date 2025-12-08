@@ -1,6 +1,6 @@
 package com.comp2042.game.bricks;
 
-final class TBrick extends AbstractBrick {
+public final class TBrick extends AbstractBrick {
    public TBrick() {
         brickMatrix.add(new int[][]{
                 {0, 0, 0, 0},

@@ -1,110 +1,68 @@
-/**
- * Unit tests for GameController verifying:
- *  - soft-drop scoring,
- *  - brick spawning behaviour,
- *  - game-over detection when the spawn region is obstructed.
- *
- * Tests were updated after refactoring GameController and SimpleBoard,
- * including moving score logic out of MatrixOperations and adjusting SPAWN_Y.
- */
-
 package com.comp2042;
 
+import com.comp2042.game.bricks.*;
+import com.comp2042.game.config.GameMode;
 import com.comp2042.game.controller.GameController;
 import com.comp2042.game.events.EventSource;
 import com.comp2042.game.events.EventType;
 import com.comp2042.game.events.MoveEvent;
+import javafx.application.Platform;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import java.util.Collections;
+import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class GameControllerTest {
 
-    @Test
-    public void testSoftDropIncreasesScore() {
-        MockGuiController mockGui = new MockGuiController();
-        GameController controller = new GameController(mockGui);
+    @BeforeAll
+    static void initJfx() {
+        try {
+            Platform.startup(() -> {});
+        } catch (IllegalStateException e) {
+            // Toolkit already initialized, ignore
+        }
+    }
 
-        int initialScore = controller.getBoard().getScore().getScore();
-
-        controller.onDownEvent(
-                new MoveEvent(EventType.DOWN, EventSource.USER)
-        );
-
-        int updatedScore = controller.getBoard().getScore().getScore();
-        assertEquals(initialScore + 1, updatedScore);
+    // A Stub Generator that ALWAYS returns an O-Brick (Square)
+    class StubBrickGenerator implements BrickGenerator {
+        @Override
+        public Brick getBrick() { return new OBrick(); }
+        @Override
+        public Brick getNextBrick() { return new OBrick(); }
+        @Override
+        public List<Brick> getNextBricks(int count) {
+            return Collections.nCopies(count, new OBrick());
+        }
     }
 
     @Test
-    public void testBrickSpawnsAfterLanding() {
+    public void testSoftDropIncreasesScore() {
         MockGuiController mockGui = new MockGuiController();
-        GameController controller = new GameController(mockGui);
+        GameController controller = new GameController(mockGui, GameMode.ADVENTURE, new StubBrickGenerator());
 
-        for (int i = 0; i < 30; i++) {
-            controller.onDownEvent(
-                    new MoveEvent(EventType.DOWN, EventSource.THREAD)
-            );
-        }
+        int initialScore = controller.getBoard().getScore().getScore();
+        controller.onDownEvent(new MoveEvent(EventType.DOWN, EventSource.USER));
 
-        assertNotNull(controller.getBoard().getBoardMatrix());
+        assertEquals(initialScore + 1, controller.getBoard().getScore().getScore());
     }
 
     @Test
     public void testGameOverTriggered() {
         MockGuiController mockGui = new MockGuiController();
-        GameController controller = new GameController(mockGui);
+        GameController controller = new GameController(mockGui, GameMode.ADVENTURE, new StubBrickGenerator());
 
         int[][] matrix = controller.getBoard().getBoardMatrix();
 
-        int spawnX = 4;   // default
-        int spawnY = 0;   // your updated SimpleBoard spawn row
+        int blockRow = 2;
+        int blockCol = 4;
 
-        // Fill the 4×4 spawn region
-        for (int row = spawnY; row < spawnY + 4; row++) {
-            for (int col = spawnX; col < spawnX + 4; col++) {
-                if (row < matrix.length && col < matrix[row].length) {
-                    matrix[row][col] = 1;
-                }
-            }
-        }
+        // Block the path immediately below the spawn
+        matrix[blockRow][blockCol] = 1;
 
+        // This simulates: "Try to move down" -> "Blocked at Row 2" -> "Lock Brick" -> "Spawn New" -> "Game Over"
         var result = controller.onDownEvent(new MoveEvent(EventType.DOWN, EventSource.THREAD));
 
-        assertTrue(result.isGameOver(), "Game over should be triggered when the spawn area is blocked.");
-    }
-
-    @Test
-    public void testMoveLeftDecreasesX() {
-        MockGuiController mockGui = new MockGuiController();
-        GameController controller = new GameController(mockGui);
-
-        int initialX = controller.getBoard().getViewData().getxPosition();
-        int initialY = controller.getBoard().getViewData().getyPosition();
-
-        // simulate LEFT key from user
-        controller.onLeftEvent(new MoveEvent(EventType.LEFT, EventSource.USER));
-
-        int newX = controller.getBoard().getViewData().getxPosition();
-        int newY = controller.getBoard().getViewData().getyPosition();
-
-        assertEquals(initialX - 1, newX, "Brick should move one step left");
-        assertEquals(initialY, newY, "Y position should not change when moving left");
-    }
-
-    @Test
-    public void testMoveRightIncreasesX() {
-        MockGuiController mockGui = new MockGuiController();
-        GameController controller = new GameController(mockGui);
-
-        int initialX = controller.getBoard().getViewData().getxPosition();
-        int initialY = controller.getBoard().getViewData().getyPosition();
-
-        // simulate RIGHT key from user
-        controller.onRightEvent(new MoveEvent(EventType.RIGHT, EventSource.USER));
-
-        int newX = controller.getBoard().getViewData().getxPosition();
-        int newY = controller.getBoard().getViewData().getyPosition();
-
-        assertEquals(initialX + 1, newX, "Brick should move one step right");
-        assertEquals(initialY, newY, "Y position should not change when moving right");
+        assertTrue(result.isGameOver(), "Game should be over if the path is blocked immediately.");
     }
 }

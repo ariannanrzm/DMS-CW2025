@@ -11,12 +11,12 @@ import javafx.event.ActionEvent;
 public class MockGuiController extends GuiController {
 
     private boolean gameOverCalled = false;
+    private boolean gameWonCalled = false;
     private int[][] latestBackground;
     private ViewData latestViewData;
 
     public MockGuiController() {
-        // Call parent constructor indirectly; we don't need FXML initialization
-        // and we won't be using JavaFX components in tests.
+        // Call parent constructor indirectly
     }
 
     @Override
@@ -25,14 +25,11 @@ public class MockGuiController extends GuiController {
     }
 
     /**
-     * CRITICAL FIX:
-     * We override this method to prevent the parent class from executing:
-     * inputHandler.attachTo(gamePanel);
-     * Since 'gamePanel' is null in this mock, the parent method causes a NullPointerException.
+     * Prevent attaching InputHandler (which uses JavaFX Events) to a null GamePanel.
      */
     @Override
     public void setGameController(GameController controller) {
-        // Do nothing. We don't need the real InputHandler in unit tests.
+        // Do nothing.
     }
 
     @Override
@@ -40,8 +37,11 @@ public class MockGuiController extends GuiController {
         super.setEventListener(eventListener);
     }
 
+    /**
+     * Updated to match the 3-argument signature in GuiController.
+     */
     @Override
-    public void initGameView(int[][] boardMatrix, ViewData viewData) {
+    public void initGameView(int[][] boardMatrix, ViewData viewData, double initialSpeed) {
         this.latestBackground = boardMatrix;
         this.latestViewData = viewData;
     }
@@ -57,9 +57,44 @@ public class MockGuiController extends GuiController {
     }
 
     @Override
-    public void bindScore(IntegerProperty integerProperty) {
-        // Skip GUI binding
-    }
+    public void bindScore(IntegerProperty integerProperty) { }
+
+    @Override
+    public void bindLines(IntegerProperty property) { }
+
+    @Override
+    public void bindLevel(IntegerProperty property) { }
+
+    @Override
+    public void updateGameSpeed(double delayMillis) { }
+
+    @Override
+    public void updateTimer(String timeString) { }
+
+    // --- Stub out Notification/Animation methods to avoid Toolkit errors ---
+
+    @Override
+    public void showLevelUpNotification(int newLevel) { }
+
+    @Override
+    public void showChaosNotification(String message) { }
+
+    @Override
+    public void playHardDropBounce() { }
+
+    @Override
+    public void showNotificationIfRowsCleared(ClearRow clearRow) { }
+
+    @Override
+    public void resetTimeline() { }
+
+    @Override
+    public void showPauseMessage(boolean isPaused) { }
+
+    @Override
+    public void resetGameView() { }
+
+    // Game State Handling
 
     @Override
     public void gameOver() {
@@ -67,29 +102,28 @@ public class MockGuiController extends GuiController {
     }
 
     @Override
-    public void resetTimeline() {
-        // Do nothing during tests to avoid "Toolkit not initialized" errors
-    }
-
-    @Override
-    public void showNotificationIfRowsCleared(ClearRow clearRow) {
-        // Do nothing during tests
+    public void gameWon(int finalSeconds) {
+        this.gameWonCalled = true;
     }
 
     @Override
     public void newGame(ActionEvent actionEvent) {
-        // Reset internal test state
         this.gameOverCalled = false;
+        this.gameWonCalled = false;
     }
 
     @Override
-    public void pauseGame(ActionEvent actionEvent) {
-        // Skip GUI pause behavior
-    }
+    public void pauseGame(ActionEvent actionEvent) { }
 
-    // Helpers for tests:
+
+    // Test Helpers
+
     public boolean wasGameOverCalled() {
         return gameOverCalled;
+    }
+
+    public boolean wasGameWonCalled() {
+        return gameWonCalled;
     }
 
     public int[][] getLatestBackground() {
