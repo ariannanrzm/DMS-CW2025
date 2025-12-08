@@ -73,6 +73,8 @@ public class GuiController implements Initializable {
     @FXML private VBox scoreContainer;
     @FXML private StackPane rootPane;
     @FXML private StackPane scalableContainer;
+    @FXML private StackPane howToOverlayInGame;
+
 
     private StackPane[][] displayMatrix;
     private StackPane[][] rectangles;
@@ -122,6 +124,12 @@ public class GuiController implements Initializable {
 
         if (pauseMenu != null) {
             Platform.runLater(() -> com.comp2042.util.SoundManager.getInstance().registerButtons(pauseMenu));
+        }
+
+        if (howToOverlayInGame != null) {
+            howToOverlayInGame.setVisible(false);
+            howToOverlayInGame.setOpacity(0.0);
+            howToOverlayInGame.setMouseTransparent(true);
         }
 
         Platform.runLater(() -> {
@@ -796,6 +804,37 @@ public class GuiController implements Initializable {
         if (gamePanel != null) {
             gamePanel.requestFocus();
         }
+    }
+
+    @FXML
+    private void openHowToFromPause(ActionEvent event) {
+        if (howToOverlayInGame == null) return;
+
+        howToOverlayInGame.setVisible(true);
+        howToOverlayInGame.setMouseTransparent(false);
+
+        FadeTransition ft = new FadeTransition(Duration.millis(200), howToOverlayInGame);
+        ft.setFromValue(0.0);
+        ft.setToValue(1.0);
+        ft.play();
+
+        SoundManager.getInstance().playClick();
+    }
+
+    @FXML
+    private void closeHowToFromPause(ActionEvent event) {
+        if (howToOverlayInGame == null) return;
+
+        FadeTransition ft = new FadeTransition(Duration.millis(200), howToOverlayInGame);
+        ft.setFromValue(howToOverlayInGame.getOpacity());
+        ft.setToValue(0.0);
+        ft.setOnFinished(e -> {
+            howToOverlayInGame.setVisible(false);
+            howToOverlayInGame.setMouseTransparent(true);
+        });
+        ft.play();
+
+        SoundManager.getInstance().playClick();
     }
 
 }

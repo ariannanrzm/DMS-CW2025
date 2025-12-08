@@ -22,6 +22,7 @@ public class MainMenuController {
 
     @FXML private StackPane rootPane;
     @FXML private Label titleLabel;
+    @FXML private StackPane howToOverlay;
 
     private FadeTransition introFade;
     private Stage stage;
@@ -104,6 +105,37 @@ public class MainMenuController {
     @FXML
     private void startZen(ActionEvent event) {
         fadeOutAndLoad(GameMode.ZEN);
+    }
+
+    @FXML
+    private void openHowToMenu(ActionEvent event) {
+        if (howToOverlay == null) return;
+
+        howToOverlay.setVisible(true);
+        howToOverlay.setMouseTransparent(false);
+
+        FadeTransition ft = new FadeTransition(Duration.millis(200), howToOverlay);
+        ft.setFromValue(0.0);
+        ft.setToValue(1.0);
+        ft.play();
+
+        SoundManager.getInstance().playClick();
+    }
+
+    @FXML
+    private void closeHowToMenu(ActionEvent event) {
+        if (howToOverlay == null) return;
+
+        FadeTransition ft = new FadeTransition(Duration.millis(200), howToOverlay);
+        ft.setFromValue(howToOverlay.getOpacity());
+        ft.setToValue(0.0);
+        ft.setOnFinished(e -> {
+            howToOverlay.setVisible(false);
+            howToOverlay.setMouseTransparent(true);
+        });
+        ft.play();
+
+        SoundManager.getInstance().playClick();
     }
 
 }

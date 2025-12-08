@@ -98,9 +98,106 @@
             <Label styleClass="pause-title" text="PAUSED" />
             <Button onAction="#resumeGame" styleClass="button" text="RESUME"  prefWidth="260" />
             <Button onAction="#restartGame" styleClass="button" text="RESTART" prefWidth="260" />
+            <Button onAction="#openHowToFromPause" styleClass="button" text="HOW TO PLAY" prefWidth="260" />
             <Button onAction="#backToMenu" styleClass="button" text="MAIN MENU" prefWidth="260" />
             <Button onAction="#quitGame" styleClass="button, quit" text="QUIT" prefWidth="260"  />
         </VBox>
+
+        <!-- HOW TO PLAY OVERLAY (IN-GAME) -->
+        <StackPane fx:id="howToOverlayInGame"
+                   visible="false"
+                   opacity="0.0"
+                   mouseTransparent="true"
+                   style="-fx-background-color: rgba(0,0,0,0.75);">
+
+            <VBox alignment="CENTER"
+                  spacing="14"
+                  prefWidth="380"
+                  style="-fx-background-color: rgba(20,0,40,0.9);
+                         -fx-padding: 24;
+                         -fx-background-radius: 16;
+                         -fx-border-radius: 16;
+                         -fx-border-color: rgba(255,255,255,0.4);
+                         -fx-border-width: 2;">
+
+                <!-- TITLE -->
+                <Label text="HOW TO PLAY"
+                       alignment="CENTER"
+                       textAlignment="CENTER"
+                       style="-fx-font-family: 'Press Start 2P';
+                              -fx-font-size: 18px;
+                              -fx-text-fill: #ffb0ff;" />
+
+                <!-- CONTROLS TITLE -->
+                <Label text="Controls:"
+                       alignment="CENTER"
+                       textAlignment="CENTER"
+                       style="-fx-font-family: 'Press Start 2P';
+                              -fx-font-size: 10px;
+                              -fx-text-fill: #ffffff;" />
+
+                <!-- CONTROLS GRID (CENTERED) -->
+                <GridPane hgap="24" vgap="6" alignment="CENTER">
+                    <!-- Keys column -->
+                    <Label text="← / → / A / D"  styleClass="howto-line" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+                    <Label text="↑ / W"          styleClass="howto-line" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+                    <Label text="↓ / S"          styleClass="howto-line" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+                    <Label text="SPACE"          styleClass="howto-line" GridPane.rowIndex="3" GridPane.columnIndex="0" />
+                    <Label text="C"              styleClass="howto-line" GridPane.rowIndex="4" GridPane.columnIndex="0" />
+                    <Label text="P"              styleClass="howto-line" GridPane.rowIndex="5" GridPane.columnIndex="0" />
+
+                    <!-- Action column -->
+                    <Label text="Move left / right"
+                           styleClass="howto-line"
+                           GridPane.rowIndex="0" GridPane.columnIndex="1" />
+                    <Label text="Rotate piece"
+                           styleClass="howto-line"
+                           GridPane.rowIndex="1" GridPane.columnIndex="1" />
+                    <Label text="Soft drop"
+                           styleClass="howto-line"
+                           GridPane.rowIndex="2" GridPane.columnIndex="1" />
+                    <Label text="Hard drop"
+                           styleClass="howto-line"
+                           GridPane.rowIndex="3" GridPane.columnIndex="1" />
+                    <Label text="Hold current piece"
+                           styleClass="howto-line"
+                           GridPane.rowIndex="4" GridPane.columnIndex="1" />
+                    <Label text="Pause / resume game"
+                           styleClass="howto-line"
+                           GridPane.rowIndex="5" GridPane.columnIndex="1" />
+                </GridPane>
+
+                <!-- MODES TITLE -->
+                <Label text="Modes:"
+                       alignment="CENTER"
+                       textAlignment="CENTER"
+                       style="-fx-font-family: 'Press Start 2P';
+                              -fx-font-size: 10px;
+                              -fx-text-fill: #ffffff;" />
+
+                <!-- MODE DESCRIPTIONS -->
+                <Label text="ZEN — Chill practice mode with infinite levels."
+                       wrapText="true"
+                       maxWidth="320"
+                       alignment="CENTER"
+                       textAlignment="CENTER"
+                       styleClass="howto-line" />
+
+                <Label text="ADVENTURE — Complete 6 levels (5 lines each). The game speeds up and mechanics change as you progress."
+                       wrapText="true"
+                       maxWidth="320"
+                       alignment="CENTER"
+                       textAlignment="CENTER"
+                       styleClass="howto-line" />
+
+                <!-- CLOSE BUTTON -->
+                <Button text="CLOSE"
+                        onAction="#closeHowToFromPause"
+                        styleClass="button"
+                        prefWidth="150"
+                        prefHeight="30" />
+            </VBox>
+        </StackPane>
     </StackPane>
 
     <StackPane fx:id="centerNotificationOverlay" mouseTransparent="true" prefHeight="100.0" prefWidth="500.0" />
