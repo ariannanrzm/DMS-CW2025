@@ -1,19 +1,27 @@
 package com.comp2042;
 
 import com.comp2042.ui.MainMenuController;
-import com.comp2042.game.controller.GameController;
-import com.comp2042.ui.GuiController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * The entry point for the Tetris application.
+ * This class extends JavaFX Application and is responsible for setting up the primary stage,
+ * loading the main menu scene, and launching the application.
+ */
 public class Main extends Application {
 
+    /**
+     * Starts the JavaFX application by loading the Main Menu FXML and displaying the primary stage.
+     *
+     * @param primaryStage The primary window for this application, onto which the application scene can be set.
+     * @throws Exception If the FXML resource cannot be loaded.
+     */
     @Override
     public void start(Stage primaryStage) throws Exception {
 
@@ -34,7 +42,11 @@ public class Main extends Application {
         controller.playIntroAnimation();
     }
 
-
+    /**
+     * The main method that launches the JavaFX application.
+     *
+     * @param args Command line arguments.
+     */
     public static void main(String[] args) {
         launch(args);
     }

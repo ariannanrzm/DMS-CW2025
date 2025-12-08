@@ -39,7 +39,9 @@ import javafx.scene.shape.Rectangle;
 import com.comp2042.util.MusicManager;
 
 /**
- * GuiController manages visual updates and animations.
+ * The main view controller for the gameplay scene.
+ * It manages the grid display, next brick previews, score labels, animations,
+ * and handles UI updates triggered by the game loop.
  */
 public class GuiController implements Initializable {
 
@@ -88,6 +90,14 @@ public class GuiController implements Initializable {
     private GameMode currentMode;
 
 
+    /**
+     * Initializes the controller class.
+     * Sets up the game panel focus, loads fonts, initializes the color cache,
+     * and sets up responsiveness for window resizing.
+     *
+     * @param location  The location used to resolve relative paths for the root object, or null if unrelated.
+     * @param resources The resources used to localize the root object, or null if unrelated.
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         if (centerNotificationOverlay != null) {
@@ -145,7 +155,12 @@ public class GuiController implements Initializable {
     }
 
 
-
+    /**
+     * Scales the game interface based on the current window size to maintain
+     * aspect ratio and visibility.
+     *
+     * @param stage The primary stage of the application.
+     */
     private void scaleGame(Stage stage) {
         if (scalableContainer == null) return;
 
@@ -166,12 +181,22 @@ public class GuiController implements Initializable {
         scalableContainer.setScaleY(scale);
     }
 
+    /**
+     * Formats a total number of seconds into a "MM:SS" string format.
+     *
+     * @param totalSeconds The time in seconds.
+     * @return A formatted string representation of the time.
+     */
     private String formatTime(int totalSeconds) {
         int minutes = totalSeconds / 60;
         int seconds = totalSeconds % 60;
         return String.format("%02d:%02d", minutes, seconds);
     }
 
+    /**
+     * Retrieves the fastest completion time from the high score manager
+     * and updates the Best Time label in the UI.
+     */
     private void refreshBestTime() {
         if (bestTimeLabel != null) {
             int best = com.comp2042.game.logic.HighScoreManager.getFastestTime();
@@ -179,12 +204,24 @@ public class GuiController implements Initializable {
             bestTimeLabel.setText(text);
         }
     }
+
+    /**
+     * Links this UI controller to the main GameController and initializes the input handler.
+     *
+     * @param controller The main GameController instance.
+     */
     public void setGameController(GameController controller) {
         this.gameController = controller;
         this.inputHandler = new InputHandler(controller);
         inputHandler.attachTo(gamePanel);
     }
 
+    /**
+     * Starts a new game session in the specified mode.
+     * Initializes music, resets UI components, and instantiates the GameController.
+     *
+     * @param mode The game mode to start.
+     */
     public void startGame(GameMode mode) {
         this.currentMode = mode; // Save mode
 
@@ -225,6 +262,12 @@ public class GuiController implements Initializable {
         gamePanel.requestFocus();
     }
 
+    /**
+     * Helper method to toggle the visibility and management state of a JavaFX Pane.
+     *
+     * @param pane    The pane to modify.
+     * @param visible True to show the pane, false to hide and unmanage it.
+     */
     private void setVisible(Pane pane, boolean visible) {
         if (pane != null) {
             pane.setVisible(visible);
@@ -232,12 +275,20 @@ public class GuiController implements Initializable {
         }
     }
 
+    /**
+     * Updates the time label with the current game duration.
+     *
+     * @param timeString The formatted time string to display.
+     */
     public void updateTimer(String timeString) {
         if (timeLabel != null) {
             timeLabel.setText(timeString);
         }
     }
 
+    /**
+     * Restarts the game loop timeline.
+     */
     public void resetTimeline() {
         if (timeLine != null) {
             timeLine.stop();
@@ -245,6 +296,14 @@ public class GuiController implements Initializable {
         }
     }
 
+    /**
+     * Initializes the visual grid of the game board.
+     * Creates the StackPanes that represent the cells of the Tetris board and next-brick previews.
+     *
+     * @param boardMatrix  The initial state of the logical board.
+     * @param brick        The view data for the current active brick.
+     * @param initialSpeed The starting speed of the game loop.
+     */
     public void initGameView(int[][] boardMatrix, ViewData brick, double initialSpeed) {
         displayMatrix = new StackPane[boardMatrix.length][boardMatrix[0].length];
 
@@ -271,7 +330,11 @@ public class GuiController implements Initializable {
         updateGameSpeed(initialSpeed);
     }
 
-
+    /**
+     * Initializes the "ghost" brick panel which shows where the active brick will land.
+     *
+     * @param brickSize The size of the individual block cells.
+     */
     private void initGhostPanel(int brickSize) {
         ghostPanel = new GridPane();
         ghostPanel.setVgap(1);
@@ -294,6 +357,12 @@ public class GuiController implements Initializable {
         }
     }
 
+    /**
+     * Initializes the panel responsible for displaying the currently active moving brick.
+     *
+     * @param brick     The view data containing the brick's shape.
+     * @param brickSize The size of the individual block cells.
+     */
     private void initBrickPanel(ViewData brick, int brickSize) {
         rectangles = new StackPane[brick.getBrickData().length][brick.getBrickData()[0].length];
 
@@ -309,9 +378,12 @@ public class GuiController implements Initializable {
         }
     }
 
-    private void showClearRowNotication(ClearRow clearRow){
-    }
 
+    /**
+     * Displays a floating notification when the player levels up.
+     *
+     * @param newLevel The new level number reached.
+     */
     public void showLevelUpNotification(int newLevel) {
         if (currentMode == GameMode.ZEN) return;
         NotificationPanel notification = new NotificationPanel("LEVEL UP!");
@@ -327,6 +399,11 @@ public class GuiController implements Initializable {
         animation.play();
     }
 
+    /**
+     * Displays a notification for "Chaos Mode" events.
+     *
+     * @param message The text message to display.
+     */
     public void showChaosNotification(String message) {
         NotificationPanel notification = new NotificationPanel(message);
         notification.setStyleClass("centerMessage");
@@ -342,6 +419,12 @@ public class GuiController implements Initializable {
         fadeOut.play();
     }
 
+    /**
+     * Checks if lines were cleared and displays appropriate notifications (Single, Double, Tetris).
+     * Also handles combo notifications and sound effects.
+     *
+     * @param clearRow The object containing data about cleared lines and scores.
+     */
     public void showNotificationIfRowsCleared(ClearRow clearRow) {
         if (currentMode == GameMode.ZEN) return;
         String text = switch (clearRow.getLinesRemoved()) {
@@ -382,6 +465,8 @@ public class GuiController implements Initializable {
 
     /**
      * Shows a small floating score number in the center overlay.
+     *
+     * @param score The amount of points to display.
      */
     private void showScorePopup(int score) {
         Label scoreLabel = new Label("+" + score);
@@ -401,6 +486,12 @@ public class GuiController implements Initializable {
         animation.play();
     }
 
+    /**
+     * Updates the X and Y coordinates of the active brick panel and the ghost panel
+     * to match the logic board state.
+     *
+     * @param brick The current view data of the active brick.
+     */
     private void updateBrickPanelPosition(ViewData brick) {
         int BRICK_SIZE = GameConfig.get().getBrickSize();
         int TOP_OFFSET = GameConfig.get().getTopOffset();
@@ -421,6 +512,12 @@ public class GuiController implements Initializable {
         }
     }
 
+    /**
+     * Retrieves the color associated with a specific block ID.
+     *
+     * @param i The block ID/color index.
+     * @return The JavaFX Paint object for the block.
+     */
     private Paint getFillColor(int i) {
         if (i >= 0 && i < paintCache.length) {
             return paintCache[i];
@@ -428,6 +525,12 @@ public class GuiController implements Initializable {
         return Color.TRANSPARENT;
     }
 
+    /**
+     * Styles a single grid cell with the appropriate color and border.
+     *
+     * @param color The color index of the block.
+     * @param r     The StackPane representing the grid cell.
+     */
     private void setRectangleData(int color, StackPane r) {
         Paint fill = getFillColor(color);
         r.setBackground(new Background(new BackgroundFill(fill, CornerRadii.EMPTY, Insets.EMPTY)));
@@ -437,6 +540,12 @@ public class GuiController implements Initializable {
             r.setBorder(BLOCK_BORDER);
         }    }
 
+    /**
+     * Refreshes the visual state of the active brick, including its position,
+     * ghost position, and shape.
+     *
+     * @param brick The current ViewData containing brick information.
+     */
     public void refreshBrick(ViewData brick) {
         updateBrickPanelPosition(brick);
         refreshNextBricks(brick.getNextBricks());
@@ -461,6 +570,11 @@ public class GuiController implements Initializable {
         }
     }
 
+    /**
+     * Updates the "Next Brick" preview container with the upcoming pieces.
+     *
+     * @param nextBricks A list of matrices representing the shapes of the next bricks.
+     */
     private void refreshNextBricks(List<int[][]> nextBricks) {
         // 1. Keep the Title Label (index 0)
         while (nextBrickContainer.getChildren().size() > 1) {
@@ -516,6 +630,11 @@ public class GuiController implements Initializable {
         }
     }
 
+    /**
+     * Updates the "Hold" container to display the currently held brick.
+     *
+     * @param matrix The shape matrix of the held brick.
+     */
     private void refreshHeldBrick(int[][] matrix) {
         // 1. Keep the Title Label (index 0)
         while (holdBrickContainer.getChildren().size() > 1) {
@@ -567,6 +686,11 @@ public class GuiController implements Initializable {
         holdBrickContainer.getChildren().add(previewPane);
     }
 
+    /**
+     * Redraws the static game board background based on the logical grid state.
+     *
+     * @param board The 2D array representing the board's locked blocks.
+     */
     public void refreshGameBackground(int[][] board) {
         int HIDDEN_ROWS = GameConfig.get().getHiddenRows();
 
@@ -577,6 +701,12 @@ public class GuiController implements Initializable {
         }
     }
 
+    /**
+     * Handles the logic associated with the periodic "move down" event (game tick).
+     * Updates the board, checks for game over, and refreshes the UI.
+     *
+     * @param event The move event triggered by the timeline.
+     */
     private void moveDown(MoveEvent event) {
         DownData downData = eventListener.onDownEvent(event);
 
@@ -594,23 +724,47 @@ public class GuiController implements Initializable {
 
     }
 
+    /**
+     * Registers the listener that handles game input events.
+     *
+     * @param listener The InputEventListener implementation (usually GameController).
+     */
     public void setEventListener(InputEventListener listener) {
         this.eventListener = listener;
     }
 
+    /**
+     * Binds the UI score label to the score property in the game logic.
+     *
+     * @param property The IntegerProperty representing the score.
+     */
     public void bindScore(IntegerProperty property) {
         scoreLabel.textProperty().bind(property.asString("%d"));
     }
 
+    /**
+     * Binds the UI lines label to the lines-cleared property in the game logic.
+     *
+     * @param property The IntegerProperty representing cleared lines.
+     */
     public void bindLines(IntegerProperty property) {
         linesLabel.textProperty().bind(property.asString("%d"));
     }
 
+    /**
+     * Handles the victory state, plays the win sound, and transitions to the game over screen.
+     *
+     * @param finalSeconds The total time taken to complete the game.
+     */
     public void gameWon(int finalSeconds) {
         MusicManager.getInstance().playMusic("win.mp3", false);
         timeLine.stop();
         switchToGameOverScene(true, finalSeconds);    }
 
+
+    /**
+     * Handles the game over state, plays animations and sounds, and transitions to the result screen.
+     */
     public void gameOver() {
 
         if (currentMode == GameMode.ZEN) {
@@ -643,6 +797,12 @@ public class GuiController implements Initializable {
         sequence.play();
     }
 
+    /**
+     * Loads and switches the scene to the Game Over / Victory screen.
+     *
+     * @param isVictory    True if the player won, false if they lost.
+     * @param finalSeconds The duration of the game session.
+     */
     private void switchToGameOverScene(boolean isVictory, int finalSeconds) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/GameOver.fxml"));
@@ -698,6 +858,11 @@ public class GuiController implements Initializable {
         gamePanel.requestFocus();
     }
 
+    /**
+     * Toggles the visibility of the pause menu overlay and manages the game timeline state.
+     *
+     * @param isPaused True to show the pause menu and stop time, false to hide it and resume.
+     */
     public void showPauseMessage(boolean isPaused) {
         if (isPaused) {
             pauseMenu.setVisible(true);
@@ -710,10 +875,20 @@ public class GuiController implements Initializable {
         }
     }
 
+    /**
+     * Binds the UI level label to the level property in the game logic.
+     *
+     * @param property The IntegerProperty representing the current level.
+     */
     public void bindLevel(IntegerProperty property) {
         levelLabel.textProperty().bind(property.asString("%d"));
     }
 
+    /**
+     * Updates the game loop speed by creating a new Timeline with the specified delay.
+     *
+     * @param delayMillis The delay between game ticks in milliseconds.
+     */
     public void updateGameSpeed(double delayMillis) {
         if (timeLine != null) {
             timeLine.stop();
@@ -727,6 +902,9 @@ public class GuiController implements Initializable {
         timeLine.play();
     }
 
+    /**
+     * Plays a visual "bounce" animation on the game board container when a hard drop occurs.
+     */
     public void playHardDropBounce() {
         if (gameBoard == null) return;
 
@@ -775,6 +953,11 @@ public class GuiController implements Initializable {
         gamePanel.requestFocus();
     }
 
+    /**
+     * FXML handler to return to the Main Menu scene.
+     *
+     * @param event The ActionEvent.
+     */
     @FXML
     public void backToMenu(ActionEvent event) {
         try {
@@ -791,6 +974,11 @@ public class GuiController implements Initializable {
         }
     }
 
+    /**
+     * FXML handler to quit the application.
+     *
+     * @param event The ActionEvent.
+     */
     @FXML
     public void quitGame(ActionEvent event) {
         Platform.exit();
@@ -806,6 +994,11 @@ public class GuiController implements Initializable {
         }
     }
 
+    /**
+     * Opens the "How to Play" overlay from within the pause menu.
+     *
+     * @param event The ActionEvent.
+     */
     @FXML
     private void openHowToFromPause(ActionEvent event) {
         if (howToOverlayInGame == null) return;
@@ -821,6 +1014,11 @@ public class GuiController implements Initializable {
         SoundManager.getInstance().playClick();
     }
 
+    /**
+     * Closes the "How to Play" overlay and returns to the pause menu.
+     *
+     * @param event The ActionEvent.
+     */
     @FXML
     private void closeHowToFromPause(ActionEvent event) {
         if (howToOverlayInGame == null) return;

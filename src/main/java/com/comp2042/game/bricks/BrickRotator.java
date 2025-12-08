@@ -4,12 +4,9 @@ import com.comp2042.game.board.GamePoint;
 import com.comp2042.util.MatrixOperations;
 
 /**
- * The BrickRotator class manages the rotation state of the active Tetris brick.
- * Each brick contains multiple rotation matrices. This class controls which
- * rotation is currently in use and computes subsequent rotations.
- *
- * This refactored version improves naming clarity and adds documentation
- * without altering the original rotation behaviour.
+ * Manages the rotation logic for bricks.
+ * It handles the retrieval of rotation matrices and implements logic to attempt
+ * rotations with wall-kick offsets if the standard rotation is blocked.
  */
 public class BrickRotator {
 

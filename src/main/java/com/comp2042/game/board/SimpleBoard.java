@@ -7,10 +7,10 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
-
 /**
- * The SimpleBoard class manages brick movement, rotation, spawning,
- * background merging, and row clearing.
+ * Represents the logical grid of the Tetris game.
+ * This class manages the board matrix, active brick movement, collision detection,
+ * and row clearing operations.
  */
 
 public class SimpleBoard implements Board {
@@ -52,8 +52,8 @@ public class SimpleBoard implements Board {
     }
 
     /**
-     * Attempts to move the active brick by a given offset.
-     *
+     * Checks if a specific move is valid by verifying collision with board boundaries
+     * and existing blocks.
      * @param dx horizontal movement
      * @param dy vertical movement
      * @return true if movement is successful, false if blocked by collision
@@ -101,6 +101,12 @@ public class SimpleBoard implements Board {
         return tryMove(MOVE_RIGHT, 0);
     }
 
+    /**
+     * Rotates the current active brick.
+     * Utilizes the BrickRotator to find a valid rotation state (including wall kicks).
+     *
+     * @return true if rotation was successful, false otherwise.
+     */
     @Override
     public boolean rotateLeftBrick() {
         GamePoint newPosition = brickRotator.tryRotate(currentGameMatrix, currentOffset);
@@ -175,6 +181,10 @@ public class SimpleBoard implements Board {
         );
     }
 
+    /**
+     * Merges the currently active brick into the background board matrix.
+     * This is called when a brick locks into place.
+     */
     @Override
     public void mergeBrickToBackground() {
         currentGameMatrix = MatrixOperations.merge(
@@ -185,6 +195,11 @@ public class SimpleBoard implements Board {
         );
     }
 
+    /**
+     * Scans the board for completed rows, removes them, and calculates the score.
+     *
+     * @return A ClearRow object containing the number of lines removed and the new board matrix.
+     */
     @Override
     public ClearRow clearRows() {
         ClearRow basicRow = MatrixOperations.removeCompletedRows(currentGameMatrix);

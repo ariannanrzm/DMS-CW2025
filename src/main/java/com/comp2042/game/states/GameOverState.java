@@ -6,6 +6,10 @@ import com.comp2042.game.board.ViewData;
 import com.comp2042.game.controller.GameController;
 import com.comp2042.game.events.MoveEvent;
 
+/**
+ * Represents the state of the game after the game has ended.
+ * All input events are ignored in this state to prevent further gameplay.
+ */
 public class GameOverState implements GameState {
 
     public GameOverState(GameController context) { }

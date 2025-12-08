@@ -5,6 +5,11 @@ import com.comp2042.game.board.ViewData;
 import com.comp2042.game.controller.GameController;
 import com.comp2042.game.events.MoveEvent;
 
+/**
+ * Represents the Paused state of the game.
+ * Most input events are ignored or handled as no-ops to prevent
+ * the game state from advancing while the pause menu is active.
+ */
 public class PausedState implements GameState {
 
     private final GameController context;

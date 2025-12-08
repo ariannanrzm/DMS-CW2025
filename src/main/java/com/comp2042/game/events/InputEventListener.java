@@ -3,8 +3,10 @@ package com.comp2042.game.events;
 import com.comp2042.game.board.DownData;
 import com.comp2042.game.board.ViewData;
 
-import javax.swing.text.View;
-
+/**
+ * Listener interface for handling game-related input events.
+ * Defines the contract for processing user or system-triggered actions like moving, rotating, or dropping bricks.
+ */
 public interface InputEventListener {
 
     DownData onDownEvent(MoveEvent event);

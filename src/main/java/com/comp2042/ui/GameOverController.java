@@ -17,6 +17,10 @@ import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 import com.comp2042.util.SoundManager;
 
+/**
+ * Controller for the Game Over / Victory screen.
+ * Displays the final score, high scores, and provides options to retry, return to the main menu, or quit.
+ */
 public class GameOverController {
 
     @FXML private StackPane rootPane;
@@ -26,6 +30,10 @@ public class GameOverController {
     @FXML private Label bestTimeLabel;
     @FXML private Label timeLabel;
 
+    /**
+     * Initializes the controller, setting the initial opacity of main elements to 0
+     * for a fade-in animation upon scene entry.
+     */
     @FXML
     public void initialize() {
         if (rootPane != null) {
@@ -40,12 +48,20 @@ public class GameOverController {
     }
 
     /**
-     * Sets the score text.
+     * Sets the displayed final score text.
+     *
+     * @param score The final score achieved by the player.
      */
     public void setScore(int score) {
         scoreLabel.setText("SCORE: " + score);
     }
 
+    /**
+     * Sets the main title text (e.g., "GAME OVER" or "YOU WON!") and its color.
+     *
+     * @param text The title string.
+     * @param color The color of the title text.
+     */
     public void setTitle(String text, javafx.scene.paint.Paint color) {
         if (titleLabel != null) {
             titleLabel.setText(text);
@@ -53,6 +69,11 @@ public class GameOverController {
         }
     }
 
+    /**
+     * Formats the total seconds elapsed into MM:SS and updates the time label.
+     *
+     * @param seconds The total game time in seconds.
+     */
     public void setGameTime(int seconds) {
         if (timeLabel != null) {
             int m = seconds / 60;
@@ -61,6 +82,10 @@ public class GameOverController {
         }
     }
 
+    /**
+     * Retrieves the all-time high score and fastest time from HighScoreManager
+     * and updates the corresponding labels.
+     */
     public void showRecords() {
         if (highScoreLabel == null || bestTimeLabel == null) return;
 
@@ -73,6 +98,12 @@ public class GameOverController {
         bestTimeLabel.setText("BEST TIME: " + timeStr);
     }
 
+    /**
+     * Helper method to format a total number of seconds into an "MM:SS" string.
+     *
+     * @param totalSeconds The total time in seconds.
+     * @return A formatted string representation of the time.
+     */
     private String formatTime(int totalSeconds) {
         int minutes = totalSeconds / 60;
         int seconds = totalSeconds % 60;
@@ -109,6 +140,11 @@ public class GameOverController {
         Platform.runLater(() -> SoundManager.getInstance().registerButtons(rootPane));
     }
 
+    /**
+     * FXML handler to start a new Adventure Mode game, replacing the current scene.
+     *
+     * @param event The action event triggered by the retry button.
+     */
     @FXML
     public void retryGame(ActionEvent event) {
         try {
@@ -127,6 +163,11 @@ public class GameOverController {
         }
     }
 
+    /**
+     * FXML handler to load and transition to the Main Menu scene.
+     *
+     * @param event The action event triggered by the menu button.
+     */
     @FXML
     public void backToMenu(ActionEvent event) {
         try {
@@ -149,6 +190,11 @@ public class GameOverController {
         }
     }
 
+    /**
+     * FXML handler to terminate the application.
+     *
+     * @param event The action event triggered by the quit button.
+     */
     @FXML
     public void quitGame(ActionEvent event) {
         Platform.exit();

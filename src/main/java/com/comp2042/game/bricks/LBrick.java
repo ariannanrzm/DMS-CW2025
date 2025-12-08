@@ -1,5 +1,8 @@
 package com.comp2042.game.bricks;
 
+/**
+ * Represents the "L" shaped brick (Tetromino)
+ */
 public final class LBrick extends AbstractBrick {
     public LBrick() {
         brickMatrix.add(new int[][]{

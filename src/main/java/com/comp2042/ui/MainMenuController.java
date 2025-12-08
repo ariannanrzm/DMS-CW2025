@@ -14,10 +14,13 @@ import javafx.scene.control.Label;
 import com.comp2042.util.SoundManager;
 import javafx.application.Platform;
 import com.comp2042.util.MusicManager;
-
-
 import java.net.URL;
 
+/**
+ * Controller for the Main Menu screen.
+ * Handles the intro animation, navigation to different game modes (Zen, Adventure),
+ * and the "How to Play" overlay.
+ */
 public class MainMenuController {
 
     @FXML private StackPane rootPane;
@@ -96,12 +99,22 @@ public class MainMenuController {
         fadeOut.play();
     }
 
+    /**
+     * Triggers the transition to Adventure Mode.
+     *
+     * @param event The action event triggered by the button click.
+     */
     @FXML
     private void startAdventure(ActionEvent event) {
         fadeOutAndLoad(GameMode.ADVENTURE);
 
     }
 
+    /**
+     * Triggers the transition to Zen Mode.
+     *
+     * @param event The action event triggered by the button click.
+     */
     @FXML
     private void startZen(ActionEvent event) {
         fadeOutAndLoad(GameMode.ZEN);

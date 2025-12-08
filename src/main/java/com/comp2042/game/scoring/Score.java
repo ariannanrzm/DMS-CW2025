@@ -4,6 +4,10 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import com.comp2042.game.config.GameConfig;
 
+/**
+ * Manages the scoring system using JavaFX properties for UI binding.
+ * Calculates points based on lines cleared, level multipliers, and combo bonuses.
+ */
 public final class Score {
 
     private final IntegerProperty score = new SimpleIntegerProperty(0);

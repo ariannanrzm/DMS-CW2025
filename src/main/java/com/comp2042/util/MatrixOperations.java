@@ -6,12 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Utility class for performing matrix-related operations used by the Tetris board.
- * Responsibilities include:
- *  - collision detection
- *  - out-of-bounds checks
- *  - merging bricks into the board
- *  - clearing completed rows (without score logic)
+ * Utility class providing static methods for 2D array manipulations.
+ * Handles collision detection, matrix merging, and row removal logic.
  */
 public final class MatrixOperations {
 
@@ -27,6 +23,7 @@ public final class MatrixOperations {
      * @param brick  brick shape matrix
      * @param x      column offset
      * @param y      row offset
+     * @return true if a collision is detected, false otherwise.
      */
     public static boolean intersect(final int[][] matrix, final int[][] brick, int x, int y) {
         for (int row = 0; row < brick.length; row++) {

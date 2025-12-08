@@ -3,9 +3,8 @@ package com.comp2042.game.events;
 
 /**
  * Represents a movement-related input event in the Tetris game.
- * A MoveEvent encapsulates the type of movement requested
- * (left, right, rotate, down) and the source that triggered it
- * (user input or internal game thread).
+ * MoveEvent encapsulates the type of movement requested
+ * and the source that triggered it.
  *
  * This class is immutable and used for communication between
  * the GUI controller and the game logic (GameController).

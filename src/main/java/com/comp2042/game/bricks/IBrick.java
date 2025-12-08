@@ -3,6 +3,9 @@ package com.comp2042.game.bricks;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents the "I" shaped brick (Tetromino)
+ */
 public final class IBrick extends AbstractBrick {
 
     public IBrick() {

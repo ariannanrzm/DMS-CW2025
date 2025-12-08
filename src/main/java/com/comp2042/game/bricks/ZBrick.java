@@ -1,5 +1,8 @@
 package com.comp2042.game.bricks;
 
+/**
+ * Represents the "Z" shaped brick (Tetromino)
+ */
 public final class ZBrick extends AbstractBrick {
     public ZBrick() {
         brickMatrix.add(new int[][]{

@@ -1,5 +1,8 @@
 package com.comp2042.game.bricks;
 
+/**
+ * Represents the "S" shaped brick (Tetromino)
+ */
 public final class SBrick extends AbstractBrick {
     public SBrick() {
         brickMatrix.add(new int[][]{

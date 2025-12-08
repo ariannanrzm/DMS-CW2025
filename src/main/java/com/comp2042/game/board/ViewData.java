@@ -4,8 +4,9 @@ import com.comp2042.util.ArrayOperations;
 import java.util.List;
 
 /**
- * ViewData is an immutable data transfer object used to pass
- * rendering information from the game logic (Board) to the UI.
+ * An immutable Data Transfer Object (DTO) used to pass rendering information
+ * from the game logic (Board) to the User Interface.
+ * This ensures the UI cannot accidentally modify the internal game state.
  */
 public final class ViewData {
 
