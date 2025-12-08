@@ -2,15 +2,9 @@ package com.comp2042.game.scoring;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import com.comp2042.game.config.GameConfig;
 
 public final class Score {
-    private static final int SOFT_DROP_SCORE = 1;
-    private static final int HARD_DROP_SCORE = 2;
-    private static final int SCORE_SINGLE = 100;
-    private static final int SCORE_DOUBLE = 300;
-    private static final int SCORE_TRIPLE = 500;
-    private static final int SCORE_TETRIS = 800;
-    private static final int SCORE_COMBO_BONUS = 50;
 
     private final IntegerProperty score = new SimpleIntegerProperty(0);
     private final IntegerProperty lines = new SimpleIntegerProperty(0);
@@ -24,23 +18,24 @@ public final class Score {
     public IntegerProperty linesProperty() {
         return lines;
     }
+
     /**
      * Calculates and adds points for cleared lines.
      */
-
     public int addLinesCleared(int count) {
         if (count > 0) {
             comboCount++;
 
             int baseScore = 0;
+            // Use GameConfig getters
             switch (count) {
-                case 1 -> baseScore = SCORE_SINGLE;
-                case 2 -> baseScore = SCORE_DOUBLE;
-                case 3 -> baseScore = SCORE_TRIPLE;
-                case 4 -> baseScore = SCORE_TETRIS;
+                case 1 -> baseScore = GameConfig.get().getScoreSingle();
+                case 2 -> baseScore = GameConfig.get().getScoreDouble();
+                case 3 -> baseScore = GameConfig.get().getScoreTriple();
+                case 4 -> baseScore = GameConfig.get().getScoreTetris();
             }
 
-            int comboBonus = (comboCount > 0) ? (comboCount * SCORE_COMBO_BONUS) : 0;
+            int comboBonus = (comboCount > 0) ? (comboCount * GameConfig.get().getScoreComboBonus()) : 0;
 
             int totalPoints = baseScore + comboBonus;
 
@@ -64,14 +59,14 @@ public final class Score {
     }
 
     public void addSoftDrop() {
-        score.setValue(score.getValue() + SOFT_DROP_SCORE);
+        score.setValue(score.getValue() + GameConfig.get().getSoftDropScore());;
     }
 
     /**
      * Adds score for hard drop based on the number of rows dropped.
      */
     public void addHardDrop(int rows) {
-        score.setValue(score.getValue() + (rows * HARD_DROP_SCORE));
+        score.setValue(score.getValue() + (rows * GameConfig.get().getHardDropScore()));
     }
 
     public void reset() {

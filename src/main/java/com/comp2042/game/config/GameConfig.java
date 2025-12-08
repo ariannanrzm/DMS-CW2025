@@ -6,6 +6,7 @@ package com.comp2042.game.config;
  */
 public class GameConfig {
 
+    // Board & Visuals
     private static final GameConfig INSTANCE = new GameConfig();
     private static final int BRICK_SIZE = 20;
     private static final int TOP_OFFSET = -43;
@@ -14,6 +15,15 @@ public class GameConfig {
     private static final int HIDDEN_ROWS = 2;
     private static final int BOARD_HEIGHT = 25;
     private static final int BOARD_WIDTH = 10;
+
+    // Scoring
+    private static final int SOFT_DROP_SCORE = 1;
+    private static final int HARD_DROP_SCORE = 2;
+    private static final int SCORE_SINGLE = 100;
+    private static final int SCORE_DOUBLE = 300;
+    private static final int SCORE_TRIPLE = 500;
+    private static final int SCORE_TETRIS = 800;
+    private static final int SCORE_COMBO_BONUS = 50;
 
     private GameConfig() {}
 
@@ -30,4 +40,13 @@ public class GameConfig {
     public double getArcRadius() { return ARC_RADIUS; }
     public double getDropInterval() { return DROP_INTERVAL_MS; }
     public int getTopOffset() { return TOP_OFFSET; }
+
+    // Scoring Getters
+    public int getSoftDropScore() { return SOFT_DROP_SCORE; }
+    public int getHardDropScore() { return HARD_DROP_SCORE; }
+    public int getScoreSingle() { return SCORE_SINGLE; }
+    public int getScoreDouble() { return SCORE_DOUBLE; }
+    public int getScoreTriple() { return SCORE_TRIPLE; }
+    public int getScoreTetris() { return SCORE_TETRIS; }
+    public int getScoreComboBonus() { return SCORE_COMBO_BONUS; }
 }
